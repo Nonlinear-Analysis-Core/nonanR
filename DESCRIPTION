@@ -1,0 +1,13 @@
+Package: NONANr
+Type: Package
+Title: Nonlinear Analysis Methods for Human Movement Data
+Version: 0.0.1
+Date: 2023-11-14
+Author: Joel Sommerfeld
+Maintainer: Nonlinear Analysis Core <bmchnonan@unomaha.edu>
+Description: This is a collection of functions that can be used for the nonlinear analysis of human movement time series data. 
+License: GPL (>= 2)
+Imports: Rcpp (>= 1.0.11)
+LinkingTo: Rcpp, RcppArmadillo
+RoxygenNote: 7.2.3
+Encoding: UTF-8

@@ -30,6 +30,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                 # Application title
                 titlePanel("NONAN App"),
                 navbarPage("{NONANr}", 
+                           tabPanel("About", 
+                                    includeMarkdown("About_NONAN.Rmd")),
                            navbarMenu("Fractal Methods",
 
 # DFA ---------------------------------------------------------------------

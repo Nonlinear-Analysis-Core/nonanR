@@ -30,69 +30,113 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                 # Application title
                 titlePanel("NONAN App"),
                 navbarPage("{NONANr}", 
-                           tabPanel("DFA", 
-                                    sidebarLayout(
-                                      sidebarPanel(
-                                        selectInput("dataChoice", "select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
-                                        selectInput("dfax", "Select X axis", choices = NULL),
-                                        selectInput("dfay", "Select Y axis", choices = NULL),
-                                        numericInput("order", "Order:", value = 1),
-                                        numericInput("minScale", "Min Scale:", value = 4),
-                                        numericInput("maxScale", "Max Scale:", value = 10),
-                                        numericInput("scaleRatio", "Scale Ratio:", value = 2),
-                                        actionButton("goDFA", "Go!"),
-                                        p("Click the button to start the analysis.")
-                                        
-                                      ), # sidebarpanel
-                                      mainPanel(
-                                        fluidRow( 
-                                          column(12,  plotlyOutput('dfaTS')), # single row just for the time series plot
-                                        ), 
-                                        br(),
-                                        br(),
-                                        fluidRow( 
-                                          column(4,  plotOutput('dfaPlot')), 
-                                          column(4,  plotOutput('histogram')),
-                                          column(4,  plotOutput('autocorr'))
-                                        ), 
-                                        verbatimTextOutput("dfaResults"), 
-                                        br(),
-                                        br(),
-                                        tableOutput("datHead")
-                                      ) # mainpanel
-                                    ) # sidebarlayout
-                           ), # DFA tabpanel
-                           tabPanel("Entropy",
+                           navbarMenu("Fractal Methods",
+
+# DFA ---------------------------------------------------------------------
+                                      
+                                      tabPanel("DFA", 
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoice", "select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dfax", "Select X axis", choices = NULL),
+                                                   selectInput("dfay", "Select Y axis", choices = NULL),
+                                                   numericInput("order", "Order:", value = 1),
+                                                   numericInput("minScale", "Min Scale:", value = 4),
+                                                   numericInput("maxScale", "Max Scale:", value = 10),
+                                                   numericInput("scaleRatio", "Scale Ratio:", value = 2),
+                                                   actionButton("goDFA", "Go!"),
+                                                   p("Click the button to start the analysis.")
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('dfaTS')), # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow( 
+                                                     column(4,  plotOutput('dfaPlot')), 
+                                                     column(4,  plotOutput('histogram')),
+                                                     column(4,  plotOutput('autocorr'))
+                                                   ), 
+                                                   verbatimTextOutput("dfaResults"), 
+                                                   br(),
+                                                   br(),
+                                                   # tableOutput("datHead") # This was largely for debugging
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ), # DFA tabpanel
+                           ), # navbarPage
+                           navbarMenu("Entropy",
+
+# Sample Entropy ----------------------------------------------------------
+
+                           tabPanel("Sample Entropy",
                                     sidebarLayout(
                                       sidebarPanel(
                                         selectInput("dataChoice1", "select Data", choices = list("Your Data" = c(myDataFrames), 
-                                                                                                "R Datasets" = c(loadedData), 
-                                                                                                selected = NULL)),
-                                        selectInput("entx", "Select X axis", choices = NULL),
-                                        selectInput("enty", "Select Y axis", choices = NULL),
-                                        numericInput("m", "m value:", value = 2),
-                                        numericInput("r", "r value:", value = 0.2),
-                                        actionButton("goENT", "Go!"),
+                                                                                                 "R Datasets" = c(loadedData), 
+                                                                                                 selected = NULL)),
+                                        selectInput("SEx", "Select X axis", choices = NULL),
+                                        selectInput("SEy", "Select Y axis", choices = NULL),
+                                        numericInput("SEm", "m value:", value = 2),
+                                        numericInput("SEr", "r value:", value = 0.2),
+                                        actionButton("goSEENT", "Go!"),
                                         p("Click the button to start the analysis.")
                                         
                                       ), # sidebarpanel
                                       
                                       mainPanel(fluidRow( 
-                                        column(12,  plotlyOutput('entropyTS')), # single row just for the time series plot
+                                        column(12,  plotlyOutput('SEts')), # single row just for the time series plot
                                       ), 
                                       br(),
                                       br(),
                                       fluidRow( 
-                                        column(6,  plotOutput('entropyHist')),
-                                        column(6,  plotOutput('entropyACF'))
+                                        column(6,  plotOutput('SEhist')),
+                                        column(6,  plotOutput('SEacf'))
                                       ), 
-                                      verbatimTextOutput("entropyResults"), 
+                                      verbatimTextOutput("SEresults"), 
                                       br(),
                                       br(),
-                                      tableOutput("entdatHead")
+                                      # tableOutput("SEdatHead") # This was largely for debugging
+                                      ) # mainpanel
+                                    ) #sidebarlayout
+                           ), # sample entropy tabpanel
+
+# Approximate Entropy -----------------------------------------------------
+
+                           tabPanel("Approximate Entropy",
+                                    sidebarLayout(
+                                      sidebarPanel(
+                                        selectInput("dataChoice2", "select Data", choices = list("Your Data" = c(myDataFrames), 
+                                                                                                 "R Datasets" = c(loadedData), 
+                                                                                                 selected = NULL)),
+                                        selectInput("AEx", "Select X axis", choices = NULL),
+                                        selectInput("AEy", "Select Y axis", choices = NULL),
+                                        numericInput("AEdim", "dim value:", value = 8),
+                                        numericInput("AEr", "r value:", value = 0.2),
+                                        actionButton("goAEENT", "Go!"),
+                                        p("Click the button to start the analysis.")
+                                        
+                                      ), # sidebarpanel
+                                      
+                                      mainPanel(fluidRow( 
+                                        column(12,  plotlyOutput('AEts')), # single row just for the time series plot
+                                      ), 
+                                      br(),
+                                      br(),
+                                      fluidRow( 
+                                        column(6,  plotOutput('AEhist')),
+                                        column(6,  plotOutput('AEacf'))
+                                      ), 
+                                      verbatimTextOutput("AEresults"), 
+                                      br(),
+                                      br(),
+                                      tableOutput("AEdatHead") # This was largely for debugging
                                       ) # mainpanel
                                     ) #sidebarlayout
                            ) # entropy tabpanel
+                           ) # navbarMenu
                 ) # navbar page
 ) # fluidpage
 
@@ -174,13 +218,13 @@ server <- function(input, output) {
     #input$ycol
   })
   
-  output$datHead <- renderTable({
-    head(get(input$dataChoice))
-    #head(dat())
-  })
+  # Print the data so we can see what column is actually being selected. For debugging only
+  # output$datHead <- renderTable({
+  #   head(get(input$dataChoice))
+  # })
   
   
-  # Entropy -----------------------------------------------------------------
+  # Sample Entropy -----------------------------------------------------------------
   
   # get a list of the column names in the data frame
   n1 = reactive({
@@ -189,57 +233,118 @@ server <- function(input, output) {
   
   # Update x and y choices based on the selected dataframe
   observeEvent(input$dataChoice1, {
-    updateSelectInput(inputId = "entx", choices = n1())
-    updateSelectInput(inputId = "enty", choices = n1(), selected = n1()[2])
+    updateSelectInput(inputId = "SEx", choices = n1())
+    updateSelectInput(inputId = "SEy", choices = n1(), selected = n1()[2])
   })
   
   
   # Select the desired data frame and by default the second column for analysis
-  ent_dat = reactive({
+  SE_dat = reactive({
     get(input$dataChoice1) |>
-      select(all_of(input$enty)) |>
+      select(all_of(input$SEy)) |>
       as.matrix()
   })
   
   # plot the time series of the data
-  output$entropyTS <- renderPlotly({
+  output$SEts <- renderPlotly({
     
     plot_dat = get(input$dataChoice1)
-    plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$enty]], type = 'scatter', mode = 'lines', 
+    plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SEy]], type = 'scatter', mode = 'lines', 
             color = I('black')) %>% # Aesthetics for the plot
-      layout(title = list(text = paste0("Time series of ", input$enty)),
+      layout(title = list(text = paste0("Time series of ", input$SEy)),
              xaxis = list(title = "data Index"),
-             yaxis = list(title = paste0(input$enty)))
+             yaxis = list(title = paste0(input$SEy)))
   })
   
   # Entropy calculation
-  entResult <- eventReactive(input$goENT, {
-    SampleEntropy(ent_dat(), m = input$m, R = input$r)
+  SEresult <- eventReactive(input$goSEENT, {
+    SampleEntropy(SE_dat(), m = input$SEm, R = input$SEr)
   })
   
   # Print out the DFA results
-  output$entropyResults <- renderPrint({
-    entResult()
+  output$SEresults <- renderPrint({
+    SEresult()
   })
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
-  observeEvent(input$goENT, {
-    output$entropyHist <- renderPlot({
-      hist(ent_dat(), main = paste("Histogram of ", input$enty), xlab = input$enty)
+  observeEvent(input$goSEENT, {
+    output$SEhist <- renderPlot({
+      hist(SE_dat(), main = paste("Histogram of ", input$SEy), xlab = input$SEy)
     })
   }) # observeEvent
   
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
-  observeEvent(input$goENT, {
-    output$entropyACF <-  renderPlot({
-      acf(ent_dat(), main = paste("Autocorrelation of ", input$ycol))  
+  observeEvent(input$goSEENT, {
+    output$SEacf <-  renderPlot({
+      acf(SE_dat(), main = paste("Autocorrelation of ", input$ycol))  
+    })
+  }) # observeEvent
+
+  # Print the data so we can see what column is actually being selected. For debugging only
+  # output$SEdatHead <- renderTable({
+  #   head(get(input$dataChoice1))
+  # })
+  
+  # Approximate Entropy -----------------------------------------------------------------
+  
+  # get a list of the column names in the data frame
+  n2 = reactive({
+    names(get(input$dataChoice2))
+  })
+  
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoice2, {
+    updateSelectInput(inputId = "AEx", choices = n2())
+    updateSelectInput(inputId = "AEy", choices = n2(), selected = n2()[2])
+  })
+  
+  
+  # Select the desired data frame and by default the second column for analysis
+  AE_dat = reactive({
+    get(input$dataChoice2) |>
+      select(all_of(input$AEy)) |>
+      as.matrix()
+  })
+  
+  # plot the time series of the data
+  output$AEts <- renderPlotly({
+    
+    plot_dat = get(input$dataChoice2)
+    plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$AEy]], type = 'scatter', mode = 'lines', 
+            color = I('black')) %>% # Aesthetics for the plot
+      layout(title = list(text = paste0("Time series of ", input$AEy)),
+             xaxis = list(title = "data Index"),
+             yaxis = list(title = paste0(input$AEy)))
+  })
+  
+  # Entropy calculation
+  AEresult <- eventReactive(input$goAEENT, {
+    ApproximateEntropy(AE_dat(), dim = input$AEdim, R = input$AEr)
+  })
+  
+  # Print out the DFA results
+  output$AEresults <- renderPrint({
+    AEresult()
+  })
+  
+  # Histogram plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goAEENT, {
+    output$AEhist <- renderPlot({
+      hist(AE_dat(), main = paste("Histogram of ", input$AEy), xlab = input$AEy)
     })
   }) # observeEvent
   
-  output$entdatHead <- renderTable({
-    head(get(input$dataChoice1))
-    #head(dat())
-  })
+  # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goAEENT, {
+    output$AEacf <-  renderPlot({
+      acf(AE_dat(), main = paste("Autocorrelation of ", input$ycol))  
+    })
+  }) # observeEvent
+  
+  # Print the data so we can see what column is actually being selected. For debugging only
+  # output$SEdatHead <- renderTable({
+  #   head(get(input$dataChoice1))
+  # })
   
 } # server
 

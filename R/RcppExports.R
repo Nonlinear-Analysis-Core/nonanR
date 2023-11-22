@@ -39,7 +39,7 @@ SampleEntropy <- function(x, m, R) {
 
 #' This function computes the symbolic entropy on a time series really, really quickly. 
 #' 
-#' @param x - A vector of integers
+#' @param data - A vector of integers
 #' @param thresholdVal - the threshold of the search that you want to do
 #' @param seqLength - the length of the sequence that you want to find 
 #' @import Rcpp

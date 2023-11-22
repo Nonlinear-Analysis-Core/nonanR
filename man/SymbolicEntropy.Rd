@@ -7,11 +7,11 @@
 SymbolicEntropy(data, thresholdVal, seqLength)
 }
 \arguments{
+\item{data}{- A vector of integers}
+
 \item{thresholdVal}{- the threshold of the search that you want to do}
 
 \item{seqLength}{- the length of the sequence that you want to find}
-
-\item{x}{- A vector of integers}
 }
 \description{
 This function computes the symbolic entropy on a time series really, really quickly.

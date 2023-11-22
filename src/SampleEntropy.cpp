@@ -2,7 +2,9 @@
 using namespace Rcpp;
 // [[Rcpp::depends(RcppArmadillo)]]
 
-//' Calculate the sample entropy of a time series with this function.
+//' Sample Entropy
+//' 
+//' Calculate the sample entropy of a time series.
 //' 
 //' @param x - a single column time series
 //' @param m - the length of the vectors to be compared for matches
@@ -14,12 +16,12 @@ using namespace Rcpp;
 //' 
 //' @examples 
 //' 
-//' ts = rnorm(1000)
+//' x = rnorm(1000)
 //' 
 //' m = 2
 //' R = 0.2
 //' 
-//' SE = SampleEntropy(ts, m, R)
+//' SE = SampleEntropy(x, m, R)
 //' 
 //' @references
 //' Richman, J.S., Moorman, J.R., 2000. Physiological time-series analysis using approximate entropy and sample entropy. Am. J. Physiol. Heart Circ. Physiol. 278. https://doi.org/10.1152/ajpheart.2000.278.6.H2039

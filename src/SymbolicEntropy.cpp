@@ -4,9 +4,11 @@ using namespace Rcpp;
 
 int binToDec(arma::ivec binSeq, unsigned int seqLength);
 
-//' This function computes the symbolic entropy on a time series really, really quickly. 
+//' Symbolic Entropy 
 //' 
-//' @param data - A vector of integers
+//' Calculate the symbolic entropy of a time series.
+//' 
+//' @param x - A vector of integers
 //' @param thresholdVal - the threshold of the search that you want to do
 //' @param seqLength - the length of the sequence that you want to find 
 //' @import Rcpp
@@ -16,23 +18,23 @@ int binToDec(arma::ivec binSeq, unsigned int seqLength);
 //' 
 //' @examples 
 //' 
-//' ts = rnorm(1000)
+//' x = rnorm(1000)
 //' 
 //' thresholdVal = 2
 //' seqLength = 0.2
 //' 
-//' SymE = SymbolicEntropy(ts, thresholdVal, seqLength)
+//' SymE = SymbolicEntropy(x, thresholdVal, seqLength)
 //' 
 //' @references
 //' Aziz, W., Arif, M. Complexity analysis of stride interval time series by threshold dependent symbolic entropy. Eur J Appl Physiol 98, 30–40 (2006). https://doi.org/10.1007/s00421-006-0226-5
 // [[Rcpp::export]]
-double SymbolicEntropy(arma::vec data, double thresholdVal, unsigned int seqLength) {
+double SymbolicEntropy(arma::vec x, double thresholdVal, unsigned int seqLength) {
    
-  unsigned int dataSize = data.n_elem;
+  unsigned int dataSize = x.n_elem;
    
   arma::ivec binData(dataSize, arma::fill::zeros);
   for (unsigned int i = 0; i < dataSize; ++i){
-    if (data(i) > thresholdVal){
+    if (x(i) > thresholdVal){
       binData(i) = 1;
     }
   }

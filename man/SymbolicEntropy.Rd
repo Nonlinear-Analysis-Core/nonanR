@@ -2,31 +2,31 @@
 % Please edit documentation in R/RcppExports.R
 \name{SymbolicEntropy}
 \alias{SymbolicEntropy}
-\title{This function computes the symbolic entropy on a time series really, really quickly.}
+\title{Symbolic Entropy}
 \usage{
-SymbolicEntropy(data, thresholdVal, seqLength)
+SymbolicEntropy(x, thresholdVal, seqLength)
 }
 \arguments{
-\item{data}{- A vector of integers}
+\item{x}{- A vector of integers}
 
 \item{thresholdVal}{- the threshold of the search that you want to do}
 
 \item{seqLength}{- the length of the sequence that you want to find}
 }
 \description{
-This function computes the symbolic entropy on a time series really, really quickly.
+Calculate the symbolic entropy of a time series.
 }
 \details{
 Like all entropy functions, this one also quantifies the amount of complexity (or uncertainty/unpredictability) in the signal. Symbolic entropy can be used to gather greater insight into the underlying patterns seen in movement data.
 }
 \examples{
 
-ts = rnorm(1000)
+x = rnorm(1000)
 
 thresholdVal = 2
 seqLength = 0.2
 
-SymE = SymbolicEntropy(ts, thresholdVal, seqLength)
+SymE = SymbolicEntropy(x, thresholdVal, seqLength)
 
 }
 \references{

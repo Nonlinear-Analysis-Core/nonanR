@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{SampleEntropy}
 \alias{SampleEntropy}
-\title{Calculate the sample entropy of a time series with this function.}
+\title{Sample Entropy}
 \usage{
 SampleEntropy(x, m, R)
 }
@@ -14,19 +14,19 @@ SampleEntropy(x, m, R)
 \item{R}{- the radius for accepting matches}
 }
 \description{
-Calculate the sample entropy of a time series with this function.
+Calculate the sample entropy of a time series.
 }
 \details{
 Sample entropy can be used to quantify the complexity of a time series. A higher sample entropy value is associated with a more complex signal (more random). On the other hand a time series with a lower sample entropy value could be considered more predictable and repetitive.
 }
 \examples{
 
-ts = rnorm(1000)
+x = rnorm(1000)
 
 m = 2
 R = 0.2
 
-SE = SampleEntropy(ts, m, R)
+SE = SampleEntropy(x, m, R)
 
 }
 \references{

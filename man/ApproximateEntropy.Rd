@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{ApproximateEntropy}
 \alias{ApproximateEntropy}
-\title{Calculate the approximate entropy of a time series with this function.}
+\title{Approximate Entropy}
 \usage{
 ApproximateEntropy(x, dim, R)
 }
@@ -14,5 +14,17 @@ ApproximateEntropy(x, dim, R)
 \item{R}{is the radius in which to search for matches}
 }
 \description{
-Calculate the approximate entropy of a time series with this function.
+Calculate the approximate entropy of a time series.
+}
+\details{
+Here are some additional details about approximate entropy.
+}
+\examples{
+
+x = rnorm(1000)
+
+dim = 8
+R = 0.2
+
+AE = ApproximateEntropy(x, dim, R)
 }

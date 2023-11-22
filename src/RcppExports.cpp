@@ -38,15 +38,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // SymbolicEntropy
-double SymbolicEntropy(arma::vec data, double thresholdVal, unsigned int seqLength);
-RcppExport SEXP _NONANr_SymbolicEntropy(SEXP dataSEXP, SEXP thresholdValSEXP, SEXP seqLengthSEXP) {
+double SymbolicEntropy(arma::vec x, double thresholdVal, unsigned int seqLength);
+RcppExport SEXP _NONANr_SymbolicEntropy(SEXP xSEXP, SEXP thresholdValSEXP, SEXP seqLengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
     Rcpp::traits::input_parameter< double >::type thresholdVal(thresholdValSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type seqLength(seqLengthSEXP);
-    rcpp_result_gen = Rcpp::wrap(SymbolicEntropy(data, thresholdVal, seqLength));
+    rcpp_result_gen = Rcpp::wrap(SymbolicEntropy(x, thresholdVal, seqLength));
     return rcpp_result_gen;
 END_RCPP
 }

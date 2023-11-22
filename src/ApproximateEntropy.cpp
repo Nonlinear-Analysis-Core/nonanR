@@ -3,13 +3,26 @@ using namespace Rcpp;
 using namespace arma;
 // [[Rcpp::depends(RcppArmadillo)]]
 
-//' Calculate the approximate entropy of a time series with this function.
+//' Approximate Entropy
+//' 
+//' Calculate the approximate entropy of a time series.
 //' 
 //' @param x is the time series to analyse
 //' @param dim is the embedding dimension of the time series
 //' @param R is the radius in which to search for matches
 //' @import Rcpp
 //' @export
+//' 
+//' @details Here are some additional details about approximate entropy.
+//' 
+//' @examples
+//' 
+//' x = rnorm(1000)
+//' 
+//' dim = 8
+//' R = 0.2
+//' 
+//' AE = ApproximateEntropy(x, dim, R)
 // [[Rcpp::export]]
 arma::mat ApproximateEntropy(arma::colvec x, int dim, double R) {
  

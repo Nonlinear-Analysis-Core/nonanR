@@ -1,8 +1,4 @@
 
-# To have this be able to run as a function we need to have the app directory folder inside the package folder
-# Search for the folder in the package folder
-# Combine the package directory with the app name specified -- the actual folder name that the app file is in
-# Call runapp on that name
 
 library(shiny)
 library(shinythemes)
@@ -12,8 +8,8 @@ library(plotly)
 library(NONANr)
 
 # Create some mock data to use in the app
-left_dat = data.frame("stride_number" = 1:1000, "stride_time_left" = fgn_sim(1000, 0.75))
-right_dat = data.frame("stride_number" = 1:1000, "stride_time_right" = fgn_sim(1000, 0.8))
+#left_dat = data.frame("stride_number" = 1:1000, "stride_time_left" = fgn_sim(1000, 0.75))
+#right_dat = data.frame("stride_number" = 1:1000, "stride_time_right" = fgn_sim(1000, 0.8))
 
 
 myDataFrames <- names(which(unlist(eapply(.GlobalEnv,is.data.frame))))

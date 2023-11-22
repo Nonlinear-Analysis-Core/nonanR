@@ -12,14 +12,14 @@ ApproximateEntropy <- function(x, dim, R) {
     .Call(`_NONANr_ApproximateEntropy`, x, dim, R)
 }
 
-#' Calute the sample entropy of a time series with this function.
+#' Calculate the sample entropy of a time series with this function.
 #' 
-#' @param x  - a single column time series
+#' @param x - a single column time series
 #' @param m - the length of the vectors to be compared for matches
 #' @param R - the radius for accepting matches
 #' @import Rcpp
 #' @export
-#' 
+#'
 #' @details Sample entropy can be used to quantify the complexity of a time series. A higher sample entropy value is associated with a more complex signal (more random). On the other hand a time series with a lower sample entropy value could be considered more predictable and repetitive.
 #' 
 #' @examples 
@@ -37,15 +37,16 @@ SampleEntropy <- function(x, m, R) {
     .Call(`_NONANr_SampleEntropy`, x, m, R)
 }
 
-#' Symbolic Entropy
-#' 
 #' This function computes the symbolic entropy on a time series really, really quickly. 
 #' 
-#' @param x A vector of integers
-#' @param thresholdVal is the threshold of the search that you want to do
-#' @param seqLength is the length of the sequence that you want to find 
+#' @param x - A vector of integers
+#' @param thresholdVal - the threshold of the search that you want to do
+#' @param seqLength - the length of the sequence that you want to find 
+#' @import Rcpp
 #' @export
+#' 
 #' @details Like all entropy functions, this one also quantifies the amount of complexity (or uncertainty/unpredictability) in the signal. Symbolic entropy can be used to gather greater insight into the underlying patterns seen in movement data.
+#' 
 #' @examples 
 #' 
 #' ts = rnorm(1000)
@@ -54,10 +55,9 @@ SampleEntropy <- function(x, m, R) {
 #' seqLength = 0.2
 #' 
 #' SymE = SymbolicEntropy(ts, thresholdVal, seqLength)
+#' 
 #' @references
 #' Aziz, W., Arif, M. Complexity analysis of stride interval time series by threshold dependent symbolic entropy. Eur J Appl Physiol 98, 30–40 (2006). https://doi.org/10.1007/s00421-006-0226-5
-NULL
-
 SymbolicEntropy <- function(data, thresholdVal, seqLength) {
     .Call(`_NONANr_SymbolicEntropy`, data, thresholdVal, seqLength)
 }

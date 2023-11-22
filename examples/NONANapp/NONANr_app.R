@@ -28,7 +28,22 @@ library(shiny)
 ui <- fluidPage(theme = shinytheme("yeti"),
                 
                 # Application title
-                titlePanel("NONAN App"),
+                titlePanel(title=div(img(src="NONAN_header2.png", height = 70), 
+                                     ""), 
+                           windowTitle = ""),
+                # This changes the colour and padding of the titlepanel block
+                tags$style(HTML("
+                             h2{
+                             background: black;
+                             color: white;
+                             margin-top: 0px;
+                             margin-bottom: 0px
+                             }")),
+                # This adds some padding to the left side of the image in the title panel block
+                tags$style(HTML(
+                           "img {
+                           padding-left: 10px}")),
+                
                 navbarPage("{NONANr}", 
                            tabPanel("About", 
                                     includeMarkdown("About_NONAN.Rmd")),

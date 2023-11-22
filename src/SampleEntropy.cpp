@@ -2,14 +2,14 @@
 using namespace Rcpp;
 // [[Rcpp::depends(RcppArmadillo)]]
 
-//' Calute the sample entropy of a time series with this function.
+//' Calculate the sample entropy of a time series with this function.
 //' 
-//' @param x  - a single column time series
+//' @param x - a single column time series
 //' @param m - the length of the vectors to be compared for matches
 //' @param R - the radius for accepting matches
 //' @import Rcpp
 //' @export
-//' 
+//'
 //' @details Sample entropy can be used to quantify the complexity of a time series. A higher sample entropy value is associated with a more complex signal (more random). On the other hand a time series with a lower sample entropy value could be considered more predictable and repetitive.
 //' 
 //' @examples 

@@ -5,7 +5,7 @@ date: "2023-11-21"
 output: html_document
 ---
 
-## How to use our app
+### How to use our app
 
 -   Analysis methods are grouped according to their "analysis type"
 -   Select the analysis you want from the drop down menu
@@ -14,7 +14,7 @@ output: html_document
 -   A histogram is shown for you to check the distrubution of your data
 -   Autocorrelation is shown for some methods as a sanity check for the results of the selected analysis
 
-## About the Nonlinear Analysis Core
+### About the Nonlinear Analysis Core
 
 The Nonlinear Analysis Core (NONAN) is a non-profit service center based at the Center for Research in Human Movement Variability at the University of Nebraska at Omaha. We provide software, consulting, and educational resources for innovative analysis of time series data. These methods go beyond averages by looking at the time-varying characteristics of a time signal. NONAN provides access to a multitude of nonlinear analysis tools as well as assistance in experimental design, data processing, quality assurance, interpretation and dissemination. NONAN is also actively exploring and validating new techniques and algorithms for future use. In addition to our nonlinear methods, statistical analyses can also be performed.
 

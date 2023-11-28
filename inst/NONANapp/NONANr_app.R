@@ -43,20 +43,25 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                 navbarPage("{NONANr}", 
                            tabPanel("About", 
                                     includeMarkdown("About_NONAN.Rmd")),
+
+# Fractal Methods --------------------------------------------------------
+# Create a fractal methods tab group
+
                            navbarMenu("Fractal Methods",
 
-# DFA ---------------------------------------------------------------------
+## DFA ---------------------------------------------------------------------
                                       
                                       tabPanel("DFA", 
+                                               h4(strong("DFA")),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoice", "select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dataChoice", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
                                                    selectInput("dfax", "Select X axis", choices = NULL),
                                                    selectInput("dfay", "Select Y axis", choices = NULL),
                                                    numericInput("order", "Order:", value = 1),
                                                    numericInput("minScale", "Min Scale:", value = 4),
                                                    numericInput("maxScale", "Max Scale:", value = 10),
-                                                   numericInput("scaleRatio", "Scale Ratio:", value = 2),
+                                                   numericInput("scaleRatio", "Scale Ratio:", value = 2, step = 0.1),
                                                    actionButton("goDFA", "Go!"),
                                                    p("Click the button to start the analysis.")
                                                    
@@ -80,11 +85,16 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                ) # sidebarlayout
                                       ), # DFA tabpanel
                            ), # navbarPage
+
+
+# Entropy -----------------------------------------------------------------
+# Create an entropy tab group
                            navbarMenu("Entropy",
 
-# Sample Entropy ----------------------------------------------------------
+## Sample Entropy ----------------------------------------------------------
 
                            tabPanel("Sample Entropy",
+                                    h4(strong("Sample Entropy")),
                                     sidebarLayout(
                                       sidebarPanel(
                                         selectInput("dataChoice1", "select Data", choices = list("Your Data" = c(myDataFrames), 
@@ -93,7 +103,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                         selectInput("SEx", "Select X axis", choices = NULL),
                                         selectInput("SEy", "Select Y axis", choices = NULL),
                                         numericInput("SEm", "m value:", value = 2),
-                                        numericInput("SEr", "r value:", value = 0.2),
+                                        numericInput("SEr", "r value:", value = 0.2, step = 0.1),
                                         actionButton("goSEENT", "Go!"),
                                         p("Click the button to start the analysis.")
                                         
@@ -116,9 +126,10 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                     ) #sidebarlayout
                            ), # sample entropy tabpanel
 
-# Approximate Entropy -----------------------------------------------------
+## Approximate Entropy -----------------------------------------------------
 
                            tabPanel("Approximate Entropy",
+                                    h4(strong("Approximate Entropy")),
                                     sidebarLayout(
                                       sidebarPanel(
                                         selectInput("dataChoice2", "select Data", choices = list("Your Data" = c(myDataFrames), 
@@ -127,7 +138,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                         selectInput("AEx", "Select X axis", choices = NULL),
                                         selectInput("AEy", "Select Y axis", choices = NULL),
                                         numericInput("AEdim", "dim value:", value = 8),
-                                        numericInput("AEr", "r value:", value = 0.2),
+                                        numericInput("AEr", "r value:", value = 0.2, step = 0.1),
                                         actionButton("goAEENT", "Go!"),
                                         p("Click the button to start the analysis.")
                                         
@@ -214,20 +225,21 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goDFA, {
     output$histogram <- renderPlot({
-      hist(dfa_dat(), main = paste("Histogram of ", input$ycol), xlab = input$ycol)
+      hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
     })
   }) # observeEvent
   
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goDFA, {
     output$autocorr <-  renderPlot({
-      acf(dfa_dat(), main = paste("Autocorrelation of ", input$ycol))  
+      acf(dfa_dat(), main = paste("Autocorrelation of ", input$dfay))  
     })
   }) # observeEvent
   
   # Print out the DFA results
   output$dfaResults <- renderPrint({
-    dfaResult()
+    cat("Log Scales:", dfaResult()$log_scales, "\n", "Log RMS:", dfaResult()$log_rms, "\n", "Alpha:", dfaResult()$alpha)
+    #dfaResult()
     #input$ycol
   })
   
@@ -276,7 +288,7 @@ server <- function(input, output) {
   
   # Print out the DFA results
   output$SEresults <- renderPrint({
-    SEresult()
+    cat("Sample Entropy:", SEresult())
   })
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
@@ -289,7 +301,7 @@ server <- function(input, output) {
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSEENT, {
     output$SEacf <-  renderPlot({
-      acf(SE_dat(), main = paste("Autocorrelation of ", input$ycol))  
+      acf(SE_dat(), main = paste("Autocorrelation of ", input$SEy))  
     })
   }) # observeEvent
 
@@ -337,7 +349,7 @@ server <- function(input, output) {
   
   # Print out the DFA results
   output$AEresults <- renderPrint({
-    AEresult()
+    cat("Approximate Entropy:", AEresult())
   })
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
@@ -350,7 +362,7 @@ server <- function(input, output) {
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goAEENT, {
     output$AEacf <-  renderPlot({
-      acf(AE_dat(), main = paste("Autocorrelation of ", input$ycol))  
+      acf(AE_dat(), main = paste("Autocorrelation of ", input$AEy))  
     })
   }) # observeEvent
   

@@ -40,7 +40,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                            "img {
                            padding-left: 10px}")),
                 
-                navbarPage("{NONANr}", 
+                navbarPage("{nonanR}", 
                            tabPanel("About", 
                                     includeMarkdown("About_NONAN.Rmd")),
 

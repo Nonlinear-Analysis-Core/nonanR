@@ -420,17 +420,26 @@ server <- function(input, output) {
     updateSelectInput(inputId = "SymEy", choices = n3(), selected = n3()[2])
   })
   
+  observeEvent(input$SymEy, ignoreInit = TRUE, { # ignore init is crucial here so that the app actually loads
+    
+    mean_val <- get(input$dataChoice3) %>%
+      select(all_of(input$SymEy)) %>%
+      as.matrix() %>%
+      mean(na.rm = TRUE) %>% 
+      round(digits = 4) %>%
+      as.numeric()
+    
+    updateNumericInput(inputId = "SymEthresh", value = mean_val)
+    
+  })
+  
+
   # Select the desired data frame and by default the second column for analysis
   SymE_dat = reactive({
     get(input$dataChoice3) |>
       select(all_of(input$SymEy)) |>
       as.matrix()
   })
-  
-  # observeEvent(input$dataChoice3, {
-  #   updateNumericInput(inputId = "SymEthresh", value = mean(SymE_dat()))
-  # })
-
   
   # plot the time series of the data
   output$SymEts <- renderPlotly({
@@ -451,7 +460,6 @@ server <- function(input, output) {
   # Print out the DFA results
   output$SymEresults <- renderPrint({
     cat("Symbolic Entropy:", SymEresult())
-  print(mean(SymE_dat()))
   })
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
@@ -469,10 +477,10 @@ server <- function(input, output) {
   }) # observeEvent
   
   # Print the data so we can see what column is actually being selected. For debugging only
-  output$SymEdatHead <- renderTable({
-     head(get(input$dataChoice3))
-    head(SymE_dat())
-  })
+  # output$SymEdatHead <- renderTable({
+  #   head(get(input$dataChoice3))
+  #   head(SymE_dat())
+  # })
   
 } # server
 

@@ -50,11 +50,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dfa
+List dfa(arma::vec x, int order, arma::uword verbose, arma::uvec scales, double scale_ratio);
+RcppExport SEXP _NONANr_dfa(SEXP xSEXP, SEXP orderSEXP, SEXP verboseSEXP, SEXP scalesSEXP, SEXP scale_ratioSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type order(orderSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type verbose(verboseSEXP);
+    Rcpp::traits::input_parameter< arma::uvec >::type scales(scalesSEXP);
+    Rcpp::traits::input_parameter< double >::type scale_ratio(scale_ratioSEXP);
+    rcpp_result_gen = Rcpp::wrap(dfa(x, order, verbose, scales, scale_ratio));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_NONANr_ApproximateEntropy", (DL_FUNC) &_NONANr_ApproximateEntropy, 3},
     {"_NONANr_SampleEntropy", (DL_FUNC) &_NONANr_SampleEntropy, 3},
     {"_NONANr_SymbolicEntropy", (DL_FUNC) &_NONANr_SymbolicEntropy, 3},
+    {"_NONANr_dfa", (DL_FUNC) &_NONANr_dfa, 5},
     {NULL, NULL, 0}
 };
 

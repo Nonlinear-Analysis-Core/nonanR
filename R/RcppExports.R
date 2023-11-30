@@ -79,3 +79,47 @@ SymbolicEntropy <- function(x, thresholdVal, seqLength) {
     .Call(`_NONANr_SymbolicEntropy`, x, thresholdVal, seqLength)
 }
 
+#' detrending function that returns the sum of squared residuals */
+NULL
+
+#' simple linear regression
+NULL
+
+#' Integer sequence
+NULL
+
+#' Detrended Fluctuation Analysis
+#' 
+#' Something a little more can go here
+#' 
+#' @param x - x, A real values vector (i.e., time series data) to be analyzed.
+#' @param order - an integer indicating the polynomial order used for detrending the local windows (e.g., 1 = linear, 2 = quadratic, etc.).
+#' @param verbose - a boolean that when = 1 indicates that the flucuation function inlcuding the log of all included scales as well as the log Rms should be returned as well as the alpha or when = 0 only the estimated scaling exponent alpha will be returned.
+#' @param scales - An integer valued vector indicating the scales one wishes to resolve in the analysis.
+#' @param scale_ratio - A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max.
+#' 
+#' @details DFA is useful in the analysis of many things but also it has a lot of requirements that should be met before using it.
+#' 
+#' @examples
+#' x = rnorm(1000)
+#' order = 1
+#' verbose = 1
+#' scales <- c(16,32,64,128,256,512,1024)
+#' scale_ratio = 2
+#' 
+#' dfa_out = dfa(x, order, verbose, scales, scale_ratio)
+#' 
+#' @references
+#' Eke, A., Herman, P., Kocsis, L., & Kozak, L. R. (2002). Fractal characterization of complexity in temporal physiological signals. Physiological measurement, 23(1), R1-R38.
+#' Gulich, D., & Zunino, L. (2014). A criterion for the determination of optimal scaling ranges in DFA and MF-DFA. Physica A: Statistical Mechanics and its Applications, 397, 17-30.
+#' Kantelhardt, J. W., Koscielny-Bunde, E., Rego, H. H., Havlin, S., & Bunde, A. (2001). Detecting long-range correlations with detrended fluctuation analysis. Physica A: Statistical Mechanics and its Applications, 295(3-4), 441-454.
+#' Kelty-Stephen, D. G., Stirling, L. A., & Lipsitz, L. A. (2016). Multifractal temporal correlations in circle-tracing behaviors are associated with the executive function of rule-switching assessed by the Trail Making Test. Psychological assessment, 28(2), 171-180. 
+#' Peng C-K, Buldyrev SV, Havlin S, Simons M, Stanley HE, and Goldberger AL (1994), Mosaic organization of DNA nucleotides, Physical Review E, 49, 1685-1689. 
+#' Peng C-K, Havlin S, Stanley HE, and Goldberger AL (1995), Quantification of scaling exponents and crossover phenomena in nonstationary heartbeat time series, Chaos, 5, 82-87.
+#' Perakakis, P., Taylor, M., Martinez-Nieto, E., Revithi, I., & Vila, J. (2009). Breathing frequency bias in fractal analysis of heart rate variability. Biological psychology, 82(1), 82-88.
+NULL
+
+dfa <- function(x, order, verbose, scales, scale_ratio) {
+    .Call(`_NONANr_dfa`, x, order, verbose, scales, scale_ratio)
+}
+

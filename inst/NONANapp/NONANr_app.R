@@ -37,19 +37,19 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                              }")),
                 # This adds some padding to the left side of the image in the title panel block
                 tags$style(HTML(
-                           "img {
+                  "img {
                            padding-left: 10px}")),
                 
                 navbarPage("{nonanR}", 
                            tabPanel("About", 
                                     includeMarkdown("About_NONAN.Rmd")),
-
-# Fractal Methods --------------------------------------------------------
-# Create a fractal methods tab group
-
+                           
+                           # Fractal Methods --------------------------------------------------------
+                           # Create a fractal methods tab group
+                           
                            navbarMenu("Fractal Methods",
-
-## DFA ---------------------------------------------------------------------
+                                      
+                                      ## DFA ---------------------------------------------------------------------
                                       
                                       tabPanel("DFA", 
                                                h4(strong("DFA")),
@@ -85,81 +85,116 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                ) # sidebarlayout
                                       ), # DFA tabpanel
                            ), # navbarPage
-
-
-# Entropy -----------------------------------------------------------------
-# Create an entropy tab group
+                           
+                           
+                           # Entropy -----------------------------------------------------------------
+                           # Create an entropy tab group
                            navbarMenu("Entropy",
-
-## Sample Entropy ----------------------------------------------------------
-
-                           tabPanel("Sample Entropy",
-                                    h4(strong("Sample Entropy")),
-                                    sidebarLayout(
-                                      sidebarPanel(
-                                        selectInput("dataChoice1", "select Data", choices = list("Your Data" = c(myDataFrames), 
-                                                                                                 "R Datasets" = c(loadedData), 
-                                                                                                 selected = NULL)),
-                                        selectInput("SEx", "Select X axis", choices = NULL),
-                                        selectInput("SEy", "Select Y axis", choices = NULL),
-                                        numericInput("SEm", "m value:", value = 2),
-                                        numericInput("SEr", "r value:", value = 0.2, step = 0.1),
-                                        actionButton("goSEENT", "Go!"),
-                                        p("Click the button to start the analysis.")
-                                        
-                                      ), # sidebarpanel
                                       
-                                      mainPanel(fluidRow( 
-                                        column(12,  plotlyOutput('SEts')), # single row just for the time series plot
-                                      ), 
-                                      br(),
-                                      br(),
-                                      fluidRow( 
-                                        column(6,  plotOutput('SEhist')),
-                                        column(6,  plotOutput('SEacf'))
-                                      ), 
-                                      verbatimTextOutput("SEresults"), 
-                                      br(),
-                                      br(),
-                                      # tableOutput("SEdatHead") # This was largely for debugging
-                                      ) # mainpanel
-                                    ) #sidebarlayout
-                           ), # sample entropy tabpanel
-
-## Approximate Entropy -----------------------------------------------------
-
-                           tabPanel("Approximate Entropy",
-                                    h4(strong("Approximate Entropy")),
-                                    sidebarLayout(
-                                      sidebarPanel(
-                                        selectInput("dataChoice2", "select Data", choices = list("Your Data" = c(myDataFrames), 
-                                                                                                 "R Datasets" = c(loadedData), 
-                                                                                                 selected = NULL)),
-                                        selectInput("AEx", "Select X axis", choices = NULL),
-                                        selectInput("AEy", "Select Y axis", choices = NULL),
-                                        numericInput("AEdim", "dim value:", value = 8),
-                                        numericInput("AEr", "r value:", value = 0.2, step = 0.1),
-                                        actionButton("goAEENT", "Go!"),
-                                        p("Click the button to start the analysis.")
-                                        
-                                      ), # sidebarpanel
+                                      ## Sample Entropy ----------------------------------------------------------
                                       
-                                      mainPanel(fluidRow( 
-                                        column(12,  plotlyOutput('AEts')), # single row just for the time series plot
-                                      ), 
-                                      br(),
-                                      br(),
-                                      fluidRow( 
-                                        column(6,  plotOutput('AEhist')),
-                                        column(6,  plotOutput('AEacf'))
-                                      ), 
-                                      verbatimTextOutput("AEresults"), 
-                                      br(),
-                                      br(),
-                                      tableOutput("AEdatHead") # This was largely for debugging
-                                      ) # mainpanel
-                                    ) #sidebarlayout
-                           ) # entropy tabpanel
+                                      tabPanel("Sample Entropy",
+                                               h4(strong("Sample Entropy")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoice1", "select Data", choices = list("Your Data" = c(myDataFrames), 
+                                                                                                            "R Datasets" = c(loadedData), 
+                                                                                                            selected = NULL)),
+                                                   selectInput("SEx", "Select X axis", choices = NULL),
+                                                   selectInput("SEy", "Select Y axis", choices = NULL),
+                                                   numericInput("SEm", "m value:", value = 2),
+                                                   numericInput("SEr", "r value:", value = 0.2, step = 0.1),
+                                                   actionButton("goSEENT", "Go!"),
+                                                   p("Click the button to start the analysis.")
+                                                   
+                                                 ), # sidebarpanel
+                                                 
+                                                 mainPanel(fluidRow( 
+                                                   column(12,  plotlyOutput('SEts')), # single row just for the time series plot
+                                                 ), 
+                                                 br(),
+                                                 br(),
+                                                 fluidRow( 
+                                                   column(6,  plotOutput('SEhist')),
+                                                   column(6,  plotOutput('SEacf'))
+                                                 ), 
+                                                 verbatimTextOutput("SEresults"), 
+                                                 br(),
+                                                 br(),
+                                                 # tableOutput("SEdatHead") # This was largely for debugging
+                                                 ) # mainpanel
+                                               ) #sidebarlayout
+                                      ), # sample entropy tabpanel
+                                      
+                                      ## Approximate Entropy -----------------------------------------------------
+                                      
+                                      tabPanel("Approximate Entropy",
+                                               h4(strong("Approximate Entropy")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoice2", "select Data", choices = list("Your Data" = c(myDataFrames), 
+                                                                                                            "R Datasets" = c(loadedData), 
+                                                                                                            selected = NULL)),
+                                                   selectInput("AEx", "Select X axis", choices = NULL),
+                                                   selectInput("AEy", "Select Y axis", choices = NULL),
+                                                   numericInput("AEdim", "dim value:", value = 8),
+                                                   numericInput("AEr", "r value:", value = 0.2, step = 0.1),
+                                                   actionButton("goAEENT", "Go!"),
+                                                   p("Click the button to start the analysis.")
+                                                   
+                                                 ), # sidebarpanel
+                                                 
+                                                 mainPanel(fluidRow( 
+                                                   column(12,  plotlyOutput('AEts')), # single row just for the time series plot
+                                                 ), 
+                                                 br(),
+                                                 br(),
+                                                 fluidRow( 
+                                                   column(6,  plotOutput('AEhist')),
+                                                   column(6,  plotOutput('AEacf'))
+                                                 ), 
+                                                 verbatimTextOutput("AEresults"), 
+                                                 br(),
+                                                 br(),
+                                                 tableOutput("AEdatHead") # This was largely for debugging
+                                                 ) # mainpanel
+                                               ) #sidebarlayout
+                                      ), # approximate entropy tabpanel
+                                      
+                                      ## Symbolic Entropy --------------------------------------------------------
+                                      tabPanel("Symbolic Entropy",
+                                               h4(strong("Symbolic Entropy")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoice3", "select Data", choices = list("Your Data" = c(myDataFrames), 
+                                                                                                            "R Datasets" = c(loadedData), 
+                                                                                                            selected = NULL)),
+                                                   selectInput("SymEx", "Select X axis", choices = NULL),
+                                                   selectInput("SymEy", "Select Y axis", choices = NULL),
+                                                   numericInput("SymEthresh", "Threshold value:", value = NULL),
+                                                   numericInput("SymEseql", "Sequence length:", value = 2),
+                                                   actionButton("goSymENT", "Go!"),
+                                                   p("Click the button to start the analysis.")
+                                                   
+                                                 ), # sidebarpanel
+                                                 
+                                                 mainPanel(fluidRow( 
+                                                   column(12,  plotlyOutput('SymEts')), # single row just for the time series plot
+                                                 ), 
+                                                 br(),
+                                                 br(),
+                                                 fluidRow( 
+                                                   column(6,  plotOutput('SymEhist')),
+                                                   column(6,  plotOutput('SymEacf'))
+                                                 ), 
+                                                 verbatimTextOutput("SymEresults"), 
+                                                 br(),
+                                                 br(),
+                                                 tableOutput("SymEdatHead") # This was largely for debugging
+                                                 ) # mainpanel
+                                               ) #sidebarlayout
+                                      ) # symbolic entropy tabpanel
+                                      
                            ) # navbarMenu
                 ) # navbar page
 ) # fluidpage
@@ -304,7 +339,7 @@ server <- function(input, output) {
       acf(SE_dat(), main = paste("Autocorrelation of ", input$SEy))  
     })
   }) # observeEvent
-
+  
   # Print the data so we can see what column is actually being selected. For debugging only
   # output$SEdatHead <- renderTable({
   #   head(get(input$dataChoice1))
@@ -370,6 +405,74 @@ server <- function(input, output) {
   # output$SEdatHead <- renderTable({
   #   head(get(input$dataChoice1))
   # })
+  
+  
+  # Symbolic Entropy --------------------------------------------------------
+  
+  # get a list of the column names in the data frame
+  n3 = reactive({
+    names(get(input$dataChoice3))
+  })
+  
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoice3, {
+    updateSelectInput(inputId = "SymEx", choices = n3())
+    updateSelectInput(inputId = "SymEy", choices = n3(), selected = n3()[2])
+  })
+  
+  # Select the desired data frame and by default the second column for analysis
+  SymE_dat = reactive({
+    get(input$dataChoice3) |>
+      select(all_of(input$SymEy)) |>
+      as.matrix()
+  })
+  
+  # observeEvent(input$dataChoice3, {
+  #   updateNumericInput(inputId = "SymEthresh", value = mean(SymE_dat()))
+  # })
+
+  
+  # plot the time series of the data
+  output$SymEts <- renderPlotly({
+    
+    plot_dat = get(input$dataChoice3)
+    plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SymEy]], type = 'scatter', mode = 'lines', 
+            color = I('black')) %>% # Aesthetics for the plot
+      layout(title = list(text = paste0("Time series of ", input$SymEy)),
+             xaxis = list(title = "data Index"),
+             yaxis = list(title = paste0(input$SymEy)))
+  })
+  
+  # Entropy calculation
+  SymEresult <- eventReactive(input$goSymENT, {
+    SymbolicEntropy(SymE_dat(), thresholdVal = input$SymEthresh, seqLength = input$SymEseql)
+  })
+  
+  # Print out the DFA results
+  output$SymEresults <- renderPrint({
+    cat("Symbolic Entropy:", SymEresult())
+  print(mean(SymE_dat()))
+  })
+  
+  # Histogram plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goSymENT, {
+    output$SymEhist <- renderPlot({
+      hist(SymE_dat(), main = paste("Histogram of ", input$SymEy), xlab = input$SymEy)
+    })
+  }) # observeEvent
+  
+  # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goSymENT, {
+    output$SymEacf <-  renderPlot({
+      acf(SymE_dat(), main = paste("Autocorrelation of ", input$SymEy))  
+    })
+  }) # observeEvent
+  
+  # Print the data so we can see what column is actually being selected. For debugging only
+  output$SymEdatHead <- renderTable({
+     head(get(input$dataChoice3))
+    head(SymE_dat())
+  })
   
 } # server
 

@@ -63,14 +63,14 @@ arma::mat ApproximateEntropy(arma::colvec x, int dim, double R) {
 
 
   /*** R
-  source("C:/Users/jsommerfeld/Desktop/Rcode/ApEn.R")
+  #source("C:/Users/jsommerfeld/Desktop/Rcode/ApEn.R")
    
-  y = rnorm(1000)
+  #y = rnorm(1000)
   
-  dim = nonlinearTseries::estimateEmbeddingDim(y, do.plot = FALSE)
+  #dim = nonlinearTseries::estimateEmbeddingDim(y, do.plot = FALSE)
   
   
-  rbenchmark::benchmark("R" = Ent_Ap(y, dim, 0.2), 
-                       "C++" = ApproximateEntropy(y, dim, 0.2), replications = 1)
+  #rbenchmark::benchmark("R" = Ent_Ap(y, dim, 0.2), 
+   #                    "C++" = ApproximateEntropy(y, dim, 0.2), replications = 1)
   
   */

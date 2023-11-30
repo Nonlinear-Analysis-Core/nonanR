@@ -79,28 +79,22 @@ SymbolicEntropy <- function(x, thresholdVal, seqLength) {
     .Call(`_NONANr_SymbolicEntropy`, x, thresholdVal, seqLength)
 }
 
-#' detrending function that returns the sum of squared residuals */
-NULL
-
-#' simple linear regression
-NULL
-
-#' Integer sequence
-NULL
-
 #' Detrended Fluctuation Analysis
 #' 
 #' Something a little more can go here
 #' 
-#' @param x - x, A real values vector (i.e., time series data) to be analyzed.
+#' @param x - A real values vector (i.e., time series data) to be analyzed.
 #' @param order - an integer indicating the polynomial order used for detrending the local windows (e.g., 1 = linear, 2 = quadratic, etc.).
 #' @param verbose - a boolean that when = 1 indicates that the flucuation function inlcuding the log of all included scales as well as the log Rms should be returned as well as the alpha or when = 0 only the estimated scaling exponent alpha will be returned.
 #' @param scales - An integer valued vector indicating the scales one wishes to resolve in the analysis.
 #' @param scale_ratio - A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max.
+#' @import Rcpp
+#' @export
 #' 
 #' @details DFA is useful in the analysis of many things but also it has a lot of requirements that should be met before using it.
 #' 
 #' @examples
+#' 
 #' x = rnorm(1000)
 #' order = 1
 #' verbose = 1
@@ -117,8 +111,6 @@ NULL
 #' Peng C-K, Buldyrev SV, Havlin S, Simons M, Stanley HE, and Goldberger AL (1994), Mosaic organization of DNA nucleotides, Physical Review E, 49, 1685-1689. 
 #' Peng C-K, Havlin S, Stanley HE, and Goldberger AL (1995), Quantification of scaling exponents and crossover phenomena in nonstationary heartbeat time series, Chaos, 5, 82-87.
 #' Perakakis, P., Taylor, M., Martinez-Nieto, E., Revithi, I., & Vila, J. (2009). Breathing frequency bias in fractal analysis of heart rate variability. Biological psychology, 82(1), 82-88.
-NULL
-
 dfa <- function(x, order, verbose, scales, scale_ratio) {
     .Call(`_NONANr_dfa`, x, order, verbose, scales, scale_ratio)
 }

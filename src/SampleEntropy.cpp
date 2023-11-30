@@ -74,11 +74,11 @@ arma::mat SampleEntropy(arma::colvec x, int m, double R) {
 //
 
 /*** R
-source("C:/Users/jsommerfeld/Desktop/Rcode/SampEn.R")
+#source("C:/Users/jsommerfeld/Desktop/Rcode/SampEn.R")
 
-y = rnorm(1000)
+#y = rnorm(1000)
 
-rbenchmark::benchmark("R" = SampEn(y, 2, 0.2), 
-                      "C++" = SampleEntropy(y, 2, 0.2), replications = 1)
+#rbenchmark::benchmark("R" = SampEn(y, 2, 0.2), 
+#                      "C++" = SampleEntropy(y, 2, 0.2), replications = 1)
 
 */

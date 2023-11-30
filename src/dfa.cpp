@@ -1,14 +1,13 @@
 #include <RcppArmadillo.h>
 using namespace Rcpp;
+using namespace arma;
 // [[Rcpp::depends(RcppArmadillo)]]
 
-//' detrending function that returns the sum of squared residuals */
+// detrending function that returns the sum of squared residuals */
 double polyDetrend(arma::vec y, int m);
  
-//' simple linear regression
+// simple linear regression
 arma::colvec lmC(arma::vec xs, arma::vec ys);
-
-//' Integer sequence
 
 //' Detrended Fluctuation Analysis
 //' 
@@ -25,6 +24,7 @@ arma::colvec lmC(arma::vec xs, arma::vec ys);
 //' @details DFA is useful in the analysis of many things but also it has a lot of requirements that should be met before using it.
 //' 
 //' @examples
+//' 
 //' x = rnorm(1000)
 //' order = 1
 //' verbose = 1
@@ -59,7 +59,7 @@ arma::colvec lmC(arma::vec xs, arma::vec ys);
      // indx = indx-1;
      arma::uword number_of_blocks = floor(len/window);
      for ( arma::uword j = 0; j < number_of_blocks; ++j){
-       RMS(i) = RMS(i) + arma::accu(pow(polyDetrend(X.rows(indx), order), 2));
+       RMS(i) = RMS(i) + arma::accu(arma::pow(polyDetrend(X.rows(indx), order), 2));
        count = count + 1;
        indx = indx + window;
      }

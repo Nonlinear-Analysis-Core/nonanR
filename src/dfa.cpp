@@ -1,13 +1,8 @@
 #include <RcppArmadillo.h>
+#include "helpers.hpp"
 using namespace Rcpp;
 using namespace arma;
 // [[Rcpp::depends(RcppArmadillo)]]
-
-// detrending function that returns the sum of squared residuals */
-double polyDetrend(arma::vec y, int m);
- 
-// simple linear regression
-arma::colvec lmC(arma::vec xs, arma::vec ys);
 
 //' Detrended Fluctuation Analysis
 //' 
@@ -42,85 +37,56 @@ arma::colvec lmC(arma::vec xs, arma::vec ys);
 //' Peng C-K, Havlin S, Stanley HE, and Goldberger AL (1995), Quantification of scaling exponents and crossover phenomena in nonstationary heartbeat time series, Chaos, 5, 82-87.
 //' Perakakis, P., Taylor, M., Martinez-Nieto, E., Revithi, I., & Vila, J. (2009). Breathing frequency bias in fractal analysis of heart rate variability. Biological psychology, 82(1), 82-88.
 // [[Rcpp::export]]
- List dfa(arma::vec x, int order, arma::uword verbose, arma::uvec scales, double scale_ratio){
-   
-   double len = x.n_elem;
-   arma::uword number_of_scales = scales.n_elem;
-   arma::vec resid(number_of_scales);
-   arma::vec X = cumsum(x-mean(x));
-   
-   // do the detrending and return the RMSE for each of the ith scales
-   arma::vec RMS(number_of_scales);
-   
-   for (arma::uword i = 0; i < number_of_scales; ++i){
-     arma::uword window = scales[i];
-     arma::uword count = 0;
-     arma::uvec indx = 0; //seq_int(window); -- changed to 0 based on nonancpp function
-     // indx = indx-1;
-     arma::uword number_of_blocks = floor(len/window);
-     for ( arma::uword j = 0; j < number_of_blocks; ++j){
-       RMS(i) = RMS(i) + arma::accu(arma::pow(polyDetrend(X.rows(indx), order), 2));
-       count = count + 1;
-       indx = indx + window;
-     }
-     
-     RMS(i) = sqrt(RMS(i)/(count*window));
-     
-   }
-   
-   // take the logm of scales and RMS
-   arma::vec log_scale(number_of_scales);
-   arma::vec log_rms(number_of_scales);
-   if (abs(scale_ratio-2)<.00001){
-     log_scale = arma::log2(arma::conv_to<arma::vec>::from(scales));
-     log_rms = arma::log2(RMS);
-   }else{
-     log_scale = log(arma::conv_to<arma::vec>::from(scales))/log(scale_ratio);
-     log_rms = log(RMS)/log(scale_ratio);
-   }
-   
-   //compute scaling coefficient
-   arma::colvec alpha = lmC(log_scale, log_rms);
-   
-   //create a list of output and return it
-   if(verbose == 0){
-     return List::create(Named("alpha") = alpha(1));
-   }else{
-     return List::create(Named("log_scales") = log_scale, Named("log_rms")=log_rms, Named("alpha") = alpha(1));
-   }
- }
-
-
-double polyDetrend(arma::vec y, int m) {
-  int rows = y.n_elem;
-  int cols = m + 1;
-  arma::colvec coef(cols), resid;
-  arma::mat x(rows, cols);
+List dfa(arma::vec x, int order, arma::uword verbose, 
+         arma::uvec scales, double scale_ratio = 2){
   
-  /* allocate memory for x and power of x vectors */
-  arma::vec t1 = arma::mat(0, rows - 1); // this may be wrong.... it was originally arma::vec
-  t1 = t1 - mean(t1);
-  for (int i = 0; i < cols; i++) {	
-    x.col(i) = arma::pow(t1, i);
+  double len = x.n_elem;
+  arma::uword number_of_scales = scales.n_elem;
+  arma::vec resid(number_of_scales);
+  arma::vec X = cumsum(x-mean(x));
+  
+  // do the detrending and return the RMSE for each of the ith scales
+  arma::vec RMS(number_of_scales);
+  
+  for (arma::uword i = 0; i < number_of_scales; ++i){
+    arma::uword window = scales[i];
+    arma::uword count = 0;
+    arma::uvec indx = seq_int(window);
+    // indx = indx-1;
+    arma::uword number_of_blocks = floor(len/window);
+    for ( arma::uword j = 0; j < number_of_blocks; ++j){
+      RMS(i) = RMS(i) + arma::accu(arma::pow(poly_residuals(X.rows(indx), 
+                                   order),2));
+      count = count + 1;
+      indx = indx + window;
+    }
+    
+    RMS(i) = sqrt(RMS(i)/(count*window));
+    
   }
   
-  coef = solve(x, y);
-  resid = y - x * coef;
-  
-  /* square and sum the residuals */
-  double ssResid = 0;
-  for (int i = 0; i < rows; i++) {
-    ssResid = ssResid + pow(resid(i), 2);
+  //take the logm of scales and RMS
+  arma::vec log_scale(number_of_scales);
+  arma::vec log_rms(number_of_scales);
+  if (abs(scale_ratio-2)<.00001){
+    log_scale = arma::log2(arma::conv_to<arma::vec>::from(scales));
+    log_rms = arma::log2(RMS);
+  }else{
+    log_scale = log(arma::conv_to<arma::vec>::from(scales))/log(scale_ratio);
+    log_rms = log(RMS)/log(scale_ratio);
   }
   
-  return ssResid;
+  //compute scaling coefficient
+  arma::colvec alpha = lm_c(log_scale,log_rms);
+  
+  //create a list of output and return it
+  if(verbose == 0){
+    return List::create(Named("alpha") = alpha(1));
+  }else{
+    return List::create(Named("log_scales") = log_scale, Named("log_rms")=log_rms, Named("alpha") = alpha(1));
+  }
 }
 
-arma::colvec lmC(arma::vec x, arma::vec y) {
-  arma::mat augmentedX(y.n_elem, 2, arma::fill::ones);
-  augmentedX.col(1) = x;
-  return solve(augmentedX, y);
-}
 
 /*** R
 x = rnorm(1000)

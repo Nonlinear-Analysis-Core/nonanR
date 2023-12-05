@@ -65,12 +65,50 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// poly_residuals
+arma::vec poly_residuals(arma::vec yr, int m);
+RcppExport SEXP _NONANr_poly_residuals(SEXP yrSEXP, SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type yr(yrSEXP);
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(poly_residuals(yr, m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// lm_c
+arma::vec lm_c(arma::vec xs, arma::vec yr);
+RcppExport SEXP _NONANr_lm_c(SEXP xsSEXP, SEXP yrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type xs(xsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type yr(yrSEXP);
+    rcpp_result_gen = Rcpp::wrap(lm_c(xs, yr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// seq_int
+arma::uvec seq_int(arma::uword length);
+RcppExport SEXP _NONANr_seq_int(SEXP lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::uword >::type length(lengthSEXP);
+    rcpp_result_gen = Rcpp::wrap(seq_int(length));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_NONANr_ApproximateEntropy", (DL_FUNC) &_NONANr_ApproximateEntropy, 3},
     {"_NONANr_SampleEntropy", (DL_FUNC) &_NONANr_SampleEntropy, 3},
     {"_NONANr_SymbolicEntropy", (DL_FUNC) &_NONANr_SymbolicEntropy, 3},
     {"_NONANr_dfa", (DL_FUNC) &_NONANr_dfa, 5},
+    {"_NONANr_poly_residuals", (DL_FUNC) &_NONANr_poly_residuals, 2},
+    {"_NONANr_lm_c", (DL_FUNC) &_NONANr_lm_c, 2},
+    {"_NONANr_seq_int", (DL_FUNC) &_NONANr_seq_int, 1},
     {NULL, NULL, 0}
 };
 

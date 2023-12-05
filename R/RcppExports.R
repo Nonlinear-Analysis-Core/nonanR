@@ -111,7 +111,19 @@ SymbolicEntropy <- function(x, thresholdVal, seqLength) {
 #' Peng C-K, Buldyrev SV, Havlin S, Simons M, Stanley HE, and Goldberger AL (1994), Mosaic organization of DNA nucleotides, Physical Review E, 49, 1685-1689. 
 #' Peng C-K, Havlin S, Stanley HE, and Goldberger AL (1995), Quantification of scaling exponents and crossover phenomena in nonstationary heartbeat time series, Chaos, 5, 82-87.
 #' Perakakis, P., Taylor, M., Martinez-Nieto, E., Revithi, I., & Vila, J. (2009). Breathing frequency bias in fractal analysis of heart rate variability. Biological psychology, 82(1), 82-88.
-dfa <- function(x, order, verbose, scales, scale_ratio) {
+dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
     .Call(`_NONANr_dfa`, x, order, verbose, scales, scale_ratio)
+}
+
+poly_residuals <- function(yr, m) {
+    .Call(`_NONANr_poly_residuals`, yr, m)
+}
+
+lm_c <- function(xs, yr) {
+    .Call(`_NONANr_lm_c`, xs, yr)
+}
+
+seq_int <- function(length) {
+    .Call(`_NONANr_seq_int`, length)
 }
 

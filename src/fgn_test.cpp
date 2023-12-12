@@ -5,7 +5,7 @@ using namespace Rcpp;
 //' Function to generate Fractional Gaussian Noise
  
  // [[Rcpp::export]]
-arma::vec fgn_test(int n = 1000, double H = 0.7) {
+ arma::cx_vec fgn_test(int n = 1000, double H = 0.7) {
    // Settings
    double mean = 0;
    double std = 1;
@@ -40,7 +40,7 @@ arma::vec fgn_test(int n = 1000, double H = 0.7) {
    // Calculate parameters for FGN
    arma::vec k = arma::regspace(0, n - 1); // 1000 points long
    arma::vec gammak = (arma::pow(abs(k - 1), 2 * H) - 2 * arma::pow(abs(k), 2 * H) + arma::pow(abs(k + 1), 2 * H)) / 2; // This seems to check out
-
+   
    
    // define the elements to join. These should create a pyramid with 999 being the point in the middle of the vector.
    arma::uvec A = arma::regspace<arma::uvec>(0, n - 1);
@@ -54,7 +54,7 @@ arma::vec fgn_test(int n = 1000, double H = 0.7) {
    
    arma::vec gksqrt = arma::real(gkFGN0);
    
-   double two = 0;
+   arma::vec temp;
    
    // Check if all elements in gksqrt are positive
    if (all(gksqrt > 0)) {
@@ -64,19 +64,21 @@ arma::vec fgn_test(int n = 1000, double H = 0.7) {
      z_complex = arma::ifft(z_complex);
      
      double one = std::pow(n - 1, -0.5);
-     two = one * 0.5;
+     double two = one * 0.5;
+     // Everything seems to be fine until here
+     
      z_complex = z_complex * two;
      arma::vec temp = arma::real(z_complex);
      ans = temp.head(n);
-     } else {
-   //    gksqrt.zeros();
-   //    stop("Re(gk)-vector not positive");
-     }
+   } else {
+     //    gksqrt.zeros();
+     //    stop("Re(gk)-vector not positive");
+   }
    //
    // Standardize the result
    ans = std * ans + mean;
    
-   return(ans); // Return the generated FGN
+   return(temp); // Return the generated FGN
  }
  
  

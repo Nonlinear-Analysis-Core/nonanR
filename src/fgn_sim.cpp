@@ -47,7 +47,7 @@ arma::vec fgn_sim(int n = 1000, double H = 0.7) {
   arma::cx_mat gkFGN0 = arma::ifft(complex_gammak);
   
   //arma::vec gksqrt = arma::real(gkFGN0);
-  
+
   // Check if all elements in gksqrt are positive
   // if (all(gksqrt > 0)) {
   //    gksqrt = sqrt(gksqrt);
@@ -59,7 +59,7 @@ arma::vec fgn_sim(int n = 1000, double H = 0.7) {
   //    gksqrt.zeros();
   //    stop("Re(gk)-vector not positive");
   //  }
-  //  
+  //
   // // Standardize the result
   ans = std * ans + mean;
   

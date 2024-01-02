@@ -5,7 +5,7 @@ using namespace Rcpp;
 //' Function to generate Fractional Gaussian Noise
  
  // [[Rcpp::export]]
- arma::cx_vec fgn_test(int n = 1000, double H = 0.7) {
+ arma::vec fgn_test(int n = 1000, double H = 0.7) {
    // Settings
    double mean = 0;
    double std = 1;
@@ -58,14 +58,16 @@ using namespace Rcpp;
     
    arma::vec gksqrt = arma::real(gkFGN0); // differences here only at e-16; quite small
    
-   arma::cx_vec temp1;
+   arma::cx_vec temp;
    
    // Check if all elements in gksqrt are positive
    if (all(gksqrt > 0)) {
      gksqrt = arma::sqrt(gksqrt);
-     z_complex = z_complex % arma::conv_to<arma::cx_vec>::from(gksqrt);
+     arma::vec blank = arma::zeros(gksqrt.n_elem);
+     arma::cx_vec both = arma::cx_vec(gksqrt, blank);
+     z_complex = z_complex % both;
      
-     z_complex = arma::fft(z_complex); // quite different at this point ------------------
+     z_complex = arma::ifft(z_complex) * both.n_elem; // quite different at this point ------------------
      
      //     z1 = 0.5*(n-1)**(-0.5)*z
      arma::cx_vec temp = std::pow(0.5 * (n - 1), -0.5) * z_complex;
@@ -77,16 +79,17 @@ using namespace Rcpp;
      
      //z_complex = z_complex * two;
      arma::vec temp1 = arma::real(temp);
-     //ans = temp1.head(n);
+     ans = temp1.head(n);
    //} else {
      //    gksqrt.zeros();
      //    stop("Re(gk)-vector not positive");
    }
    //
    // Standardize the result
+   arma::vec out = mean + (std / arma::stddev(ans)) * ans;
    //ans = std * ans + mean;
    
-   return(temp1); // Return the generated FGN
+   return(out); // Return the generated FGN
  }
  
  

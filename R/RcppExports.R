@@ -121,6 +121,20 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
     .Call(`_NONANr_dfa`, x, order, verbose, scales, scale_ratio)
 }
 
+#' Function to generate Fractional Gaussian Noise
+NULL
+
+fgn_sim <- function(n = 1000L, H = 0.7) {
+    .Call(`_NONANr_fgn_sim`, n, H)
+}
+
+#' Function to generate Fractional Gaussian Noise
+NULL
+
+fgn_test <- function(n = 1000L, H = 0.7) {
+    .Call(`_NONANr_fgn_test`, n, H)
+}
+
 poly_residuals <- function(yr, m) {
     .Call(`_NONANr_poly_residuals`, yr, m)
 }

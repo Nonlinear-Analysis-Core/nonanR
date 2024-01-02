@@ -77,6 +77,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fgn_test
+arma::vec fgn_test(int n, double H);
+RcppExport SEXP _NONANr_fgn_test(SEXP nSEXP, SEXP HSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type H(HSEXP);
+    rcpp_result_gen = Rcpp::wrap(fgn_test(n, H));
+    return rcpp_result_gen;
+END_RCPP
+}
 // poly_residuals
 arma::vec poly_residuals(arma::vec yr, int m);
 RcppExport SEXP _NONANr_poly_residuals(SEXP yrSEXP, SEXP mSEXP) {
@@ -119,6 +131,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_NONANr_SymbolicEntropy", (DL_FUNC) &_NONANr_SymbolicEntropy, 3},
     {"_NONANr_dfa", (DL_FUNC) &_NONANr_dfa, 5},
     {"_NONANr_fgn_sim", (DL_FUNC) &_NONANr_fgn_sim, 2},
+    {"_NONANr_fgn_test", (DL_FUNC) &_NONANr_fgn_test, 2},
     {"_NONANr_poly_residuals", (DL_FUNC) &_NONANr_poly_residuals, 2},
     {"_NONANr_lm_c", (DL_FUNC) &_NONANr_lm_c, 2},
     {"_NONANr_seq_int", (DL_FUNC) &_NONANr_seq_int, 1},

@@ -121,9 +121,19 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
     .Call(`_NONANr_dfa`, x, order, verbose, scales, scale_ratio)
 }
 
+#' Fractional Gaussian Noise Simulation
+#' 
 #' Function to generate Fractional Gaussian Noise
-NULL
-
+#' 
+#' Create a time series with a specified Hurst value. 
+#' 
+#' @param n - the length of the resulting time series
+#' @param H - the Hurst value of the resulting time series
+#' @import Rcpp
+#' 
+#' @examples 
+#' 
+#' ts_out = fgn_sim(n = 1000, H = 0.7)
 fgn_sim <- function(n = 1000L, H = 0.7) {
     .Call(`_NONANr_fgn_sim`, n, H)
 }

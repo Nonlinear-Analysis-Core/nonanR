@@ -31,7 +31,7 @@ fgn_sim <- function(n = 100, H = 0.6){
     gksqrt = sqrt(gksqrt)
     z = z*gksqrt
     z = fft(z, inverse = TRUE)
-    z1 = 0.5*(n-1)**(-0.5)*z
+    z = 0.5*(n-1)**(-0.5)*z
     z = Re(z[c(1:n)])
     } else {
     #   gksqrt = 0*gksqrt
@@ -41,7 +41,7 @@ fgn_sim <- function(n = 100, H = 0.6){
   # # Standardize:
   # # (z-mean(z))/sqrt(var(z))
   ans = std*drop(z) + mean
-  return(gkFGN0)
+  return(z)
 }
 
 
@@ -50,11 +50,65 @@ set.seed()
 sim = fgn_sim(n = 100, H = 0.6)
 
 set.seed(123456)
-test = fgn_test(n = 100, H = 0.6)
+test = fgn_test(n = 1000, H = 0.8)
 
-plot(gkFGN0,type="l",col="red")
+plot(sim,type="l",col="red")
 lines(test,col="blue")
 
 plot.ts(sim, main= "sim")
 plot.ts(test, main = "test")
+
+
+
+order = 1
+verbose = 1
+scales <- c(16,32,64,128,256,512)
+scale_ratio = 2
+
+
+temp = NULL
+results = NULL
+for (i in 1:1000) { 
+  for(j in 1:9){
+    
+    hurst = j/10
+    
+    test = fgn_test(n = 1000, H = hurst)
+    nonan_dfa = NONANr::dfa(test, order, verbose, scales, scale_ratio)
+    fr_dfa = fractalRegression::dfa(test, order, verbose, scales, scale_ratio)
+
+    temp[[j]] = data.frame("sim" = i, "hurst"= hurst, "nonan_alpha" = nonan_dfa$alpha, "fr_alpha" = fr_dfa$alpha)
+    }
+    
+  results[[i]] = Reduce(rbind, temp)
+}
+
+results = Reduce(rbind,results)
+
+library(ggplot2)
+
+ggplot(results, aes(x=hurst, y=nonan_alpha, fill=hurst, group = hurst)) +
+  geom_point(aes(color = hurst), show.legend = F) + 
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 9), minor_breaks = NULL) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 9), minor_breaks = NULL) +
+  scale_color_viridis_b() + 
+  labs(title = "fgn_sim alpha vs expected alpha",
+       subtitle = "As quantified by NONANr::dfa()",
+       x = "Expected Alpha", 
+       y = "Calcualted Alpha") + 
+  NONANr::theme_nonan()
+
+
+ggplot(results, aes(x=fr_alpha, y=nonan_alpha, fill=hurst, group = hurst)) +
+  geom_point(aes(color = hurst), show.legend = F) + 
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 9), minor_breaks = NULL) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 9), minor_breaks = NULL) +
+  scale_color_viridis_b() + 
+  labs(title = "Comparison of alpha values calculated with DFA",
+       x = "fractalRegression::dfa()", 
+       y = "NONANr::dfa()") + 
+  NONANr::theme_nonan()
+
+
+
 

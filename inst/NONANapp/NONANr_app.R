@@ -2,7 +2,6 @@
 
 library(shiny)
 library(shinythemes)
-library(fractalRegression)
 library(tidyverse)
 library(plotly)
 library(NONANr)
@@ -62,8 +61,16 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    numericInput("minScale", "Min Scale:", value = 4),
                                                    numericInput("maxScale", "Max Scale:", value = 10),
                                                    numericInput("scaleRatio", "Scale Ratio:", value = 2, step = 0.1),
-                                                   actionButton("goDFA", "Go!"),
-                                                   p("Click the button to start the analysis.")
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goDFA", "Analyze")
+                                                 ),
+                                                 column(width = 6,
+                                                   actionButton("exportDFA", "Export",
+                                                                style = "position: absolute; right: 19px;")
+                                                 )
+                                                   ), # fluidRow for action buttons
                                                    
                                                  ), # sidebarpanel
                                                  mainPanel(
@@ -104,8 +111,16 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    selectInput("SEy", "Select Y axis", choices = NULL),
                                                    numericInput("SEm", "m value:", value = 2),
                                                    numericInput("SEr", "r value:", value = 0.2, step = 0.1),
-                                                   actionButton("goSEENT", "Go!"),
-                                                   p("Click the button to start the analysis.")
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goSEENT", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportSEENT", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
                                                    
                                                  ), # sidebarpanel
                                                  
@@ -139,8 +154,16 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    selectInput("AEy", "Select Y axis", choices = NULL),
                                                    numericInput("AEdim", "dim value:", value = 8),
                                                    numericInput("AEr", "r value:", value = 0.2, step = 0.1),
-                                                   actionButton("goAEENT", "Go!"),
-                                                   p("Click the button to start the analysis.")
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goAENT", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportAENT", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
                                                    
                                                  ), # sidebarpanel
                                                  
@@ -173,8 +196,16 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    selectInput("SymEy", "Select Y axis", choices = NULL),
                                                    numericInput("SymEthresh", "Threshold value:", value = NULL),
                                                    numericInput("SymEseql", "Sequence length:", value = 2),
-                                                   actionButton("goSymENT", "Go!"),
-                                                   p("Click the button to start the analysis.")
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goSymENT", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportSymENT", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
                                                    
                                                  ), # sidebarpanel
                                                  
@@ -247,7 +278,8 @@ server <- function(input, output) {
   
   # DFA calculation
   dfaResult <- eventReactive(input$goDFA, {
-    dfa(dfa_dat(), order = input$order, verbose = 1, scales = scales(), scale_ratio = input$scaleRatio)
+    NONANr::dfa(dfa_dat(), order = input$order, verbose = 1, scales = scales(), scale_ratio = input$scaleRatio)
+    
   })
   
   # DFA plot -- generate the plot only when the "Go" button has been clicked
@@ -271,12 +303,22 @@ server <- function(input, output) {
     })
   }) # observeEvent
   
+  
   # Print out the DFA results
-  output$dfaResults <- renderPrint({
-    cat("Log Scales:", dfaResult()$log_scales, "\n", "Log RMS:", dfaResult()$log_rms, "\n", "Alpha:", dfaResult()$alpha)
-    #dfaResult()
-    #input$ycol
+  observeEvent(input$goDFA, {
+    output$dfaResults <- renderPrint({
+      cat("Log Scales:", dfaResult()$log_scales, "\n", "Log RMS:", dfaResult()$log_rms, "\n", "Alpha:", dfaResult()$alpha)
+    })
   })
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportDFA, {
+    assign("dfa_out", dfaResult(), envir = globalenv())
+    
+    output$dfaResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
   
   # Print the data so we can see what column is actually being selected. For debugging only
   # output$datHead <- renderTable({
@@ -318,13 +360,24 @@ server <- function(input, output) {
   
   # Entropy calculation
   SEresult <- eventReactive(input$goSEENT, {
-    SampleEntropy(SE_dat(), m = input$SEm, R = input$SEr)
+    NONANr::SampleEntropy(SE_dat(), m = input$SEm, R = input$SEr)
   })
   
-  # Print out the DFA results
-  output$SEresults <- renderPrint({
-    cat("Sample Entropy:", SEresult())
+  # Print out the sample entropy results
+  observeEvent(input$goSEENT, {
+    output$SEresults <- renderPrint({
+      cat("Sample Entropy:", SEresult())
+    })
   })
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportSEENT, {
+    assign("samp_ent_out", SEresult(), envir = globalenv())
+    
+    output$SEresults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSEENT, {
@@ -378,24 +431,35 @@ server <- function(input, output) {
   })
   
   # Entropy calculation
-  AEresult <- eventReactive(input$goAEENT, {
-    ApproximateEntropy(AE_dat(), dim = input$AEdim, R = input$AEr)
+  AEresult <- eventReactive(input$goAENT, {
+    NONANr::ApproximateEntropy(AE_dat(), dim = input$AEdim, R = input$AEr)
   })
   
-  # Print out the DFA results
-  output$AEresults <- renderPrint({
-    cat("Approximate Entropy:", AEresult())
+  # Print out the approximate entropy results
+  observeEvent(input$goAENT, {
+    output$AEresults <- renderPrint({
+      cat("Approximate Entropy:", AEresult())
+    })
   })
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportAENT, {
+    assign("approx_ent_out", AEresult(), envir = globalenv())
+    
+    output$AEresults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
-  observeEvent(input$goAEENT, {
+  observeEvent(input$goAENT, {
     output$AEhist <- renderPlot({
       hist(AE_dat(), main = paste("Histogram of ", input$AEy), xlab = input$AEy)
     })
   }) # observeEvent
   
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
-  observeEvent(input$goAEENT, {
+  observeEvent(input$goAENT, {
     output$AEacf <-  renderPlot({
       acf(AE_dat(), main = paste("Autocorrelation of ", input$AEy))  
     })
@@ -433,7 +497,7 @@ server <- function(input, output) {
     
   })
   
-
+  
   # Select the desired data frame and by default the second column for analysis
   SymE_dat = reactive({
     get(input$dataChoice3) |>
@@ -454,13 +518,24 @@ server <- function(input, output) {
   
   # Entropy calculation
   SymEresult <- eventReactive(input$goSymENT, {
-    SymbolicEntropy(SymE_dat(), thresholdVal = input$SymEthresh, seqLength = input$SymEseql)
+    NONANr::SymbolicEntropy(SymE_dat(), thresholdVal = input$SymEthresh, seqLength = input$SymEseql)
   })
   
-  # Print out the DFA results
-  output$SymEresults <- renderPrint({
-    cat("Symbolic Entropy:", SymEresult())
+  # Print out the approximate entropy results
+  observeEvent(input$goSymENT, {
+    output$SymEresults <- renderPrint({
+      cat("Symbolic Entropy:", SymEresult())
+    })
   })
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportSymENT, {
+    assign("sym_ent_out", SymEresult(), envir = globalenv())
+    
+    output$SymEresults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSymENT, {

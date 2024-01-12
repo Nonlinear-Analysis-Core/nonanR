@@ -42,7 +42,7 @@ NULL
 #' 
 #' AE = ApproximateEntropy(x, dim, R)
 ApproximateEntropy <- function(x, dim, R) {
-    .Call(`_NONANr_ApproximateEntropy`, x, dim, R)
+    .Call('_NONANr_ApproximateEntropy', PACKAGE = 'NONANr', x, dim, R)
 }
 
 #' Sample Entropy
@@ -68,7 +68,7 @@ ApproximateEntropy <- function(x, dim, R) {
 #' @references
 #' Richman, J.S., Moorman, J.R., 2000. Physiological time-series analysis using approximate entropy and sample entropy. Am. J. Physiol. Heart Circ. Physiol. 278. https://doi.org/10.1152/ajpheart.2000.278.6.H2039
 SampleEntropy <- function(x, m, R) {
-    .Call(`_NONANr_SampleEntropy`, x, m, R)
+    .Call('_NONANr_SampleEntropy', PACKAGE = 'NONANr', x, m, R)
 }
 
 #' Symbolic Entropy 
@@ -94,7 +94,7 @@ SampleEntropy <- function(x, m, R) {
 #' @references
 #' Aziz, W., Arif, M. Complexity analysis of stride interval time series by threshold dependent symbolic entropy. Eur J Appl Physiol 98, 30–40 (2006). https://doi.org/10.1007/s00421-006-0226-5
 SymbolicEntropy <- function(x, thresholdVal, seqLength) {
-    .Call(`_NONANr_SymbolicEntropy`, x, thresholdVal, seqLength)
+    .Call('_NONANr_SymbolicEntropy', PACKAGE = 'NONANr', x, thresholdVal, seqLength)
 }
 
 #' Detrended Fluctuation Analysis
@@ -136,7 +136,7 @@ SymbolicEntropy <- function(x, thresholdVal, seqLength) {
 #' 
 #' - Perakakis, P., Taylor, M., Martinez-Nieto, E., Revithi, I., & Vila, J. (2009). Breathing frequency bias in fractal analysis of heart rate variability. Biological psychology, 82(1), 82-88.
 dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
-    .Call(`_NONANr_dfa`, x, order, verbose, scales, scale_ratio)
+    .Call('_NONANr_dfa', PACKAGE = 'NONANr', x, order, verbose, scales, scale_ratio)
 }
 
 #' Fractional Gaussian Noise Simulation
@@ -153,18 +153,18 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
 #' 
 #' ts_out = fgn_sim(n = 1000, H = 0.7)
 fgn_sim <- function(n = 1000L, H = 0.7) {
-    .Call(`_NONANr_fgn_sim`, n, H)
+    .Call('_NONANr_fgn_sim', PACKAGE = 'NONANr', n, H)
 }
 
 poly_residuals <- function(yr, m) {
-    .Call(`_NONANr_poly_residuals`, yr, m)
+    .Call('_NONANr_poly_residuals', PACKAGE = 'NONANr', yr, m)
 }
 
 lm_c <- function(xs, yr) {
-    .Call(`_NONANr_lm_c`, xs, yr)
+    .Call('_NONANr_lm_c', PACKAGE = 'NONANr', xs, yr)
 }
 
 seq_int <- function(length) {
-    .Call(`_NONANr_seq_int`, length)
+    .Call('_NONANr_seq_int', PACKAGE = 'NONANr', length)
 }
 

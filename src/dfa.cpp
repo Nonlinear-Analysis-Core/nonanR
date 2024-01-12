@@ -8,11 +8,11 @@ using namespace arma;
 //' 
 //' Something a little more can go here
 //' 
-//' @param x - A real values vector (i.e., time series data) to be analyzed.
-//' @param order - an integer indicating the polynomial order used for detrending the local windows (e.g., 1 = linear, 2 = quadratic, etc.).
-//' @param verbose - a boolean that when = 1 indicates that the flucuation function inlcuding the log of all included scales as well as the log Rms should be returned as well as the alpha or when = 0 only the estimated scaling exponent alpha will be returned.
-//' @param scales - An integer valued vector indicating the scales one wishes to resolve in the analysis.
-//' @param scale_ratio - A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max.
+//' @param x A real values vector (i.e., time series data) to be analyzed.
+//' @param order An integer indicating the polynomial order used for detrending the local windows (e.g., 1 = linear, 2 = quadratic, etc.).
+//' @param verbose A boolean that when = 1 indicates that the flucuation function inlcuding the log of all included scales as well as the log Rms should be returned as well as the alpha or when = 0 only the estimated scaling exponent alpha will be returned.
+//' @param scales An integer valued vector indicating the scales one wishes to resolve in the analysis.
+//' @param scale_ratio A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max.
 //' @import Rcpp
 //' @export
 //' 
@@ -23,7 +23,7 @@ using namespace arma;
 //' x = rnorm(1000)
 //' order = 1
 //' verbose = 1
-//' scales <- c(16,32,64,128,256,512)
+//' scales = c(16,32,64,128,256,512)
 //' scale_ratio = 2
 //' 
 //' dfa_out = dfa(x, order, verbose, scales, scale_ratio)

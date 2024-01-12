@@ -8,9 +8,9 @@ int binToDec(arma::ivec binSeq, unsigned int seqLength);
 //' 
 //' Calculate the symbolic entropy of a time series.
 //' 
-//' @param x - A vector of integers
-//' @param thresholdVal - the threshold of the search that you want to do
-//' @param seqLength - the length of the sequence that you want to find 
+//' @param x A vector of integers
+//' @param thresholdVal The threshold of the search that you want to do
+//' @param seqLength The length of the sequence that you want to find 
 //' @import Rcpp
 //' @export
 //' 
@@ -19,7 +19,6 @@ int binToDec(arma::ivec binSeq, unsigned int seqLength);
 //' @examples 
 //' 
 //' x = rnorm(1000)
-//' 
 //' thresholdVal = 2
 //' seqLength = 0.2
 //' 

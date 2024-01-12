@@ -7,11 +7,11 @@
 SymbolicEntropy(x, thresholdVal, seqLength)
 }
 \arguments{
-\item{x}{- A vector of integers}
+\item{x}{A vector of integers}
 
-\item{thresholdVal}{- the threshold of the search that you want to do}
+\item{thresholdVal}{The threshold of the search that you want to do}
 
-\item{seqLength}{- the length of the sequence that you want to find}
+\item{seqLength}{The length of the sequence that you want to find}
 }
 \description{
 Calculate the symbolic entropy of a time series.
@@ -22,7 +22,6 @@ Like all entropy functions, this one also quantifies the amount of complexity (o
 \examples{
 
 x = rnorm(1000)
-
 thresholdVal = 2
 seqLength = 0.2
 

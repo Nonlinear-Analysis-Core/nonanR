@@ -6,9 +6,9 @@ using namespace Rcpp;
 //' 
 //' Calculate the sample entropy of a time series.
 //' 
-//' @param x - a single column time series
-//' @param m - the length of the vectors to be compared for matches
-//' @param R - the radius for accepting matches
+//' @param x A single column time series
+//' @param m The length of the vectors to be compared for matches
+//' @param R The radius for accepting matches
 //' @import Rcpp
 //' @export
 //'
@@ -17,7 +17,6 @@ using namespace Rcpp;
 //' @examples 
 //' 
 //' x = rnorm(1000)
-//' 
 //' m = 2
 //' R = 0.2
 //' 

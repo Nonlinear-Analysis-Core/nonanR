@@ -22,7 +22,6 @@ Here are some additional details about approximate entropy.
 \examples{
 
 x = rnorm(1000)
-
 dim = 8
 R = 0.2
 

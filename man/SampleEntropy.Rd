@@ -7,11 +7,11 @@
 SampleEntropy(x, m, R)
 }
 \arguments{
-\item{x}{- a single column time series}
+\item{x}{A single column time series}
 
-\item{m}{- the length of the vectors to be compared for matches}
+\item{m}{The length of the vectors to be compared for matches}
 
-\item{R}{- the radius for accepting matches}
+\item{R}{The radius for accepting matches}
 }
 \description{
 Calculate the sample entropy of a time series.
@@ -22,7 +22,6 @@ Sample entropy can be used to quantify the complexity of a time series. A higher
 \examples{
 
 x = rnorm(1000)
-
 m = 2
 R = 0.2
 

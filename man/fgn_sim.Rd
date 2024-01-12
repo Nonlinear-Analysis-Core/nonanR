@@ -7,9 +7,9 @@
 fgn_sim(n = 1000L, H = 0.7)
 }
 \arguments{
-\item{n}{- the length of the resulting time series}
+\item{n}{The length of the resulting time series}
 
-\item{H}{- the Hurst value of the resulting time series}
+\item{H}{The Hurst value of the resulting time series}
 }
 \description{
 Function to generate Fractional Gaussian Noise

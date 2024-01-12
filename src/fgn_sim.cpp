@@ -8,8 +8,8 @@ using namespace Rcpp;
 //' 
 //' Create a time series with a specified Hurst value. 
 //' 
-//' @param n - the length of the resulting time series
-//' @param H - the Hurst value of the resulting time series
+//' @param n The length of the resulting time series
+//' @param H The Hurst value of the resulting time series
 //' @import Rcpp
 //' 
 //' @examples 

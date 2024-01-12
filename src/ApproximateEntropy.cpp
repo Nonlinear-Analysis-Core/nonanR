@@ -18,7 +18,6 @@ using namespace arma;
 //' @examples
 //' 
 //' x = rnorm(1000)
-//' 
 //' dim = 8
 //' R = 0.2
 //' 

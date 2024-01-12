@@ -27,7 +27,7 @@ List AMI(arma::colvec x, int L){
   //arma::colvec data = x;
   //int L = L;
   int N = x.n_elem;
-  int bins = arma::ceil(arma::range(x) / (3.49 * arma::stddev(x) * arma::pow(N, -1/3))); // Scott 1979
+  int bins = ceil(arma::range(x) / (3.49 * arma::stddev(x) * pow(N, -1/3))); // Scott 1979
   double epsilon = 1e-10;
   
   // data = data - min(data); % make all data points positive
@@ -37,7 +37,6 @@ List AMI(arma::colvec x, int L){
   arma::vec y = 1 + arma::floor(data_pos / arma::max(data_pos) / bins - epsilon);
   
   //ami=zeros(L,1); % preallocate vector
-  arma::colvec ami = arma::zeros(L); // double check the shape of this vector
   int overlap = N - L;
   int increment = 1 / overlap;
   arma::colvec one = arma::ones(overlap); // create a column vector with all elements being one
@@ -51,10 +50,36 @@ List AMI(arma::colvec x, int L){
   // for i=1:length(a)
     // pA2(i,1)=sum(y(1:overlap)==a(i))*increment; % Get the sum of the values in y which equals whatever value is in a(i) and multiply by the increment
   // end
+  arma::colvec pA2 = arma::zeros(a.n_cols);
+  for (int i = 0; i < a.n_cols; ++i) {
+    //result[i] = i * 2; // Just an example operation
+    pA2[i] = sum(y.subvec(0, overlap - 1) == a[i]) * increment;
+  }
+  
+  //ami=zeros(L+1,2); % empty array
+  arma::mat ami = arma::zeros(L + 1, 2);
+  
+  // for lag = 0: L % used to be from 0:L-1 (BS)
+  for (int lag = 0; lag < L; ++lag){
+    //   ami(lag+1,1)=lag; % have to add 1 to the index because you can't index at 0
+    ami(lag + 1, 0) = lag;
+    //   pB = sparse(one, y(1+lag:overlap+lag), increment);
+
+  }
+  //   %find probablity p(x(t+time_lag))=pB, sum(pB)=1
+  //   pB = sparse(one, y(1+lag:overlap+lag), increment);
+  //   %find joing probability p(A,B)=p(x(t),x(t+time_lag))
+  //     pAB = sparse(y(1:overlap),y(1+lag:overlap+lag),increment);
+  //   [A, B, AB]=find(pAB);
+  //   ami(lag+1,2)=sum(AB.*log2(AB./(pA(A).*pB(B)')));  %Average Mutual Information
+  //   v2(lag+1,2)=sum(AB.*log2(AB./(pA(A).*pB(B)')));  %Average Mutual Information
+  //   
+  //   end
 
   
-  //return(data);
-  return List::create(Named("data") = data_pos, Named("y") = y, Named("bins") = bins);
+  
+  
+    return List::create(Named("data") = data_pos, Named("y") = y, Named("bins") = bins);
   
 }
 

@@ -1,26 +1,26 @@
-#include <RcppArmadillo.h>
-using namespace Rcpp;
-// [[Rcpp::depends(RcppArmadillo)]]
-
-//' Average Mutual Information
-//' 
-//' Calculate the average mutual information of a time series.
-//' 
-//' @param x - a single column time series
-//' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
-//' @import Rcpp
-//' 
-//' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods. 
-//' 
-//' @examples 
-//' 
-//' x = rnorm(1000)
-//' L = 100
-//' 
-//' ami_out = AMI(x, L)
-//' 
-//' @references Something should go here
-//' 
+// #include <RcppArmadillo.h>
+// using namespace Rcpp;
+// // [[Rcpp::depends(RcppArmadillo)]]
+// 
+// //' Average Mutual Information
+// //' 
+// //' Calculate the average mutual information of a time series.
+// //' 
+// //' @param x - a single column time series
+// //' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
+// //' @import Rcpp
+// //' 
+// //' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods. 
+// //' 
+// //' @examples 
+// //' 
+// //' x = rnorm(1000)
+// //' L = 100
+// //' 
+// //' ami_out = AMI(x, L)
+// //' 
+// //' @references Something should go here
+// //' 
 // // [[Rcpp::export]]
 // List AMI(arma::colvec x, int L){
 //   

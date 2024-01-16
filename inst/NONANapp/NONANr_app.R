@@ -273,7 +273,7 @@ server <- function(input, output) {
   
   # Set the scales for the DFA function
   scales = reactive({
-    logscale(input$minScale, input$maxScale, input$scaleRatio) 
+    NONANr::logscale(input$minScale, input$maxScale, input$scaleRatio) 
   })
   
   # DFA calculation
@@ -283,11 +283,11 @@ server <- function(input, output) {
   })
   
   # DFA plot -- generate the plot only when the "Go" button has been clicked
-  observeEvent(input$goDFA, {
-    output$dfaPlot <- renderPlot({
-      dfa.plot(dfaResult())
-    })
-  }) # observeEvent
+  # observeEvent(input$goDFA, {
+  #   output$dfaPlot <- renderPlot({
+  #     NONANr::plot_dfa(dfaResult())
+  #   })
+  # }) # observeEvent
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goDFA, {

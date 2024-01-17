@@ -9,6 +9,7 @@
 #' @param dim is the embedding dimension of the time series
 #' @param R is the radius in which to search for matches
 #' @import Rcpp
+#' @useDynLib NONANr
 #' @export
 #' 
 #' @details Here are some additional details about approximate entropy.

@@ -59,7 +59,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    selectInput("dfay", "Select Y axis", choices = NULL),
                                                    numericInput("order", "Order:", value = 1),
                                                    numericInput("minScale", "Min Scale:", value = 4),
-                                                   numericInput("maxScale", "Max Scale:", value = 10),
+                                                   numericInput("maxScale", "Max Scale:", value = 256),
                                                    numericInput("scaleRatio", "Scale Ratio:", value = 2, step = 0.1),
                                                    fluidRow(
                                                      
@@ -87,7 +87,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    verbatimTextOutput("dfaResults"), 
                                                    br(),
                                                    br(),
-                                                   # tableOutput("datHead") # This was largely for debugging
+                                                   #tableOutput("datHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ), # DFA tabpanel
@@ -260,15 +260,16 @@ server <- function(input, output) {
   output$dfaTS <- renderPlotly({
     
     plot_dat = get(input$dataChoice)
-    plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
-            color = I('black')) %>% # Aesthetics for the plot
-      layout(title = list(text = paste0("Time series of ", input$dfay)),
-             xaxis = list(title = "data Index"),
-             yaxis = list(title = paste0(input$dfay)))
-    
-    # ggplot(plot_dat, aes(x = .data[[input$xcol]], y = .data[[input$ycol]])) + 
-    #   geom_line() + theme_classic() +
-    #   labs(title = paste0("Time series of ", input$ycol))
+    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
+    #         color = I('black')) %>% # Aesthetics for the plot
+    #   layout(title = list(text = paste0("Time series of ", input$dfay)),
+    #          xaxis = list(title = "data Index"),
+    #          yaxis = list(title = paste0(input$dfay)))
+
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$dfay]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$dfay)) + 
+      theme_nonan()
   })
   
   # Set the scales for the DFA function
@@ -283,23 +284,44 @@ server <- function(input, output) {
   })
   
   # DFA plot -- generate the plot only when the "Go" button has been clicked
-  # observeEvent(input$goDFA, {
-  #   output$dfaPlot <- renderPlot({
-  #     NONANr::plot_dfa(dfaResult())
-  #   })
-  # }) # observeEvent
+  observeEvent(input$goDFA, {
+    output$dfaPlot <- renderPlot({
+      plot_dfa(dfaResult())
+    })
+  }) # observeEvent
   
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goDFA, {
     output$histogram <- renderPlot({
       hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
+      
+      w = ceiling(nrow(dfa_dat()) * 0.03)
+      n = colnames(dfa_dat())[1]
+      ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
+        geom_histogram( color="white", fill="maroon", bins = w) +
+        labs(title = paste("Histogram of ", input$dfay), 
+            x = input$dfay) +
+        NONANr::theme_nonan()
+
     })
   }) # observeEvent
   
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goDFA, {
     output$autocorr <-  renderPlot({
-      acf(dfa_dat(), main = paste("Autocorrelation of ", input$dfay))  
+      acf(dfa_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(dfa_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = 3, color = 'white') + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = 3, color = 'white') + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "maroon", linewidth = 3) + # lags as individual segements
+        labs(title = paste("Autocorrelation of ", input$dfay)) + 
+        NONANr::theme_nonan() # add the nonan plot them on
+      
     })
   }) # observeEvent
   
@@ -308,7 +330,8 @@ server <- function(input, output) {
   observeEvent(input$goDFA, {
     output$dfaResults <- renderPrint({
       cat("Log Scales:", dfaResult()$log_scales, "\n", "Log RMS:", dfaResult()$log_rms, "\n", "Alpha:", dfaResult()$alpha)
-    })
+
+      })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
@@ -321,9 +344,9 @@ server <- function(input, output) {
   }) # observeEvent
   
   # Print the data so we can see what column is actually being selected. For debugging only
-  # output$datHead <- renderTable({
-  #   head(get(input$dataChoice))
-  # })
+  #output$datHead <- renderTable({
+  # head(dfa_dat())
+  #})
   
   
   # Sample Entropy -----------------------------------------------------------------

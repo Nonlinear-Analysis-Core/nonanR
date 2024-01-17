@@ -20,7 +20,7 @@ theme_nonan <- function(background = "#646666", text = "#D9D9D9", axes = "#8A8A8
   
   theme(
     # Text
-    text = element_text(family = "Verdana", colour = text), 
+    text = element_text(colour = text), 
     plot.title = element_text(size = 15),
     plot.subtitle = element_text(size = 10),
     axis.text = element_text(colour = text),

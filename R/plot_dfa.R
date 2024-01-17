@@ -25,8 +25,8 @@
 plot_dfa = function(x){
   library(ggplot2)
   
-  dat = do.call(cbind.data.frame, dfa_out)
-  m = lm(dfa_out$log_rms ~ dfa_out$log_scales)
+  dat = do.call(cbind.data.frame, x)
+  m = lm(x$log_rms ~ x$log_scales)
   r2 = format(summary(m)$r.square,4, digits = 3)
   plot.text = paste0("Alpha = ", round(dat$alpha[1], 3), "\n", "R^2 = ", (r2))
   x_pos = max(dat$log_scales)-1

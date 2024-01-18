@@ -14,45 +14,45 @@ colnames(middle_aged) = as.character(header)
 
 
 # Data generally needs to be less than 1mb for it to be accepted by CRAN.... we need to cut some columns out
-var = as.character(header)
-
-# These are the things that I want to remove
-# get_rid_of_these = c("mG", "deg", "deg/s")
-
 library(dplyr)
+
 # Young adults
-young = young_person %>% 
+healthy_young = young_person %>% 
   select(-contains(c("mG", "Gyroscope", "Noraxon", "roll", "course", "Pelvic", "Lateral", 
                      "Inversion", "Supination", "abduction", "Rotation", "Cervical", "Wrist", 
                      "Axial", "Upper", "Forearm", "Hand", "Elbow", "Shoulder", "Spine", "Down", "Thoracic")))
 
 # Have to take the first 10,000 data points of time so that it starts at 0 and not 49.995 seconds
-t = young[1:10000, 1]
-young = young[10000:19999, 2:18]
-young = cbind(t, young)
+t = healthy_young[1:10000, 1]
+healthy_young = healthy_young[10000:19999, 2:18]
+healthy_young = cbind(t, healthy_young)
+colnames(healthy_young)[1] = "time"
 
 
 # Middle aged adults
-middle = middle_aged %>% 
+healthy_middle = middle_aged %>% 
   select(-contains(c("mG", "Gyroscope", "Noraxon", "roll", "course", "Pelvic", "Lateral", 
                      "Inversion", "Supination", "abduction", "Rotation", "Cervical", "Wrist", 
                      "Axial", "Upper", "Forearm", "Hand", "Elbow", "Shoulder", "Spine", "Down", "Thoracic")))
 
-t = middle[1:10000, 1]
-middle = middle[10000:19999, 2:18]
-middle = cbind(t, middle)
+t = healthy_middle[1:10000, 1]
+healthy_middle = healthy_middle[10000:19999, 2:18]
+healthy_middle = cbind(t, healthy_middle)
+colnames(healthy_middle)[1] = "time"
 
 # Old adults
-old = old_person %>% 
+healthy_old = old_person %>% 
   select(-contains(c("mG", "Gyroscope", "Noraxon", "roll", "course", "Pelvic", "Lateral", 
                      "Inversion", "Supination", "abduction", "Rotation", "Cervical", "Wrist", 
                      "Axial", "Upper", "Forearm", "Hand", "Elbow", "Shoulder", "Spine", "Down", "Thoracic")))
 
-t = old[1:10000, 1]
-old = old[10000:19999, 2:18]
-old = cbind(t, old)
+t = healthy_old[1:10000, 1]
+healthy_old = healthy_old[10000:19999, 2:18]
+healthy_old = cbind(t, healthy_old)
+colnames(healthy_old)[1] = "time"
+
 
 # Add data to package -- generally needs to be under 1mb
-usethis::use_data(young, overwrite = T, compress = "xz")
-usethis::use_data(middle, overwrite = T, compress = "xz")
-usethis::use_data(old, overwrite = T, compress = "xz")
+usethis::use_data(healthy_young, overwrite = T, compress = "xz")
+usethis::use_data(healthy_middle, overwrite = T, compress = "xz")
+usethis::use_data(healthy_old, overwrite = T, compress = "xz")

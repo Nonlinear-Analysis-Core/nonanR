@@ -84,6 +84,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                      column(4,  plotOutput('histogram')),
                                                      column(4,  plotOutput('autocorr'))
                                                    ), 
+                                                   br(),
+                                                   br(),
                                                    verbatimTextOutput("dfaResults"), 
                                                    br(),
                                                    br(),
@@ -133,6 +135,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    column(6,  plotOutput('SEhist')),
                                                    column(6,  plotOutput('SEacf'))
                                                  ), 
+                                                 br(),
+                                                 br(),
                                                  verbatimTextOutput("SEresults"), 
                                                  br(),
                                                  br(),
@@ -176,10 +180,12 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    column(6,  plotOutput('AEhist')),
                                                    column(6,  plotOutput('AEacf'))
                                                  ), 
+                                                 br(),
+                                                 br(),
                                                  verbatimTextOutput("AEresults"), 
                                                  br(),
                                                  br(),
-                                                 tableOutput("AEdatHead") # This was largely for debugging
+                                                 #tableOutput("AEdatHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) #sidebarlayout
                                       ), # approximate entropy tabpanel
@@ -218,10 +224,12 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    column(6,  plotOutput('SymEhist')),
                                                    column(6,  plotOutput('SymEacf'))
                                                  ), 
+                                                 br(),
+                                                 br(),
                                                  verbatimTextOutput("SymEresults"), 
                                                  br(),
                                                  br(),
-                                                 tableOutput("SymEdatHead") # This was largely for debugging
+                                                 # tableOutput("SymEdatHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) #sidebarlayout
                                       ) # symbolic entropy tabpanel
@@ -293,12 +301,12 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goDFA, {
     output$histogram <- renderPlot({
-      hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
+      #hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
       
-      w = ceiling(nrow(dfa_dat()) * 0.03)
-      n = colnames(dfa_dat())[1]
+      w = ceiling(nrow(dfa_dat()) * 0.03) # calculate the number of bins
+      n = colnames(dfa_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
-        geom_histogram( color="white", fill="maroon", bins = w) +
+        geom_histogram( color="white", fill="black", bins = w) +
         labs(title = paste("Histogram of ", input$dfay), 
             x = input$dfay) +
         NONANr::theme_nonan()
@@ -309,18 +317,19 @@ server <- function(input, output) {
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goDFA, {
     output$autocorr <-  renderPlot({
-      acf(dfa_dat(), plot = F)
+      
+      a = acf(dfa_dat(), plot = F)
       conf.level <- 0.95 # set this at 0.95 for 95% confidence
       ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(dfa_dat())) # calculate the confidence intervals
       df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = 3, color = 'white') + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = 3, color = 'white') + 
-        geom_segment(mapping = aes(xend = lag, yend = 0), color = "maroon", linewidth = 3) + # lags as individual segements
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$dfay)) + 
-        NONANr::theme_nonan() # add the nonan plot them on
+        NONANr::theme_nonan() # add the nonan plot theme on
       
     })
   }) # observeEvent
@@ -374,11 +383,17 @@ server <- function(input, output) {
   output$SEts <- renderPlotly({
     
     plot_dat = get(input$dataChoice1)
-    plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SEy]], type = 'scatter', mode = 'lines', 
-            color = I('black')) %>% # Aesthetics for the plot
-      layout(title = list(text = paste0("Time series of ", input$SEy)),
-             xaxis = list(title = "data Index"),
-             yaxis = list(title = paste0(input$SEy)))
+    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SEy]], type = 'scatter', mode = 'lines', 
+    #         color = I('black')) %>% # Aesthetics for the plot
+    #   layout(title = list(text = paste0("Time series of ", input$SEy)),
+    #          xaxis = list(title = "data Index"),
+    #          yaxis = list(title = paste0(input$SEy)))
+    
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$SEy]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$SEy)) + 
+      theme_nonan()
+    
   })
   
   # Entropy calculation
@@ -405,15 +420,36 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSEENT, {
     output$SEhist <- renderPlot({
-      hist(SE_dat(), main = paste("Histogram of ", input$SEy), xlab = input$SEy)
+      #hist(SE_dat(), main = paste("Histogram of ", input$SEy), xlab = input$SEy)
+      
+      w = ceiling(nrow(SE_dat()) * 0.03) # calculate the number of bins
+      n = colnames(SE_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(SE_dat()), aes(x = .data[[n]])) +
+        geom_histogram( color="white", fill="black", bins = w) +
+        labs(title = paste("Histogram of ", input$SEy), 
+             x = input$SEy) +
+        NONANr::theme_nonan()
     })
   }) # observeEvent
   
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSEENT, {
     output$SEacf <-  renderPlot({
-      acf(SE_dat(), main = paste("Autocorrelation of ", input$SEy))  
-    })
+      
+      a = acf(SE_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(SE_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$SEy)) + 
+        NONANr::theme_nonan() # add the nonan plot theme on    
+      
+      })
   }) # observeEvent
   
   # Print the data so we can see what column is actually being selected. For debugging only
@@ -446,11 +482,18 @@ server <- function(input, output) {
   output$AEts <- renderPlotly({
     
     plot_dat = get(input$dataChoice2)
-    plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$AEy]], type = 'scatter', mode = 'lines', 
-            color = I('black')) %>% # Aesthetics for the plot
-      layout(title = list(text = paste0("Time series of ", input$AEy)),
-             xaxis = list(title = "data Index"),
-             yaxis = list(title = paste0(input$AEy)))
+    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$AEy]], type = 'scatter', mode = 'lines', 
+    #         color = I('black')) %>% # Aesthetics for the plot
+    #   layout(title = list(text = paste0("Time series of ", input$AEy)),
+    #          xaxis = list(title = "data Index"),
+    #          yaxis = list(title = paste0(input$AEy)))
+    
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$AEy]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$AEy)) + 
+      theme_nonan()
+    
+    
   })
   
   # Entropy calculation
@@ -477,15 +520,37 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goAENT, {
     output$AEhist <- renderPlot({
-      hist(AE_dat(), main = paste("Histogram of ", input$AEy), xlab = input$AEy)
+      # hist(AE_dat(), main = paste("Histogram of ", input$AEy), xlab = input$AEy)
+      
+      w = ceiling(nrow(AE_dat()) * 0.03) # calculate the number of bins
+      n = colnames(AE_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(AE_dat()), aes(x = .data[[n]])) +
+        geom_histogram( color="white", fill="black", bins = w) +
+        labs(title = paste("Histogram of ", input$AEy), 
+             x = input$AEy) +
+        NONANr::theme_nonan()
+      
     })
   }) # observeEvent
   
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goAENT, {
     output$AEacf <-  renderPlot({
-      acf(AE_dat(), main = paste("Autocorrelation of ", input$AEy))  
-    })
+      
+      a = acf(AE_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(AE_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$AEy)) + 
+        NONANr::theme_nonan() # add the nonan plot theme on   
+      
+      })
   }) # observeEvent
   
   # Print the data so we can see what column is actually being selected. For debugging only
@@ -532,11 +597,16 @@ server <- function(input, output) {
   output$SymEts <- renderPlotly({
     
     plot_dat = get(input$dataChoice3)
-    plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SymEy]], type = 'scatter', mode = 'lines', 
-            color = I('black')) %>% # Aesthetics for the plot
-      layout(title = list(text = paste0("Time series of ", input$SymEy)),
-             xaxis = list(title = "data Index"),
-             yaxis = list(title = paste0(input$SymEy)))
+    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SymEy]], type = 'scatter', mode = 'lines', 
+    #         color = I('black')) %>% # Aesthetics for the plot
+    #   layout(title = list(text = paste0("Time series of ", input$SymEy)),
+    #          xaxis = list(title = "data Index"),
+    #          yaxis = list(title = paste0(input$SymEy)))
+    
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$SymEy]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$SymEy)) + 
+      theme_nonan()
   })
   
   # Entropy calculation
@@ -563,14 +633,36 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSymENT, {
     output$SymEhist <- renderPlot({
-      hist(SymE_dat(), main = paste("Histogram of ", input$SymEy), xlab = input$SymEy)
+      # hist(SymE_dat(), main = paste("Histogram of ", input$SymEy), xlab = input$SymEy)
+      
+      w = ceiling(nrow(SymE_dat()) * 0.03) # calculate the number of bins
+      n = colnames(SymE_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(SymE_dat()), aes(x = .data[[n]])) +
+        geom_histogram( color="white", fill="black", bins = w) +
+        labs(title = paste("Histogram of ", input$SymEy), 
+             x = input$SymEy) +
+        NONANr::theme_nonan()
+      
     })
   }) # observeEvent
   
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSymENT, {
     output$SymEacf <-  renderPlot({
-      acf(SymE_dat(), main = paste("Autocorrelation of ", input$SymEy))  
+      
+      a = acf(SymE_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(SymE_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$SymEy)) + 
+        NONANr::theme_nonan() # add the nonan plot theme on   
+      
     })
   }) # observeEvent
   

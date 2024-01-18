@@ -11,3 +11,6 @@ Imports: Rcpp (>= 1.0.11), shiny, shinythemes, extrafont, ggplot2, plotly
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.3.0
 Encoding: UTF-8
+Depends: 
+    R (>= 2.10)
+LazyData: true

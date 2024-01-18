@@ -5,7 +5,6 @@
 \alias{healthy_middle}
 \title{Gaitprint data for a healthy middle-aged person}
 \format{
-## `healthy_middle`
 A data frame with 10,000 rows and 18 columns:
 \describe{
   \item{time}{Time in seconds. Data is sampled at 200Hz}

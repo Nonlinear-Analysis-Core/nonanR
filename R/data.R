@@ -2,7 +2,7 @@
 #'
 #' A subset of data from the NONAN Gaitprint data repository. The age range for healthy young people is 19-34 years old. For details on the collections and data descriptions see the paper cited in the references. To get the full versions of the data please visit \url{https://springernature.figshare.com/collections/NONAN_GaitPrint_An_IMU_gait_database_of_healthy_young_adults/6415061/1}.
 #'
-#' @format ## `healthy_young`
+#' @format
 #' A data frame with 10,000 rows and 18 columns:
 #' \describe{
 #'   \item{time}{Time in seconds. Data is sampled at 200Hz}
@@ -23,7 +23,6 @@
 #'   \item{Hip Flexion RT (deg)}{Right hip angle in reference to the direction of heading}
 #'   \item{Knee Flexion RT (deg)}{Right knee angle in reference to the direction of heading}
 #'   \item{Ankle Dorsiflexion RT (deg)}{Right ankle angle in reference to the direction of heading}
-#'   ...
 #' }
 #' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
 "healthy_young"
@@ -35,7 +34,7 @@
 #'
 #' A subset of data from the NONAN Gaitprint data repository. The age range for healthy young people is 35-54 years old. For details on the collections and data descriptions see the paper cited in the references. To get the full versions of the data please visit \url{https://springernature.figshare.com/collections/NONAN_GaitPrint_An_IMU_gait_database_of_healthy_young_adults/6415061/1}.
 #'
-#' @format ## `healthy_middle`
+#' @format
 #' A data frame with 10,000 rows and 18 columns:
 #' \describe{
 #'   \item{time}{Time in seconds. Data is sampled at 200Hz}
@@ -56,7 +55,6 @@
 #'   \item{Hip Flexion RT (deg)}{Right hip angle in reference to the direction of heading}
 #'   \item{Knee Flexion RT (deg)}{Right knee angle in reference to the direction of heading}
 #'   \item{Ankle Dorsiflexion RT (deg)}{Right ankle angle in reference to the direction of heading}
-#'   ...
 #' }
 #' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
 "healthy_middle"
@@ -89,7 +87,6 @@
 #'   \item{Hip Flexion RT (deg)}{Right hip angle in reference to the direction of heading}
 #'   \item{Knee Flexion RT (deg)}{Right knee angle in reference to the direction of heading}
 #'   \item{Ankle Dorsiflexion RT (deg)}{Right ankle angle in reference to the direction of heading}
-#'   ...
 #' }
 #' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
 "healthy_old"

@@ -128,6 +128,7 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
 #' @param n The length of the resulting time series
 #' @param H The Hurst value of the resulting time series
 #' @import Rcpp
+#' @export
 #' 
 #' @examples 
 #' 

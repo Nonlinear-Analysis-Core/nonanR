@@ -11,6 +11,7 @@ using namespace Rcpp;
 //' @param n The length of the resulting time series
 //' @param H The Hurst value of the resulting time series
 //' @import Rcpp
+//' @export
 //' 
 //' @examples 
 //' 

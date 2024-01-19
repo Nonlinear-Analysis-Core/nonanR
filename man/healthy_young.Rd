@@ -25,7 +25,6 @@ A data frame with 10,000 rows and 18 columns:
   \item{Hip Flexion RT (deg)}{Right hip angle in reference to the direction of heading}
   \item{Knee Flexion RT (deg)}{Right knee angle in reference to the direction of heading}
   \item{Ankle Dorsiflexion RT (deg)}{Right ankle angle in reference to the direction of heading}
-  ...
 }
 }
 \usage{

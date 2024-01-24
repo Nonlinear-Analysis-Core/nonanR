@@ -27,6 +27,7 @@ t = healthy_young[1:10000, 1]
 healthy_young = healthy_young[10000:19999, 2:18]
 healthy_young = cbind(t, healthy_young)
 colnames(healthy_young)[1] = "time"
+healthy_young = janitor::clean_names(healthy_young)
 
 
 # Middle aged adults
@@ -39,6 +40,8 @@ t = healthy_middle[1:10000, 1]
 healthy_middle = healthy_middle[10000:19999, 2:18]
 healthy_middle = cbind(t, healthy_middle)
 colnames(healthy_middle)[1] = "time"
+healthy_middle = janitor::clean_names(healthy_middle)
+
 
 # Old adults
 healthy_old = old_person %>% 
@@ -50,6 +53,7 @@ t = healthy_old[1:10000, 1]
 healthy_old = healthy_old[10000:19999, 2:18]
 healthy_old = cbind(t, healthy_old)
 colnames(healthy_old)[1] = "time"
+healthy_old = janitor::clean_names(healthy_old)
 
 
 # Add data to package -- generally needs to be under 1mb

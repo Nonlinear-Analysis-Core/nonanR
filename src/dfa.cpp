@@ -1,5 +1,5 @@
 #include <RcppArmadillo.h>
-#include "helpers.hpp"
+#include "helpers.h"
 using namespace Rcpp;
 using namespace arma;
 // [[Rcpp::depends(RcppArmadillo)]]

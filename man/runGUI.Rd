@@ -15,6 +15,7 @@ The analysis methods have suggested inputs for you to use however, it is strongl
 left_dat = data.frame("stride_number" = 1:1000, "stride_time_left" = rnorm(1000, 1.2, 0.03))
 right_dat = data.frame("stride_number" = 1:1000, "stride_time_right" = rnorm(1000, 1.3, 0.05))
 
-runGUI()
+
+\dontrun{runGUI()}
 
 }

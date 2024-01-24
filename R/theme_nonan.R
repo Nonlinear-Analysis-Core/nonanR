@@ -1,4 +1,11 @@
+#' Theme to create NONAN style plots
+#' 
 #' This function allows you to use the NONAN theme for ggplot2 graphics
+#' 
+#' @param background Color for the background of the plot
+#' @param main_text Color of the text for the main title and axis titles
+#' @param axis_text Color of the axis tick labels
+#' @param axes Color for the axis lines
 #' 
 #'
 #' @examples
@@ -32,10 +39,11 @@
 #'
 #' @export
 theme_nonan <- function(background = "#ffffff", main_text = "#000000", axis_text = "#444444", axes = "#D9D9D9"){
-
+  library(ggplot2)
+  
   theme(
     # Text
-    text = element_text(colour = main_text, family = "Arial"), 
+    text = element_text(colour = main_text), 
     plot.title = element_text(size = 13, margin = margin(0, 0, 0.1, 0, "cm")),
     plot.subtitle = element_text(size = 10),
     axis.text = element_text(colour = axis_text),

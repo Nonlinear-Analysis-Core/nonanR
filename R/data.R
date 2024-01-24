@@ -6,23 +6,23 @@
 #' A data frame with 10,000 rows and 18 columns:
 #' \describe{
 #'   \item{time}{Time in seconds. Data is sampled at 200Hz}
-#'   \item{Pelvis pitch (deg)}{Pelvis angle in reference to the direction of heading}
-#'   \item{Head pitch (deg)}{Head angle in reference to the direction of heading}
-#'   \item{Thigh pitch LT (deg)}{Left thigh angle in reference to the direction of heading}
-#'   \item{Shank pitch LT (deg)}{Left shank angle in reference to the direction of heading}
-#'   \item{Contact LT}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
-#'   \item{Foot pitch LT (deg)}{Left foot angle in reference to the direction of heading}
-#'   \item{Thigh pitch RT (deg)}{Right thigh angle in reference to the direction of heading}
-#'   \item{Shank pitch RT (deg)}{Right shank angle in reference to the direction of heading}
-#'   \item{Contact RT}{Pre calculated heel contact events for the right leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
-#'   \item{Foot pitch RT (deg)}{Right foot angle in reference to the direction of heading}
-#'   \item{Lumbar Flexion (deg)}{Lumbar spine angle in reference to the direction of heading}
-#'   \item{Hip Flexion LT (deg)}{Left hip angle in reference to the direction of heading}
-#'   \item{Knee Flexion LT (deg)}{Left knee angle in reference to the direction of heading}
-#'   \item{Ankle Dorsiflexion LT (deg)}{Left ankle angle in reference to the direction of heading}
-#'   \item{Hip Flexion RT (deg)}{Right hip angle in reference to the direction of heading}
-#'   \item{Knee Flexion RT (deg)}{Right knee angle in reference to the direction of heading}
-#'   \item{Ankle Dorsiflexion RT (deg)}{Right ankle angle in reference to the direction of heading}
+#'   \item{pelvis_pitch_deg}{Pelvis angle in reference to the direction of heading}
+#'   \item{head_pitch_deg}{Head angle in reference to the direction of heading}
+#'   \item{thigh_pitch_lt_deg}{Left thigh angle in reference to the direction of heading}
+#'   \item{shank_pitch_lt_deg}{Left shank angle in reference to the direction of heading}
+#'   \item{contact_lt}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
+#'   \item{foot_pitch_lt_deg}{Left foot angle in reference to the direction of heading}
+#'   \item{thigh_pitch_rt_deg}{Right thigh angle in reference to the direction of heading}
+#'   \item{shank_pitch_rt_deg}{Right shank angle in reference to the direction of heading}
+#'   \item{contact_rt}{Pre calculated heel contact events for the right leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
+#'   \item{foot_pitch_rt_deg}{Right foot angle in reference to the direction of heading}
+#'   \item{lumbar_flexion_deg}{Lumbar spine angle in reference to the direction of heading}
+#'   \item{hip_flexion_lt_deg}{Left hip angle in reference to the direction of heading}
+#'   \item{knee_flexion_lt_deg}{Left knee angle in reference to the direction of heading}
+#'   \item{ankle_dorsiflexion_lt_deg}{Left ankle angle in reference to the direction of heading}
+#'   \item{hip_flexion_rt_deg}{Right hip angle in reference to the direction of heading}
+#'   \item{knee_flexion_rt_deg}{Right knee angle in reference to the direction of heading}
+#'   \item{ankle_dorsiflexion_rt_deg}{Right ankle angle in reference to the direction of heading}
 #' }
 #' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
 "healthy_young"
@@ -38,23 +38,23 @@
 #' A data frame with 10,000 rows and 18 columns:
 #' \describe{
 #'   \item{time}{Time in seconds. Data is sampled at 200Hz}
-#'   \item{Pelvis pitch (deg)}{Pelvis angle in reference to the direction of heading}
-#'   \item{Head pitch (deg)}{Head angle in reference to the direction of heading}
-#'   \item{Thigh pitch LT (deg)}{Left thigh angle in reference to the direction of heading}
-#'   \item{Shank pitch LT (deg)}{Left shank angle in reference to the direction of heading}
-#'   \item{Contact LT}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
-#'   \item{Foot pitch LT (deg)}{Left foot angle in reference to the direction of heading}
-#'   \item{Thigh pitch RT (deg)}{Right thigh angle in reference to the direction of heading}
-#'   \item{Shank pitch RT (deg)}{Right shank angle in reference to the direction of heading}
-#'   \item{Contact RT}{Pre calculated heel contact events for the right leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
-#'   \item{Foot pitch RT (deg)}{Right foot angle in reference to the direction of heading}
-#'   \item{Lumbar Flexion (deg)}{Lumbar spine angle in reference to the direction of heading}
-#'   \item{Hip Flexion LT (deg)}{Left hip angle in reference to the direction of heading}
-#'   \item{Knee Flexion LT (deg)}{Left knee angle in reference to the direction of heading}
-#'   \item{Ankle Dorsiflexion LT (deg)}{Left ankle angle in reference to the direction of heading}
-#'   \item{Hip Flexion RT (deg)}{Right hip angle in reference to the direction of heading}
-#'   \item{Knee Flexion RT (deg)}{Right knee angle in reference to the direction of heading}
-#'   \item{Ankle Dorsiflexion RT (deg)}{Right ankle angle in reference to the direction of heading}
+#'   \item{pelvis_pitch_deg}{Pelvis angle in reference to the direction of heading}
+#'   \item{head_pitch_deg}{Head angle in reference to the direction of heading}
+#'   \item{thigh_pitch_lt_deg}{Left thigh angle in reference to the direction of heading}
+#'   \item{shank_pitch_lt_deg}{Left shank angle in reference to the direction of heading}
+#'   \item{contact_lt}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
+#'   \item{foot_pitch_lt_deg}{Left foot angle in reference to the direction of heading}
+#'   \item{thigh_pitch_rt_deg}{Right thigh angle in reference to the direction of heading}
+#'   \item{shank_pitch_rt_deg}{Right shank angle in reference to the direction of heading}
+#'   \item{contact_rt}{Pre calculated heel contact events for the right leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
+#'   \item{foot_pitch_rt_deg}{Right foot angle in reference to the direction of heading}
+#'   \item{lumbar_flexion_deg}{Lumbar spine angle in reference to the direction of heading}
+#'   \item{hip_flexion_lt_deg}{Left hip angle in reference to the direction of heading}
+#'   \item{knee_flexion_lt_deg}{Left knee angle in reference to the direction of heading}
+#'   \item{ankle_dorsiflexion_lt_deg}{Left ankle angle in reference to the direction of heading}
+#'   \item{hip_flexion_rt_deg}{Right hip angle in reference to the direction of heading}
+#'   \item{knee_flexion_rt_deg}{Right knee angle in reference to the direction of heading}
+#'   \item{ankle_dorsiflexion_rt_deg}{Right ankle angle in reference to the direction of heading}
 #' }
 #' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
 "healthy_middle"
@@ -70,23 +70,23 @@
 #' A data frame with 10,000 rows and 18 columns:
 #' \describe{
 #'   \item{time}{Time in seconds. Data is sampled at 200Hz}
-#'   \item{Pelvis pitch (deg)}{Pelvis angle in reference to the direction of heading}
-#'   \item{Head pitch (deg)}{Head angle in reference to the direction of heading}
-#'   \item{Thigh pitch LT (deg)}{Left thigh angle in reference to the direction of heading}
-#'   \item{Shank pitch LT (deg)}{Left shank angle in reference to the direction of heading}
-#'   \item{Contact LT}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
-#'   \item{Foot pitch LT (deg)}{Left foot angle in reference to the direction of heading}
-#'   \item{Thigh pitch RT (deg)}{Right thigh angle in reference to the direction of heading}
-#'   \item{Shank pitch RT (deg)}{Right shank angle in reference to the direction of heading}
-#'   \item{Contact RT}{Pre calculated heel contact events for the right leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
-#'   \item{Foot pitch RT (deg)}{Right foot angle in reference to the direction of heading}
-#'   \item{Lumbar Flexion (deg)}{Lumbar spine angle in reference to the direction of heading}
-#'   \item{Hip Flexion LT (deg)}{Left hip angle in reference to the direction of heading}
-#'   \item{Knee Flexion LT (deg)}{Left knee angle in reference to the direction of heading}
-#'   \item{Ankle Dorsiflexion LT (deg)}{Left ankle angle in reference to the direction of heading}
-#'   \item{Hip Flexion RT (deg)}{Right hip angle in reference to the direction of heading}
-#'   \item{Knee Flexion RT (deg)}{Right knee angle in reference to the direction of heading}
-#'   \item{Ankle Dorsiflexion RT (deg)}{Right ankle angle in reference to the direction of heading}
+#'   \item{pelvis_pitch_deg}{Pelvis angle in reference to the direction of heading}
+#'   \item{head_pitch_deg}{Head angle in reference to the direction of heading}
+#'   \item{thigh_pitch_lt_deg}{Left thigh angle in reference to the direction of heading}
+#'   \item{shank_pitch_lt_deg}{Left shank angle in reference to the direction of heading}
+#'   \item{contact_lt}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
+#'   \item{foot_pitch_lt_deg}{Left foot angle in reference to the direction of heading}
+#'   \item{thigh_pitch_rt_deg}{Right thigh angle in reference to the direction of heading}
+#'   \item{shank_pitch_rt_deg}{Right shank angle in reference to the direction of heading}
+#'   \item{contact_rt}{Pre calculated heel contact events for the right leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
+#'   \item{foot_pitch_rt_deg}{Right foot angle in reference to the direction of heading}
+#'   \item{lumbar_flexion_deg}{Lumbar spine angle in reference to the direction of heading}
+#'   \item{hip_flexion_lt_deg}{Left hip angle in reference to the direction of heading}
+#'   \item{knee_flexion_lt_deg}{Left knee angle in reference to the direction of heading}
+#'   \item{ankle_dorsiflexion_lt_deg}{Left ankle angle in reference to the direction of heading}
+#'   \item{hip_flexion_rt_deg}{Right hip angle in reference to the direction of heading}
+#'   \item{knee_flexion_rt_deg}{Right knee angle in reference to the direction of heading}
+#'   \item{ankle_dorsiflexion_rt_deg}{Right ankle angle in reference to the direction of heading}
 #' }
 #' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
 "healthy_old"

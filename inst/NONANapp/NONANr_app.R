@@ -4,7 +4,6 @@ library(shiny)
 library(shinythemes)
 library(tidyverse)
 library(plotly)
-library(NONANr)
 
 # Create some mock data to use in the app
 #left_dat = data.frame("stride_number" = 1:1000, "stride_time_left" = fgn_sim(1000, 0.75))

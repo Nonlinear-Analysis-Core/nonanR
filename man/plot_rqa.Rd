@@ -2,9 +2,12 @@
 % Please edit documentation in R/plot_rqa.R
 \name{plot_rqa}
 \alias{plot_rqa}
-\title{This function allows you to use the NONAN theme for ggplot2 graphics}
+\title{Plot RQA Recurrence Matrix}
 \usage{
 plot_rqa(recurrence_matrix)
+}
+\arguments{
+\item{recurrence_matrix}{The output from the \code{rqa} function}
 }
 \description{
 This function allows you to use the NONAN theme for ggplot2 graphics
@@ -23,6 +26,5 @@ x.recpt = rqa(x, x, 1, 1, 0, 1, 2, 2, 0, .0001, 0, 1)
 # You can either enter the list returned by rqa() or specify the recurrence plot matrix; the function works both ways.
 plot_rqa(x.recpt) # --> using the list
 plot_rqa(x.recpt$rp) # --> specify the rp matrix in the list
-
 
 }

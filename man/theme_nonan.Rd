@@ -2,9 +2,23 @@
 % Please edit documentation in R/theme_nonan.R
 \name{theme_nonan}
 \alias{theme_nonan}
-\title{This function allows you to use the NONAN theme for ggplot2 graphics}
+\title{Theme to create NONAN style plots}
 \usage{
-theme_nonan(background = "#646666", text = "#D9D9D9", axes = "#8A8A8A")
+theme_nonan(
+  background = "#ffffff",
+  main_text = "#000000",
+  axis_text = "#444444",
+  axes = "#D9D9D9"
+)
+}
+\arguments{
+\item{background}{Color for the background of the plot}
+
+\item{main_text}{Color of the text for the main title and axis titles}
+
+\item{axis_text}{Color of the axis tick labels}
+
+\item{axes}{Color for the axis lines}
 }
 \description{
 This function allows you to use the NONAN theme for ggplot2 graphics
@@ -15,7 +29,7 @@ library(ggplot2)
 library(NONANr)
 
 # Extract data
-your_column <- NONANr::healthy_young$`Contact RT`
+your_column <- healthy_young$contact_lt
 # Find the differences between consecutive elements
 differences <- diff(your_column)
  
@@ -36,6 +50,6 @@ ggplot(dat, ggplot2::aes(x = stride_num, y = stride_time)) +
 # Alternatively you could provide color values for the different features of the graph
 ggplot(dat, ggplot2::aes(x = stride_num, y = stride_time)) + 
  geom_line(color = "black", linewidth = 1) + 
- theme_nonan(background = "#ffffff", text = "#000000", axes = "#D9D9D9")
+ theme_nonan(background = "#BCBBBA", main_text = "#D71920", axis_text = "#681820", axes = "#474648")
 
 }

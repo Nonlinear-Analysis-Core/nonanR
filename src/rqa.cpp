@@ -1,6 +1,5 @@
 #define ARMA_NO_DEBUG //decomment to speed up code once tested
 #include <RcppArmadillo.h>
-#include "helpers.hpp"
 using namespace Rcpp;
 using namespace arma;
 // [[Rcpp::depends(RcppArmadillo)]]

@@ -28,22 +28,24 @@
 #' # Alternatively you could provide color values for the different features of the graph
 #' ggplot(dat, ggplot2::aes(x = stride_num, y = stride_time)) + 
 #'  geom_line(color = "black", linewidth = 1) + 
-#'  theme_nonan(background = "#ffffff", text = "#000000", axes = "#D9D9D9")
+#'  theme_nonan(background = "#BCBBBA", main_text = "#D71920", axis_text = "#681820", axes = "#474648")
 #'
 #' @export
-theme_nonan <- function(background = "#646666", text = "#D9D9D9", axes = "#8A8A8A"){
+theme_nonan <- function(background = "#ffffff", main_text = "#000000", axis_text = "#444444", axes = "#D9D9D9"){
   library(ggplot2)
   
   theme(
     # Text
-    text = element_text(colour = text), 
-    plot.title = element_text(size = 15),
+    text = element_text(colour = main_text, family = "Arial"), 
+    plot.title = element_text(size = 13, margin = margin(0, 0, 0.1, 0, "cm")),
     plot.subtitle = element_text(size = 10),
-    axis.text = element_text(colour = text),
+    axis.text = element_text(colour = axis_text),
+    axis.title.x = element_text(margin = margin(0.1, 0, 0, 0, "cm")),
+    axis.title.y = element_text(margin = margin(0, 0.1, 0, 0, "cm")),
     
     # Axes
-    axis.ticks = element_line(colour = axes, linewidth = 1),
-    panel.grid.major = element_line(axes, linewidth = 1),
+    axis.ticks = element_line(colour = axes, linewidth = 0.7),
+    panel.grid.major = element_line(axes, linewidth = 0.7),
     panel.grid.minor = element_line(axes, linewidth = 0.1),
     
     # Background

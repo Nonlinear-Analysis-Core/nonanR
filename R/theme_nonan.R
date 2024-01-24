@@ -7,7 +7,7 @@
 #' library(NONANr)
 #' 
 #' # Extract data
-#' your_column <- NONANr::healthy_young$`Contact RT`
+#' your_column <- healthy_young$contact_lt
 #' # Find the differences between consecutive elements
 #' differences <- diff(your_column)
 #'  
@@ -32,8 +32,7 @@
 #'
 #' @export
 theme_nonan <- function(background = "#ffffff", main_text = "#000000", axis_text = "#444444", axes = "#D9D9D9"){
-  library(ggplot2)
-  
+
   theme(
     # Text
     text = element_text(colour = main_text, family = "Arial"), 

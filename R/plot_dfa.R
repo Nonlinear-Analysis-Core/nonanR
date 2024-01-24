@@ -33,13 +33,13 @@ plot_dfa = function(x){
   y_pos = dat$log_rms[2]:dat$log_rms[1] 
   
   ggplot(dat, aes(x = log_scales, y = log_rms)) + 
-    geom_smooth(formula = y ~ x, method=lm, se = FALSE, color="#EF2925") + 
+    geom_smooth(formula = y ~ x, method=lm, se = FALSE, color="#C8102E") + 
     geom_point(size = 3) + 
     annotate(geom = "label", x = x_pos, y = y_pos, label = plot.text, label.size = NA, fill = "lightgray") +
     labs(title = "Detrended Fluctuation Analysis", 
          x = "Scale (log)", 
          y = "Fluctuation (log)") +
-    NONANr::theme_nonan()
+    theme_nonan()
 }
 
 

@@ -28,7 +28,7 @@ plot_rqa = function(recurrence_matrix){
     A = recurrence_matrix
   }
   
-    diag(A) = 1
+  diag(A) = 1
   colnames(A) <- 1:ncol(A)
   rownames(A) <- 1:nrow(A)
   
@@ -38,8 +38,8 @@ plot_rqa = function(recurrence_matrix){
   
   ggplot(longData, aes(x = Var2, y = Var1)) + 
     geom_tile(aes(fill=value), colour = "black", fill = "black") + 
-    theme(aspect.ratio = 1)+
-    theme_minimal()
+    theme(aspect.ratio = 1) +
+    theme_nonan()
   
 }
 

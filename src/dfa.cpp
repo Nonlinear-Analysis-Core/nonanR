@@ -94,12 +94,3 @@ List dfa(arma::vec x, int order, arma::uword verbose,
 }
 
 
-/*** R
-x = rnorm(1000)
-order = 1
-verbose = 1
-scales <- c(16,32,64,128,256,512,1024)
-scale_ratio = 2
-
-dfa_out = dfa(x, order, verbose, scales, scale_ratio)
-*/

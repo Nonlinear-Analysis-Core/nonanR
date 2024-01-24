@@ -70,7 +70,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    actionButton("exportDFA", "Export",
                                                                 style = "position: absolute; right: 19px;")
                                                  )
-                                                   ), # fluidRow for action buttons
+                                                   ) # fluidRow for action buttons
                                                    
                                                  ), # sidebarpanel
                                                  mainPanel(
@@ -351,6 +351,7 @@ server <- function(input, output) {
       cat("Exported to global environment. Close the app to view.")
     }) # renderPrint
   }) # observeEvent
+  
   
   # Print the data so we can see what column is actually being selected. For debugging only
   #output$datHead <- renderTable({

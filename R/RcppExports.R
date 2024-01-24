@@ -149,3 +149,45 @@ seq_int <- function(length) {
     .Call('_NONANr_seq_int', PACKAGE = 'NONANr', length)
 }
 
+#' Recurrence Quantification Analysis
+#' 
+#' This function performs recurrence quantification analysis.
+#' 
+#' @param ts1 A numerical time series
+#' @param ts2 A numerical time series
+#' @param embed The embedding dimension of the time series
+#' @param delay The optimal time delay (lag)
+#' @param normalize Should the time series be normalized? (0 = no, 1 = unit interval, 2 = z-score)
+#' @param rescale Should the distance matrix be rescaled? (0 = no, 1 = max norm, 2 = min norm)
+#' @param mindiagline The smallest number of diagonal points to be considered a line
+#' @param minvertline smallest number of vertical points to be considered a line
+#' @param t_win Theiler window
+#' @param radius Minimum distance within which points are considered recurrent
+#' @param whiteline not implemented
+#' @param recpt Should recurrence plot be returned? (Not recommended for long series)
+#' @import Rcpp
+#' @export
+#' 
+#' @details This function performs recurrence quantification analysis (RQA) and its bivariate extension, cross recurrence quantification analysis (CRQA) on time series data that have (potentially) been embedded in higher dimension than the originating series. A common approach for univariate series involves several steps: First, identify the optimal time delay as either the first zero crossing of the autocorrelation function or the first minimum of the average mutual information function. Second, the time series is unfolded into embed dimensions by creating time-delayed copies of the original series. One method for determining the number of dimensions is by the method of False Nearest Neighbors. Third, a distance matrix is computed among the embedded points of the series. A recurrence plot is constructed by passing the distance matrix through a heavyside function: distances less than or equal to the chosen radius are marked as 1 (recurrent); distances falling outside the radius are marked as 0 (not recurrent).
+#' 
+#' After constructing the recurrence plot, a number of measures are computed to characterize recurrent structure in the time series. These measures and their interpretation are well documented in the literature. We provide simple definitions for each recurrence metric below. In addition, we provide references to standard readings including a very readable introduction to RQA (i.e., Webber & Zbilut, 2005; Marwan et al., 2007).
+#' 
+#' @examples
+#' # Create a sample time series
+#' x = fgn_sim(n = 100, H = 0.8)
+#' 
+#' # Compute RQA
+#' x.recpt = rqa(x, x, 1, 1, 0, 1, 2, 2, 0, .0001, 0, 1)
+#' 
+#' # Return recurrence plot
+#' plot_rqa(x.recpt$rp)
+#' 
+#' 
+#' @references 
+#' - Webber, C. L., & Zbilut, J. P. (2005). Recurrence quantification analysis of nonlinear dynamical time series. In S. Riley and G. C. Van Orden (eds). Tutorials in contemporary nonlinear methods for the behavioral sciences.
+#' 
+#' - Marwan, N., Romano, M. C. Theil, M., & Kurths, J. (2007). Recurrence plots for the analysis of complex systems. Physics Reports, 438, 237-329.
+rqa <- function(ts1, ts2, embed = 1L, delay = 1L, normalize = 1L, rescale = 1L, mindiagline = 2L, minvertline = 2L, t_win = 0L, radius = 0.0001, whiteline = 0L, recpt = 0L) {
+    .Call('_NONANr_rqa', PACKAGE = 'NONANr', ts1, ts2, embed, delay, normalize, rescale, mindiagline, minvertline, t_win, radius, whiteline, recpt)
+}
+

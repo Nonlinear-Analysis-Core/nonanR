@@ -112,6 +112,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rqa
+List rqa(arma::vec ts1, arma::vec ts2, unsigned int embed, unsigned int delay, int normalize, int rescale, int mindiagline, int minvertline, int t_win, double radius, int whiteline, int recpt);
+RcppExport SEXP _NONANr_rqa(SEXP ts1SEXP, SEXP ts2SEXP, SEXP embedSEXP, SEXP delaySEXP, SEXP normalizeSEXP, SEXP rescaleSEXP, SEXP mindiaglineSEXP, SEXP minvertlineSEXP, SEXP t_winSEXP, SEXP radiusSEXP, SEXP whitelineSEXP, SEXP recptSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type ts1(ts1SEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type ts2(ts2SEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type embed(embedSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type delay(delaySEXP);
+    Rcpp::traits::input_parameter< int >::type normalize(normalizeSEXP);
+    Rcpp::traits::input_parameter< int >::type rescale(rescaleSEXP);
+    Rcpp::traits::input_parameter< int >::type mindiagline(mindiaglineSEXP);
+    Rcpp::traits::input_parameter< int >::type minvertline(minvertlineSEXP);
+    Rcpp::traits::input_parameter< int >::type t_win(t_winSEXP);
+    Rcpp::traits::input_parameter< double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< int >::type whiteline(whitelineSEXP);
+    Rcpp::traits::input_parameter< int >::type recpt(recptSEXP);
+    rcpp_result_gen = Rcpp::wrap(rqa(ts1, ts2, embed, delay, normalize, rescale, mindiagline, minvertline, t_win, radius, whiteline, recpt));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_NONANr_ApproximateEntropy", (DL_FUNC) &_NONANr_ApproximateEntropy, 3},
@@ -122,6 +144,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_NONANr_poly_residuals", (DL_FUNC) &_NONANr_poly_residuals, 2},
     {"_NONANr_lm_c", (DL_FUNC) &_NONANr_lm_c, 2},
     {"_NONANr_seq_int", (DL_FUNC) &_NONANr_seq_int, 1},
+    {"_NONANr_rqa", (DL_FUNC) &_NONANr_rqa, 12},
     {NULL, NULL, 0}
 };
 

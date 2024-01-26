@@ -3,7 +3,6 @@
 #' This function allows you to use the NONAN theme for ggplot2 graphics
 #' 
 #' @param recurrence_matrix The output from the \code{rqa} function
-#' 
 #'
 #' @examples
 #' 
@@ -16,9 +15,8 @@
 #' x.recpt = rqa(x, x, 1, 1, 0, 1, 2, 2, 0, .0001, 0, 1)
 #' 
 #' # Return recurrence plot
-#' # You can either enter the list returned by rqa() or specify the recurrence plot matrix; the function works both ways.
-#' plot_rqa(x.recpt) # --> using the list
-#' plot_rqa(x.recpt$rp) # --> specify the rp matrix in the list
+#' plot_rqa(x.recpt)
+#' 
 #' 
 #' @export
 plot_rqa = function(recurrence_matrix){
@@ -38,10 +36,12 @@ plot_rqa = function(recurrence_matrix){
   longData = longData[longData$value!=0,]
   longData$value = as.factor(longData$value)
   
-  ggplot(longData, aes(x = Var2, y = Var1)) + 
-    geom_tile(aes(fill=value), colour = "black", fill = "black") + 
+  ggplot(longData, aes(x = longData[,1], y = longData[,2])) + 
+    geom_tile(aes(fill=longData[,3]), colour = "black", fill = "black") + 
     theme(aspect.ratio = 1) +
-    labs(title = "Reccurence Quantification Matrix") +
+    labs(title = "Reccurence Matrix", 
+         x = "", 
+         y = "") +
     theme_nonan()
   
 }

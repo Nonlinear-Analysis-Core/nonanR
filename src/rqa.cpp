@@ -176,7 +176,7 @@ void dist_mat(arma::mat& x1, arma::mat& x2, arma::mat& dist){
     }
     
   }
-  dist.t();
+  //dist.t();
   
   // return(dist);
 }

@@ -7,10 +7,20 @@ Author: Joel Sommerfeld
 Maintainer: Nonlinear Analysis Core <bmchnonan@unomaha.edu>
 Description: This is a collection of functions that can be used for the nonlinear analysis of human movement time series data. 
 License: GPL (>= 3) + file LICENSE
-Imports: Rcpp (>= 1.0.11), janitor, usethis, reshape2
+Depends: 
+    R (>= 2.10), 
+    shiny,
+    shinythemes, 
+    markdown, 
+    ggplot2
+Imports: 
+    data.table,
+    janitor,
+    Rcpp (>= 1.0.11),
+    reshape2,
+    stats,
+    usethis
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.3.0
 Encoding: UTF-8
-Depends: 
-    R (>= 2.10), shiny, shinythemes, tidyverse, plotly, markdown
 LazyData: true

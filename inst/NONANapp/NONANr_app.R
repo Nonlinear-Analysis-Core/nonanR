@@ -1,9 +1,9 @@
 
 
-library(shiny)
-library(shinythemes)
-library(tidyverse)
-library(plotly)
+# library(shiny)
+# library(shinythemes)
+# library(tidyverse)
+# library(plotly)
 
 # Create some mock data to use in the app
 #left_dat = data.frame("stride_number" = 1:1000, "stride_time_left" = fgn_sim(1000, 0.75))
@@ -13,8 +13,6 @@ library(plotly)
 myDataFrames <- names(which(unlist(eapply(.GlobalEnv,is.data.frame))))
 loadedData <- data()$results[,3]
 
-
-library(shiny)
 
 # UI ----------------------------------------------------------------------
 

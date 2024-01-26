@@ -23,8 +23,7 @@ x = fgn_sim(n = 100, H = 0.8)
 x.recpt = rqa(x, x, 1, 1, 0, 1, 2, 2, 0, .0001, 0, 1)
 
 # Return recurrence plot
-# You can either enter the list returned by rqa() or specify the recurrence plot matrix; the function works both ways.
-plot_rqa(x.recpt) # --> using the list
-plot_rqa(x.recpt$rp) # --> specify the rp matrix in the list
+plot_rqa(x.recpt)
+
 
 }

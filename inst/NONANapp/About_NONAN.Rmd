@@ -11,7 +11,7 @@ output: html_document
 -   Select the analysis you want from the drop down menu
 -   Some parameters will have defaults set for you but it is strongly recommended that you set these yourself
 -   A plot will be displayed of the time series analysed
--   A histogram is shown for you to check the distrubution of your data
+-   A histogram is shown for you to check the distribution of your data
 -   Autocorrelation is shown for some methods as a sanity check for the results of the selected analysis
 
 ### About the Nonlinear Analysis Core

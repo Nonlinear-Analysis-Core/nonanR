@@ -15,7 +15,7 @@ Plot method for monofractal detrended fluctuation analysis
 \examples{
 
 # Create a time series and perform DFA
-x = rnorm(1000)
+x = fgn_sim(n = 1000, H = 0.9)
 order = 1
 verbose = 1
 scales = c(16,32,64,128,256,512)

@@ -6,7 +6,7 @@
 #'
 #' @examples
 #' 
-#' library(NONANr)
+#' library(nonanR)
 #' 
 #' # Create a sample time series
 #' x = fgn_sim(n = 100, H = 0.8)

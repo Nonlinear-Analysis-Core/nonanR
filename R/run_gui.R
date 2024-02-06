@@ -16,9 +16,9 @@
 #'
 #' @export
 runGUI <- function() {
-  appDir <- system.file("NONANapp", "NONANr_app.R", package = "NONANr")
+  appDir <- system.file("NONANapp", "NONANr_app.R", package = "nonanR")
   if (appDir == "") {
-    stop("Could not find example directory. Try re-installing `NONANr`.", call. = FALSE)
+    stop("Could not find example directory. Try re-installing `nonanR`.", call. = FALSE)
   }
   
   shiny::runApp(appDir, display.mode = "normal")

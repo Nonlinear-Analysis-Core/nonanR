@@ -14,7 +14,7 @@ This function allows you to use the NONAN theme for ggplot2 graphics
 }
 \examples{
 
-library(NONANr)
+library(nonanR)
 
 # Create a sample time series
 x = fgn_sim(n = 100, H = 0.8)

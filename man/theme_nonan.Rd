@@ -26,7 +26,7 @@ This function allows you to use the NONAN theme for ggplot2 graphics
 \examples{
 
 library(ggplot2)
-library(NONANr)
+library(nonanR)
 
 # Extract data
 your_column <- healthy_young$contact_lt

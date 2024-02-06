@@ -1,6 +1,6 @@
-\name{NONANr-package}
-\alias{NONANr-package}
-\alias{NONANr}
+\name{nonanR-package}
+\alias{nonanR-package}
+\alias{nonanR}
 \docType{package}
 \title{
   A short title line describing what the package does

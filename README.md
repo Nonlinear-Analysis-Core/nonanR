@@ -1,4 +1,4 @@
-# NONANr
+# nonanR
 R package for nonlinear time series analysis of human movement data
 
 ## Installation Note

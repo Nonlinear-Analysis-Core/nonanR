@@ -11,9 +11,21 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// AMI
+arma::sp_mat AMI(arma::colvec x, int L);
+RcppExport SEXP _nonanR_AMI(SEXP xSEXP, SEXP LSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::colvec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    rcpp_result_gen = Rcpp::wrap(AMI(x, L));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ApproximateEntropy
 arma::mat ApproximateEntropy(arma::colvec x, int dim, double R);
-RcppExport SEXP _NONANr_ApproximateEntropy(SEXP xSEXP, SEXP dimSEXP, SEXP RSEXP) {
+RcppExport SEXP _nonanR_ApproximateEntropy(SEXP xSEXP, SEXP dimSEXP, SEXP RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -26,7 +38,7 @@ END_RCPP
 }
 // SampleEntropy
 arma::mat SampleEntropy(arma::colvec x, int m, double R);
-RcppExport SEXP _NONANr_SampleEntropy(SEXP xSEXP, SEXP mSEXP, SEXP RSEXP) {
+RcppExport SEXP _nonanR_SampleEntropy(SEXP xSEXP, SEXP mSEXP, SEXP RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -39,7 +51,7 @@ END_RCPP
 }
 // SymbolicEntropy
 double SymbolicEntropy(arma::vec x, double thresholdVal, unsigned int seqLength);
-RcppExport SEXP _NONANr_SymbolicEntropy(SEXP xSEXP, SEXP thresholdValSEXP, SEXP seqLengthSEXP) {
+RcppExport SEXP _nonanR_SymbolicEntropy(SEXP xSEXP, SEXP thresholdValSEXP, SEXP seqLengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -50,9 +62,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bayesH
+arma::vec bayesH(arma::vec x, double H);
+RcppExport SEXP _nonanR_bayesH(SEXP xSEXP, SEXP HSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type H(HSEXP);
+    rcpp_result_gen = Rcpp::wrap(bayesH(x, H));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dfa
 List dfa(arma::vec x, int order, arma::uword verbose, arma::uvec scales, double scale_ratio);
-RcppExport SEXP _NONANr_dfa(SEXP xSEXP, SEXP orderSEXP, SEXP verboseSEXP, SEXP scalesSEXP, SEXP scale_ratioSEXP) {
+RcppExport SEXP _nonanR_dfa(SEXP xSEXP, SEXP orderSEXP, SEXP verboseSEXP, SEXP scalesSEXP, SEXP scale_ratioSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,7 +91,7 @@ END_RCPP
 }
 // fgn_sim
 arma::vec fgn_sim(int n, double H);
-RcppExport SEXP _NONANr_fgn_sim(SEXP nSEXP, SEXP HSEXP) {
+RcppExport SEXP _nonanR_fgn_sim(SEXP nSEXP, SEXP HSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -79,7 +103,7 @@ END_RCPP
 }
 // poly_residuals
 arma::vec poly_residuals(arma::vec yr, int m);
-RcppExport SEXP _NONANr_poly_residuals(SEXP yrSEXP, SEXP mSEXP) {
+RcppExport SEXP _nonanR_poly_residuals(SEXP yrSEXP, SEXP mSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -91,7 +115,7 @@ END_RCPP
 }
 // lm_c
 arma::vec lm_c(arma::vec xs, arma::vec yr);
-RcppExport SEXP _NONANr_lm_c(SEXP xsSEXP, SEXP yrSEXP) {
+RcppExport SEXP _nonanR_lm_c(SEXP xsSEXP, SEXP yrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -103,7 +127,7 @@ END_RCPP
 }
 // seq_int
 arma::uvec seq_int(arma::uword length);
-RcppExport SEXP _NONANr_seq_int(SEXP lengthSEXP) {
+RcppExport SEXP _nonanR_seq_int(SEXP lengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -114,7 +138,7 @@ END_RCPP
 }
 // rqa
 List rqa(arma::vec ts1, arma::vec ts2, unsigned int embed, unsigned int delay, int normalize, int rescale, int mindiagline, int minvertline, int t_win, double radius, int whiteline, int recpt);
-RcppExport SEXP _NONANr_rqa(SEXP ts1SEXP, SEXP ts2SEXP, SEXP embedSEXP, SEXP delaySEXP, SEXP normalizeSEXP, SEXP rescaleSEXP, SEXP mindiaglineSEXP, SEXP minvertlineSEXP, SEXP t_winSEXP, SEXP radiusSEXP, SEXP whitelineSEXP, SEXP recptSEXP) {
+RcppExport SEXP _nonanR_rqa(SEXP ts1SEXP, SEXP ts2SEXP, SEXP embedSEXP, SEXP delaySEXP, SEXP normalizeSEXP, SEXP rescaleSEXP, SEXP mindiaglineSEXP, SEXP minvertlineSEXP, SEXP t_winSEXP, SEXP radiusSEXP, SEXP whitelineSEXP, SEXP recptSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -136,19 +160,21 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_NONANr_ApproximateEntropy", (DL_FUNC) &_NONANr_ApproximateEntropy, 3},
-    {"_NONANr_SampleEntropy", (DL_FUNC) &_NONANr_SampleEntropy, 3},
-    {"_NONANr_SymbolicEntropy", (DL_FUNC) &_NONANr_SymbolicEntropy, 3},
-    {"_NONANr_dfa", (DL_FUNC) &_NONANr_dfa, 5},
-    {"_NONANr_fgn_sim", (DL_FUNC) &_NONANr_fgn_sim, 2},
-    {"_NONANr_poly_residuals", (DL_FUNC) &_NONANr_poly_residuals, 2},
-    {"_NONANr_lm_c", (DL_FUNC) &_NONANr_lm_c, 2},
-    {"_NONANr_seq_int", (DL_FUNC) &_NONANr_seq_int, 1},
-    {"_NONANr_rqa", (DL_FUNC) &_NONANr_rqa, 12},
+    {"_nonanR_AMI", (DL_FUNC) &_nonanR_AMI, 2},
+    {"_nonanR_ApproximateEntropy", (DL_FUNC) &_nonanR_ApproximateEntropy, 3},
+    {"_nonanR_SampleEntropy", (DL_FUNC) &_nonanR_SampleEntropy, 3},
+    {"_nonanR_SymbolicEntropy", (DL_FUNC) &_nonanR_SymbolicEntropy, 3},
+    {"_nonanR_bayesH", (DL_FUNC) &_nonanR_bayesH, 2},
+    {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},
+    {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 2},
+    {"_nonanR_poly_residuals", (DL_FUNC) &_nonanR_poly_residuals, 2},
+    {"_nonanR_lm_c", (DL_FUNC) &_nonanR_lm_c, 2},
+    {"_nonanR_seq_int", (DL_FUNC) &_nonanR_seq_int, 1},
+    {"_nonanR_rqa", (DL_FUNC) &_nonanR_rqa, 12},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_NONANr(DllInfo *dll) {
+RcppExport void R_init_nonanR(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

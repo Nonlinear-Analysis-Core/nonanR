@@ -11,7 +11,7 @@
 #' @examples
 #' 
 #' library(ggplot2)
-#' library(NONANr)
+#' library(nonanR)
 #' 
 #' # Extract data
 #' your_column <- healthy_young$contact_lt

@@ -11,18 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// AMI
-arma::sp_mat AMI(arma::colvec x, int L);
-RcppExport SEXP _nonanR_AMI(SEXP xSEXP, SEXP LSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::colvec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type L(LSEXP);
-    rcpp_result_gen = Rcpp::wrap(AMI(x, L));
-    return rcpp_result_gen;
-END_RCPP
-}
 // ApproximateEntropy
 arma::mat ApproximateEntropy(arma::colvec x, int dim, double R);
 RcppExport SEXP _nonanR_ApproximateEntropy(SEXP xSEXP, SEXP dimSEXP, SEXP RSEXP) {
@@ -59,18 +47,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type thresholdVal(thresholdValSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type seqLength(seqLengthSEXP);
     rcpp_result_gen = Rcpp::wrap(SymbolicEntropy(x, thresholdVal, seqLength));
-    return rcpp_result_gen;
-END_RCPP
-}
-// bayesH
-arma::vec bayesH(arma::vec x, double H);
-RcppExport SEXP _nonanR_bayesH(SEXP xSEXP, SEXP HSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type H(HSEXP);
-    rcpp_result_gen = Rcpp::wrap(bayesH(x, H));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -160,11 +136,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_nonanR_AMI", (DL_FUNC) &_nonanR_AMI, 2},
     {"_nonanR_ApproximateEntropy", (DL_FUNC) &_nonanR_ApproximateEntropy, 3},
     {"_nonanR_SampleEntropy", (DL_FUNC) &_nonanR_SampleEntropy, 3},
     {"_nonanR_SymbolicEntropy", (DL_FUNC) &_nonanR_SymbolicEntropy, 3},
-    {"_nonanR_bayesH", (DL_FUNC) &_nonanR_bayesH, 2},
     {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},
     {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 2},
     {"_nonanR_poly_residuals", (DL_FUNC) &_nonanR_poly_residuals, 2},

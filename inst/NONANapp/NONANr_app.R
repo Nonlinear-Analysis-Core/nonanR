@@ -20,7 +20,7 @@ loadedData <- data()$results[,3]
 ui <- fluidPage(theme = shinytheme("yeti"),
                 
                 # Application title
-                titlePanel(title=div(img(src="NONAN_header2.png", height = 70), 
+                titlePanel(title=div(img(src="", height = 70), 
                                      ""), 
                            windowTitle = ""),
                 # This changes the colour and padding of the titlepanel block
@@ -279,12 +279,12 @@ server <- function(input, output) {
   
   # Set the scales for the DFA function
   scales = reactive({
-    nonanR::logscale(input$minScale, input$maxScale, input$scaleRatio) 
+    logscale(input$minScale, input$maxScale, input$scaleRatio) 
   })
   
   # DFA calculation
   dfaResult <- eventReactive(input$goDFA, {
-    nonanR::dfa(dfa_dat(), order = input$order, verbose = 1, scales = scales(), scale_ratio = input$scaleRatio)
+    dfa(dfa_dat(), order = input$order, verbose = 1, scales = scales(), scale_ratio = input$scaleRatio)
     
   })
   
@@ -306,7 +306,7 @@ server <- function(input, output) {
         geom_histogram( color="white", fill="black", bins = w) +
         labs(title = paste("Histogram of ", input$dfay), 
             x = input$dfay) +
-        nonanR::theme_nonan()
+       theme_nonan()
 
     })
   }) # observeEvent
@@ -326,7 +326,7 @@ server <- function(input, output) {
         geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$dfay)) + 
-        nonanR::theme_nonan() # add the nonan plot theme on
+        theme_nonan() # add the nonan plot theme on
       
     })
   }) # observeEvent
@@ -396,7 +396,7 @@ server <- function(input, output) {
   
   # Entropy calculation
   SEresult <- eventReactive(input$goSEENT, {
-    nonanR::SampleEntropy(SE_dat(), m = input$SEm, R = input$SEr)
+    SampleEntropy(SE_dat(), m = input$SEm, R = input$SEr)
   })
   
   # Print out the sample entropy results
@@ -426,7 +426,7 @@ server <- function(input, output) {
         geom_histogram( color="white", fill="black", bins = w) +
         labs(title = paste("Histogram of ", input$SEy), 
              x = input$SEy) +
-        nonanR::theme_nonan()
+        theme_nonan()
     })
   }) # observeEvent
   
@@ -445,7 +445,7 @@ server <- function(input, output) {
         geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$SEy)) + 
-        nonanR::theme_nonan() # add the nonan plot theme on    
+        theme_nonan() # add the nonan plot theme on    
       
       })
   }) # observeEvent
@@ -496,7 +496,7 @@ server <- function(input, output) {
   
   # Entropy calculation
   AEresult <- eventReactive(input$goAENT, {
-    nonanR::ApproximateEntropy(AE_dat(), dim = input$AEdim, R = input$AEr)
+    ApproximateEntropy(AE_dat(), dim = input$AEdim, R = input$AEr)
   })
   
   # Print out the approximate entropy results
@@ -526,7 +526,7 @@ server <- function(input, output) {
         geom_histogram( color="white", fill="black", bins = w) +
         labs(title = paste("Histogram of ", input$AEy), 
              x = input$AEy) +
-        nonanR::theme_nonan()
+        theme_nonan()
       
     })
   }) # observeEvent
@@ -546,7 +546,7 @@ server <- function(input, output) {
         geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$AEy)) + 
-        nonanR::theme_nonan() # add the nonan plot theme on   
+        theme_nonan() # add the nonan plot theme on   
       
       })
   }) # observeEvent
@@ -609,7 +609,7 @@ server <- function(input, output) {
   
   # Entropy calculation
   SymEresult <- eventReactive(input$goSymENT, {
-    nonanR::SymbolicEntropy(SymE_dat(), thresholdVal = input$SymEthresh, seqLength = input$SymEseql)
+    SymbolicEntropy(SymE_dat(), thresholdVal = input$SymEthresh, seqLength = input$SymEseql)
   })
   
   # Print out the approximate entropy results
@@ -639,7 +639,7 @@ server <- function(input, output) {
         geom_histogram( color="white", fill="black", bins = w) +
         labs(title = paste("Histogram of ", input$SymEy), 
              x = input$SymEy) +
-        nonanR::theme_nonan()
+        theme_nonan()
       
     })
   }) # observeEvent
@@ -659,7 +659,7 @@ server <- function(input, output) {
         geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$SymEy)) + 
-        nonanR::theme_nonan() # add the nonan plot theme on   
+        theme_nonan() # add the nonan plot theme on   
       
     })
   }) # observeEvent

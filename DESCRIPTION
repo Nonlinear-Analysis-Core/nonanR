@@ -12,7 +12,8 @@ Depends:
     shiny,
     shinythemes, 
     markdown, 
-    ggplot2
+    ggplot2,
+    plotly
 Imports: 
     data.table,
     janitor,

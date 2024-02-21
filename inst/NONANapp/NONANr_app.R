@@ -20,7 +20,7 @@ loadedData <- data()$results[,3]
 ui <- fluidPage(theme = shinytheme("yeti"),
                 
                 # Application title
-                titlePanel(title=div(img(src="", height = 70), 
+                titlePanel(title=div(img(src="AppHeader.png", height = 70), 
                                      ""), 
                            windowTitle = ""),
                 # This changes the colour and padding of the titlepanel block

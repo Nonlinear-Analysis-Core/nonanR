@@ -5,7 +5,6 @@ middle_aged = data.table::fread("S:/Team Members/Wiles Tyler/Gaitprint/CLEAN DAT
 old_person = data.table::fread("S:/Team Members/Wiles Tyler/Gaitprint/CLEAN DATA/S119_G03_D01_B01_T01.csv")
 
 
-
 # Attach column names
 header = data.table::fread("C:/Users/jsommerfeld/Desktop/Gaitprint/Gaitprint_Noraxon_Names_Clean.csv", header = F)
 colnames(young_person) = as.character(header)
@@ -55,8 +54,16 @@ healthy_old = cbind(t, healthy_old)
 colnames(healthy_old)[1] = "time"
 healthy_old = janitor::clean_names(healthy_old)
 
+rm(young_person)
+rm(middle_aged)
+rm(old_person)
 
 # Add data to package -- generally needs to be under 1mb
 usethis::use_data(healthy_young, overwrite = T, compress = "xz")
 usethis::use_data(healthy_middle, overwrite = T, compress = "xz")
 usethis::use_data(healthy_old, overwrite = T, compress = "xz")
+
+rm(healthy_young)
+rm(healthy_middle)
+rm(healthy_old)
+

@@ -36,7 +36,7 @@ plot_mfdfa = function(mf, do.surrogate,  nsurrogates = 19, return.ci = FALSE){
     log_fq_long <- tidyr::pivot_longer(log_fq, cols = -index, names_to = "column", values_to = "value") # go to long format
     
     q = ggplot(data = log_fq_long, aes(x = index, y = value, color = as.factor(column))) +
-      geom_smooth(formula = y ~ x, method = lm, se = FALSE) +
+      geom_smooth(formula = y ~ x, method = lm, se = FALSE, linewidth = 0.5) +
       geom_point() +  # Add points to the plot
       scale_x_continuous(breaks = log_fq$index) +  # Show all numbers on the x-axis
       labs(x = "logScale", y = "logF(q)") +

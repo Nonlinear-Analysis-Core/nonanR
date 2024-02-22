@@ -112,6 +112,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mfdfa
+List mfdfa(arma::vec x, arma::vec q, int order, arma::uvec scales, double scale_ratio);
+RcppExport SEXP _nonanR_mfdfa(SEXP xSEXP, SEXP qSEXP, SEXP orderSEXP, SEXP scalesSEXP, SEXP scale_ratioSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type order(orderSEXP);
+    Rcpp::traits::input_parameter< arma::uvec >::type scales(scalesSEXP);
+    Rcpp::traits::input_parameter< double >::type scale_ratio(scale_ratioSEXP);
+    rcpp_result_gen = Rcpp::wrap(mfdfa(x, q, order, scales, scale_ratio));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rqa
 List rqa(arma::vec ts1, arma::vec ts2, unsigned int embed, unsigned int delay, int normalize, int rescale, int mindiagline, int minvertline, int t_win, double radius, int whiteline, int recpt);
 RcppExport SEXP _nonanR_rqa(SEXP ts1SEXP, SEXP ts2SEXP, SEXP embedSEXP, SEXP delaySEXP, SEXP normalizeSEXP, SEXP rescaleSEXP, SEXP mindiaglineSEXP, SEXP minvertlineSEXP, SEXP t_winSEXP, SEXP radiusSEXP, SEXP whitelineSEXP, SEXP recptSEXP) {
@@ -144,6 +159,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nonanR_poly_residuals", (DL_FUNC) &_nonanR_poly_residuals, 2},
     {"_nonanR_lm_c", (DL_FUNC) &_nonanR_lm_c, 2},
     {"_nonanR_seq_int", (DL_FUNC) &_nonanR_seq_int, 1},
+    {"_nonanR_mfdfa", (DL_FUNC) &_nonanR_mfdfa, 5},
     {"_nonanR_rqa", (DL_FUNC) &_nonanR_rqa, 12},
     {NULL, NULL, 0}
 };

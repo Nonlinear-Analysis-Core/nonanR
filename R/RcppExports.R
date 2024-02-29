@@ -25,6 +25,10 @@ ApproximateEntropy <- function(x, dim, R) {
     .Call('_nonanR_ApproximateEntropy', PACKAGE = 'nonanR', x, dim, R)
 }
 
+ApproximateEntropyTest <- function(x, dim, R) {
+    .Call('_nonanR_ApproximateEntropyTest', PACKAGE = 'nonanR', x, dim, R)
+}
+
 #' Sample Entropy
 #' 
 #' Calculate the sample entropy of a time series.

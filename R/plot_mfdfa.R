@@ -16,10 +16,13 @@
 #' @references Kantelhardt et al. (2002). Multifractal detrended fluctuation
 #' analys of nonstationary time series. Physica A: Statistical Mechanics and 
 #' its Applications, 87
-#' @importFrom colorRamps blue2red
+#' 
 #' 
 #' @export
 plot_mfdfa = function(mf, do.surrogate,  nsurrogates = 19, return.ci = FALSE){
+  # Listing these here as NULL removes a CRAN warning about "Undefined global functions or variables"
+  index <- value <- Hq <- CI_low <- CI_high <- tau <- h <- Dh <- h_surr_ci_mean <- dh_surr_ci_mean <- h_CI_low <- h_CI_high <- dh_CI_low <- dh_CI_high <- NULL
+  
   if (length(mf) != 11){
     cat('This does not appear to be a multifractal spectrum object.\n')
     return(NULL)
@@ -28,7 +31,7 @@ plot_mfdfa = function(mf, do.surrogate,  nsurrogates = 19, return.ci = FALSE){
     
     # do better color coding using a ramp function
     # require(colorRamps)
-    cols = rev(colorRamps::blue2red(length(mf$q)))
+    # cols = rev(colorRamps::blue2red(length(mf$q)))
     
     # Plot q-order fluctuation function
     log_fq <- as.data.frame(mf$log_fq)

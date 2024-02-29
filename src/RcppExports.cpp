@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // ApproximateEntropy
-arma::mat ApproximateEntropy(arma::colvec x, int dim, double R);
+double ApproximateEntropy(arma::colvec x, int dim, double R);
 RcppExport SEXP _nonanR_ApproximateEntropy(SEXP xSEXP, SEXP dimSEXP, SEXP RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -21,6 +21,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
     Rcpp::traits::input_parameter< double >::type R(RSEXP);
     rcpp_result_gen = Rcpp::wrap(ApproximateEntropy(x, dim, R));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ApproximateEntropyTest
+double ApproximateEntropyTest(arma::colvec x, int dim, double R);
+RcppExport SEXP _nonanR_ApproximateEntropyTest(SEXP xSEXP, SEXP dimSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::colvec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< double >::type R(RSEXP);
+    rcpp_result_gen = Rcpp::wrap(ApproximateEntropyTest(x, dim, R));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -152,6 +165,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_nonanR_ApproximateEntropy", (DL_FUNC) &_nonanR_ApproximateEntropy, 3},
+    {"_nonanR_ApproximateEntropyTest", (DL_FUNC) &_nonanR_ApproximateEntropyTest, 3},
     {"_nonanR_SampleEntropy", (DL_FUNC) &_nonanR_SampleEntropy, 3},
     {"_nonanR_SymbolicEntropy", (DL_FUNC) &_nonanR_SymbolicEntropy, 3},
     {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},

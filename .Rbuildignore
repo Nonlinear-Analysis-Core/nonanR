@@ -1,4 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
 .DS_Store
 .Rhistory
+^data-raw$

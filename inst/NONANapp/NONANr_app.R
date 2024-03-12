@@ -51,9 +51,9 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                h4(strong("DFA")),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoice", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
-                                                   selectInput("dfax", "Select X axis", choices = NULL),
-                                                   selectInput("dfay", "Select Y axis", choices = NULL),
+                                                   selectInput("dataChoice", "Select Data:", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dfax", "Select X axis:", choices = NULL),
+                                                   selectInput("dfay", "Select Y axis:", choices = NULL),
                                                    numericInput("order", "Order:", value = 1),
                                                    numericInput("minScale", "Min Scale:", value = 4),
                                                    numericInput("maxScale", "Max Scale:", value = 256),
@@ -90,6 +90,59 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ), # DFA tabpanel
+                                      
+                                      ## MFDFA ---------------------------------------------------------------------
+                                      
+                                      tabPanel("MFDFA", 
+                                               h4(strong("MFDFA")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoiceMFDFA", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("mfdfax", "Select X axis:", choices = NULL),
+                                                   selectInput("mfdfay", "Select Y axis:", choices = NULL),
+                                                   numericInput("q", "Select a q order:", value = 3, step = 1), 
+                                                   numericInput("order_mfdfa", "Order:", value = 1),
+                                                   numericInput("minScale_mfdfa", "Min Scale:", value = 4),
+                                                   numericInput("maxScale_mfdfa", "Max Scale:", value = 256),
+                                                   numericInput("scaleRatio_mfdfa", "Scale Ratio:", value = 2, step = 0.1),
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goMFDFA", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportMFDFA", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ) # fluidRow for action buttons
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('mfdfaTS')), # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow( 
+                                                     column(2),
+                                                     column(8, plotOutput('mfdfaPlot')), 
+                                                     column(2)
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow( 
+                                                     column(6,  plotOutput('histogram_mfdfa')),
+                                                     column(6,  plotOutput('autocorr_mfdfa'))
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("mfdfaResults"), 
+                                                   br(),
+                                                   br(),
+                                                   #tableOutput("datHead") # This was largely for debugging
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ), # MFDFA tabpanel
                            ), # navbarPage
                            
                            
@@ -241,12 +294,14 @@ ui <- fluidPage(theme = shinytheme("yeti"),
 # Define server logic 
 server <- function(input, output) {
   
+  
+    # DFA ---------------------------------------------------------------------
+
   # get a list of the column names in the data frame
   n = reactive({
     names(get(input$dataChoice))
   })
   
-  # DFA ---------------------------------------------------------------------
   
   # Update x and y choices based on the selected dataframe
   observeEvent(input$dataChoice, {
@@ -345,6 +400,129 @@ server <- function(input, output) {
     assign("dfa_out", dfaResult(), envir = globalenv())
     
     output$dfaResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
+  
+  
+  # Print the data so we can see what column is actually being selected. For debugging only
+  #output$datHead <- renderTable({
+  # head(dfa_dat())
+  #})
+  
+  # MFDFA ---------------------------------------------------------------------
+  
+  # get a list of the column names in the data frame
+  n_mfdfa = reactive({
+    names(get(input$dataChoiceMFDFA))
+  })
+  
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoiceMFDFA, {
+    updateSelectInput(inputId = "mfdfax", choices = n_mfdfa())
+    updateSelectInput(inputId = "mfdfay", choices = n_mfdfa(), selected = n_mfdfa()[2])
+  })
+  
+  # Select the desired data frame and by default the second column for analysis
+  mfdfa_dat = reactive({
+    get(input$dataChoiceMFDFA) |>
+      select(all_of(input$mfdfay)) |>
+      as.matrix()
+  })
+  
+  # plot the time series of the data
+  output$mfdfaTS <- renderPlotly({
+    
+    plot_dat = get(input$dataChoiceMFDFA)
+    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
+    #         color = I('black')) %>% # Aesthetics for the plot
+    #   layout(title = list(text = paste0("Time series of ", input$dfay)),
+    #          xaxis = list(title = "data Index"),
+    #          yaxis = list(title = paste0(input$dfay)))
+    
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$mfdfay]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$mfdfay)) + 
+      theme_nonan()
+  })
+  
+  # Set the q order parameter. This will always be a symmetric range based on what the parameter is.
+  q_order = reactive({
+    -input$q:input$q
+  })
+  # Set the scales for the DFA function
+  scales = reactive({
+    logscale(input$minScale_mfdfa, input$maxScale_mfdfa, input$scaleRatio_mfdfa) 
+  })
+  
+  # DFA calculation
+  mfdfaResult <- eventReactive(input$goMFDFA, {
+    mfdfa(mfdfa_dat(), q = q_order(), order = input$order_mfdfa, scales = scales(), scale_ratio = input$scaleRatio_mfdfa)
+    
+  })
+  
+  # DFA plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goMFDFA, {
+    output$mfdfaPlot <- renderPlot({
+      plot_mfdfa(mfdfaResult(), do.surrogate = T, nsurrogates = 19, return.ci = T)
+    })
+  }) # observeEvent
+  
+  # Histogram plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goMFDFA, {
+    output$histogram_mfdfa <- renderPlot({
+      #hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
+      
+      w = ceiling(nrow(mfdfa_dat()) * 0.03) # calculate the number of bins
+      n = colnames(mfdfa_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(mfdfa_dat()), aes(x = .data[[n]])) +
+        geom_histogram( color="white", fill="black", bins = w) +
+        labs(title = paste("Histogram of ", input$mfdfay), 
+             x = input$mfdfay) +
+        theme_nonan()
+      
+    })
+  }) # observeEvent
+  
+  # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goMFDFA, {
+    output$autocorr_mfdfa <-  renderPlot({
+      
+      a = acf(mfdfa_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(mfdfa_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$mfdfay)) + 
+        theme_nonan() # add the nonan plot theme on
+      
+    })
+  }) # observeEvent
+  
+  
+  # Print out the DFA results
+  observeEvent(input$goMFDFA, {
+    output$mfdfaResults <- renderPrint({
+      cat("Log Scales:", mfdfaResult()$log_scale, "\n", 
+          "Log fq:", mfdfaResult()$log_fq, "\n", 
+          "Hq:", mfdfaResult()$Hq, "\n", 
+          "Tau:", mfdfaResult()$Tau, "\n", 
+          "H:", mfdfaResult()$h, "\n", 
+          "Dh:", mfdfaResult()$Dh)
+      
+    })
+  })
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportMFDFA, {
+    assign("mfdfa_out", mfdfaResult(), envir = globalenv())
+    
+    output$mfdfaResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
     }) # renderPrint
   }) # observeEvent

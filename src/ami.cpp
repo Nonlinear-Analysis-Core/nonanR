@@ -9,11 +9,17 @@ using namespace arma;
 //'
 //' @param x - a single column time series
 //' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
+//' @returns The output of the algorithm is a list that includes:
+//' \itemize{
+//'  \item \code{tau} A data frame of the local minima of the AMI values and the corresponding lag
+//'  \item \code{ami} A data frame of all the AMI values at each lag
+//' } 
 //' @import Rcpp
 //' @export
 //'
 //' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
-//'
+//' 
+//' 
 //' @examples
 //'
 //' x = rnorm(1000)

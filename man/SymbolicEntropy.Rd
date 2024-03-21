@@ -13,6 +13,9 @@ SymbolicEntropy(x, thresholdVal, seqLength)
 
 \item{seqLength}{The length of the sequence that you want to find}
 }
+\value{
+The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+}
 \description{
 Calculate the symbolic entropy of a time series.
 }

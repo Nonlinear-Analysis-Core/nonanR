@@ -11,6 +11,9 @@ int binToDec(arma::ivec binSeq, unsigned int seqLength);
 //' @param x A vector of integers
 //' @param thresholdVal The threshold of the search that you want to do
 //' @param seqLength The length of the sequence that you want to find 
+//' 
+//' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+//' 
 //' @import Rcpp
 //' @export
 //' 

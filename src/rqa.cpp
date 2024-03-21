@@ -34,6 +34,24 @@ const double tol = 0.0001;
 //' @param radius Minimum distance within which points are considered recurrent
 //' @param whiteline not implemented
 //' @param recpt Should recurrence plot be returned? (Not recommended for long series)
+//' 
+//' @returns The output of the algorithm is a list that includes:
+//' \itemize{
+//'  \item \code{rr}: (Recurrence rate), the overall percentage of recurrent points
+//'  \item \code{det}: (determinism), the percentage of recurrent points that fall on a line
+//'  \item \code{div}: (divergence), inverse of determinism i.e. 1/det
+//'  \item \code{nrline}: (number of lines), total number of lines in the upper triangle
+//'  \item \code{ratio}: (ratio), percent determinism/percent recurrence i.e det/rr
+//'  \item \code{maxline}: (longest line), the number points in the longest diagonal line
+//'  \item \code{meanline}: (average line), average length of diagonal lines
+//'  \item \code{lam}: (laminarity), perecentage of points that fall on vertical lines
+//'  \item \code{tt}: (trapping time), average length of vertical lines
+//'  \item \code{vmax}: (longest vertical line), the number of points in the longest vertical line
+//'  \item \code{entropy}: (Shannon entropy), based on distribution of line lengths
+//'  \item \code{rentropy}: (relative entropy), Shannon entropy normalized by number of lines 
+//' }
+//' Optionally, you can return the recurrence matrix but caution should be taken when returning this especially with larger time series as it can take some time.
+//' 
 //' @import Rcpp
 //' @export
 //' 

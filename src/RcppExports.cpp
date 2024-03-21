@@ -63,6 +63,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ami
+List ami(arma::colvec x, arma::colvec y, int L, int bins);
+RcppExport SEXP _nonanR_ami(SEXP xSEXP, SEXP ySEXP, SEXP LSEXP, SEXP binsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::colvec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::colvec >::type y(ySEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    Rcpp::traits::input_parameter< int >::type bins(binsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ami(x, y, L, bins));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dfa
 List dfa(arma::vec x, int order, arma::uword verbose, arma::uvec scales, double scale_ratio);
 RcppExport SEXP _nonanR_dfa(SEXP xSEXP, SEXP orderSEXP, SEXP verboseSEXP, SEXP scalesSEXP, SEXP scale_ratioSEXP) {
@@ -168,6 +182,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nonanR_ApproximateEntropyTest", (DL_FUNC) &_nonanR_ApproximateEntropyTest, 3},
     {"_nonanR_SampleEntropy", (DL_FUNC) &_nonanR_SampleEntropy, 3},
     {"_nonanR_SymbolicEntropy", (DL_FUNC) &_nonanR_SymbolicEntropy, 3},
+    {"_nonanR_ami", (DL_FUNC) &_nonanR_ami, 4},
     {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},
     {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 2},
     {"_nonanR_poly_residuals", (DL_FUNC) &_nonanR_poly_residuals, 2},

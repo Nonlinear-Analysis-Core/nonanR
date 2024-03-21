@@ -10,6 +10,9 @@ using namespace Rcpp;
 //' 
 //' @param n The length of the resulting time series
 //' @param H The Hurst value of the resulting time series
+//' 
+//' @returns The output of the algorithm is a numeric vector of length \code{n}.  
+//' 
 //' @import Rcpp
 //' @export
 //' 

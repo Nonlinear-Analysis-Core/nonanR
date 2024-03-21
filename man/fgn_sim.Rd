@@ -11,6 +11,9 @@ fgn_sim(n = 1000L, H = 0.7)
 
 \item{H}{The Hurst value of the resulting time series}
 }
+\value{
+The output of the algorithm is a numeric vector of length \code{n}.
+}
 \description{
 Function to generate Fractional Gaussian Noise
 }

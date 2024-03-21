@@ -47,7 +47,7 @@ using namespace arma;
 //' General recommendations for choosing the min and max scale are a scale_min = 10 and scale_max = (N/4), where N is the number of observations.
 //' See Eke et al. (2002), Gulich and Zunino (2014), Ihlen (2012), and  for additional considerations and information on choosing the correct parameters. 
 //'
-//' @return The output of the algorithm is a list that includes:
+//' @returns The output of the algorithm is a list that includes:
 //' \itemize{ 
 //'  \item \code{log_scale} The log scales used for the analysis
 //'  \item \code{log_fq} The log of the fluctuation functions for each scale and q 

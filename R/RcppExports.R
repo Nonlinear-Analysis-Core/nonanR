@@ -8,6 +8,9 @@
 #' @param x is the time series to analyse
 #' @param dim is the embedding dimension of the time series
 #' @param R is the radius in which to search for matches
+#' 
+#' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+#' 
 #' @import Rcpp
 #' @useDynLib nonanR
 #' @export
@@ -36,6 +39,9 @@ ApproximateEntropyTest <- function(x, dim, R) {
 #' @param x A single column time series
 #' @param m The length of the vectors to be compared for matches
 #' @param R The radius for accepting matches
+#' 
+#' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+#' 
 #' @import Rcpp
 #' @export
 #'
@@ -62,6 +68,9 @@ SampleEntropy <- function(x, m, R) {
 #' @param x A vector of integers
 #' @param thresholdVal The threshold of the search that you want to do
 #' @param seqLength The length of the sequence that you want to find 
+#' 
+#' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+#' 
 #' @import Rcpp
 #' @export
 #' 
@@ -81,6 +90,35 @@ SymbolicEntropy <- function(x, thresholdVal, seqLength) {
     .Call('_nonanR_SymbolicEntropy', PACKAGE = 'nonanR', x, thresholdVal, seqLength)
 }
 
+#' Average Mutual Information
+#'
+#' Calculate the average mutual information of a time series.
+#'
+#' @param x - a single column time series
+#' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{
+#'  \item \code{tau} A data frame of the local minima of the AMI values and the corresponding lag
+#'  \item \code{ami} A data frame of all the AMI values at each lag
+#' } 
+#' @import Rcpp
+#' @export
+#'
+#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+#' 
+#' 
+#' @examples
+#'
+#' x = rnorm(1000)
+#' L = 100
+#'
+#' ami_out = AMI(x, L)
+#'
+#'
+ami <- function(x, y, L, bins) {
+    .Call('_nonanR_ami', PACKAGE = 'nonanR', x, y, L, bins)
+}
+
 #' Detrended Fluctuation Analysis
 #' 
 #' Something a little more can go here
@@ -90,6 +128,15 @@ SymbolicEntropy <- function(x, thresholdVal, seqLength) {
 #' @param verbose A boolean that when = 1 indicates that the flucuation function inlcuding the log of all included scales as well as the log Rms should be returned as well as the alpha or when = 0 only the estimated scaling exponent alpha will be returned.
 #' @param scales An integer valued vector indicating the scales one wishes to resolve in the analysis.
 #' @param scale_ratio A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max.
+#' 
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{ 
+#'  \item If the value of verbose = 1, then a list object is returned that includes: \code{log_scales}
+#' the log of all included scales, \code{log_rms} the log root mean square error (RMS) per scale, and \code{alpha} the overall \eqn{\alpha} estimate.
+#'  \item If the value of verbose = 0, then a list containing only `alpha` the estimated scaling exponent \eqn{\alpha} will be returned.
+#' }
+#' 
+#' 
 #' @import Rcpp
 #' @export
 #' 
@@ -131,6 +178,9 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
 #' 
 #' @param n The length of the resulting time series
 #' @param H The Hurst value of the resulting time series
+#' 
+#' @returns The output of the algorithm is a numeric vector of length \code{n}.  
+#' 
 #' @import Rcpp
 #' @export
 #' 
@@ -195,7 +245,7 @@ seq_int <- function(length) {
 #' General recommendations for choosing the min and max scale are a scale_min = 10 and scale_max = (N/4), where N is the number of observations.
 #' See Eke et al. (2002), Gulich and Zunino (2014), Ihlen (2012), and  for additional considerations and information on choosing the correct parameters. 
 #'
-#' @return The output of the algorithm is a list that includes:
+#' @returns The output of the algorithm is a list that includes:
 #' \itemize{ 
 #'  \item \code{log_scale} The log scales used for the analysis
 #'  \item \code{log_fq} The log of the fluctuation functions for each scale and q 
@@ -267,6 +317,24 @@ mfdfa <- function(x, q, order, scales, scale_ratio) {
 #' @param radius Minimum distance within which points are considered recurrent
 #' @param whiteline not implemented
 #' @param recpt Should recurrence plot be returned? (Not recommended for long series)
+#' 
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{
+#'  \item \code{rr}: (Recurrence rate), the overall percentage of recurrent points
+#'  \item \code{det}: (determinism), the percentage of recurrent points that fall on a line
+#'  \item \code{div}: (divergence), inverse of determinism i.e. 1/det
+#'  \item \code{nrline}: (number of lines), total number of lines in the upper triangle
+#'  \item \code{ratio}: (ratio), percent determinism/percent recurrence i.e det/rr
+#'  \item \code{maxline}: (longest line), the number points in the longest diagonal line
+#'  \item \code{meanline}: (average line), average length of diagonal lines
+#'  \item \code{lam}: (laminarity), perecentage of points that fall on vertical lines
+#'  \item \code{tt}: (trapping time), average length of vertical lines
+#'  \item \code{vmax}: (longest vertical line), the number of points in the longest vertical line
+#'  \item \code{entropy}: (Shannon entropy), based on distribution of line lengths
+#'  \item \code{rentropy}: (relative entropy), Shannon entropy normalized by number of lines 
+#' }
+#' Optionally, you can return the recurrence matrix but caution should be taken when returning this especially with larger time series as it can take some time.
+#' 
 #' @import Rcpp
 #' @export
 #' 

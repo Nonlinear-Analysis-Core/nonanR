@@ -10,6 +10,9 @@ using namespace arma;
 //' @param x is the time series to analyse
 //' @param dim is the embedding dimension of the time series
 //' @param R is the radius in which to search for matches
+//' 
+//' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+//' 
 //' @import Rcpp
 //' @useDynLib nonanR
 //' @export

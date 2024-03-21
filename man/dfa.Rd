@@ -17,6 +17,14 @@ dfa(x, order, verbose, scales, scale_ratio = 2)
 
 \item{scale_ratio}{A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max.}
 }
+\value{
+The output of the algorithm is a list that includes:
+\itemize{ 
+ \item If the value of verbose = 1, then a list object is returned that includes: \code{log_scales}
+the log of all included scales, \code{log_rms} the log root mean square error (RMS) per scale, and \code{alpha} the overall \eqn{\alpha} estimate.
+ \item If the value of verbose = 0, then a list containing only `alpha` the estimated scaling exponent \eqn{\alpha} will be returned.
+}
+}
 \description{
 Something a little more can go here
 }

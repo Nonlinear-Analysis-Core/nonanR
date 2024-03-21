@@ -19,7 +19,6 @@
 #' plot_ami(ami_out)
 #' 
 #' @export
-#' 
 plot_ami = function(x){
   
   dat = as.data.frame(x[2]) # ami data frame

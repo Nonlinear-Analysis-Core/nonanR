@@ -13,6 +13,15 @@ using namespace arma;
 //' @param verbose A boolean that when = 1 indicates that the flucuation function inlcuding the log of all included scales as well as the log Rms should be returned as well as the alpha or when = 0 only the estimated scaling exponent alpha will be returned.
 //' @param scales An integer valued vector indicating the scales one wishes to resolve in the analysis.
 //' @param scale_ratio A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max.
+//' 
+//' @returns The output of the algorithm is a list that includes:
+//' \itemize{ 
+//'  \item If the value of verbose = 1, then a list object is returned that includes: \code{log_scales}
+//' the log of all included scales, \code{log_rms} the log root mean square error (RMS) per scale, and \code{alpha} the overall \eqn{\alpha} estimate.
+//'  \item If the value of verbose = 0, then a list containing only `alpha` the estimated scaling exponent \eqn{\alpha} will be returned.
+//' }
+//' 
+//' 
 //' @import Rcpp
 //' @export
 //' 

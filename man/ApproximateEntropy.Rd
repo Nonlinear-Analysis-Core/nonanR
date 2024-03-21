@@ -13,6 +13,9 @@ ApproximateEntropy(x, dim, R)
 
 \item{R}{is the radius in which to search for matches}
 }
+\value{
+The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+}
 \description{
 Calculate the approximate entropy of a time series.
 }

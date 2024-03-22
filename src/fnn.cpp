@@ -29,7 +29,7 @@ arma::mat psr(arma::vec x, int m, int tao, int npoints); // Phase space reconstr
 //' @examples
 //'
 //' x = rnorm(1000)
-//' tau = ami_out$tau[1,1]
+//' tau = 3 # You can get this value like: ami_out$tau[1,1]
 //' mmax = 12
 //' rtol = 15
 //' atol = 2

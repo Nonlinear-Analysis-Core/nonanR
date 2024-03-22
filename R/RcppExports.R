@@ -95,7 +95,9 @@ SymbolicEntropy <- function(x, thresholdVal, seqLength) {
 #' Calculate the average mutual information of a time series.
 #'
 #' @param x - a single column time series
+#' @param y - a single column time series. This can be the same as x
 #' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
+#' @param bins - the number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you. 
 #' @returns The output of the algorithm is a list that includes:
 #' \itemize{
 #'  \item \code{tau} A data frame of the local minima of the AMI values and the corresponding lag
@@ -110,9 +112,11 @@ SymbolicEntropy <- function(x, thresholdVal, seqLength) {
 #' @examples
 #'
 #' x = rnorm(1000)
-#' L = 100
+#' y = x
+#' L = 50
+#' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
 #'
-#' ami_out = AMI(x, L)
+#' ami_out = ami(x, y, L, bins)
 #'
 #'
 ami <- function(x, y, L, bins) {
@@ -189,6 +193,41 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
 #' ts_out = fgn_sim(n = 1000, H = 0.7)
 fgn_sim <- function(n = 1000L, H = 0.7) {
     .Call('_nonanR_fgn_sim', PACKAGE = 'nonanR', n, H)
+}
+
+#' False Nearest Neighbor
+#'
+#' Calculate the average mutual information of a time series.
+#'
+#' @param x - a single column time series
+#' @param tau - the first local minimum from the data. This is a value returned from the \code{ami} function
+#' @param mmax - The maximum embedding dimension. Common practice is to set this to 12.
+#' @param rtol - The near tolerance. Common practice is to set this to 15. 
+#' @param atol - The far tolerance. Used to accommodate for the fact that all neighbors may be far away to begin with. Common practice is to set this to 2.
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{
+#'  \item \code{dE} A column vector of the percentages of false neighbors at the embedding dimensions up to \code{mmax}
+#'  \item \code{dim} An integer reflecting the time delay at which there is the lowest number of false neighbors
+#' } 
+#' @import Rcpp
+#' @export
+#'
+#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+#' 
+#' 
+#' @examples
+#'
+#' x = rnorm(1000)
+#' tau = 3 # You can get this value like: ami_out$tau[1,1]
+#' mmax = 12
+#' rtol = 15
+#' atol = 2
+#' 
+#' fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
+#'
+#'
+fnn <- function(x, tau, mmax, rtol, atol) {
+    .Call('_nonanR_fnn', PACKAGE = 'nonanR', x, tau, mmax, rtol, atol)
 }
 
 poly_residuals <- function(yr, m) {

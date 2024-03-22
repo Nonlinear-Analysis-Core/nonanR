@@ -8,7 +8,9 @@ using namespace arma;
 //' Calculate the average mutual information of a time series.
 //'
 //' @param x - a single column time series
+//' @param y - a single column time series. This can be the same as x
 //' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
+//' @param bins - the number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you. 
 //' @returns The output of the algorithm is a list that includes:
 //' \itemize{
 //'  \item \code{tau} A data frame of the local minima of the AMI values and the corresponding lag
@@ -23,9 +25,11 @@ using namespace arma;
 //' @examples
 //'
 //' x = rnorm(1000)
-//' L = 100
+//' y = x
+//' L = 50
+//' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
 //'
-//' ami_out = AMI(x, L)
+//' ami_out = ami(x, y, L, bins)
 //'
 //'
 // [[Rcpp::export]]

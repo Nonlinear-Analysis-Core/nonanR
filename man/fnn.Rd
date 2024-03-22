@@ -33,7 +33,7 @@ AMI is part of the phase space reconstruction step that is needed for some nonli
 \examples{
 
 x = rnorm(1000)
-tau = ami_out$tau[1,1]
+tau = 3 # You can get this value like: ami_out$tau[1,1]
 mmax = 12
 rtol = 15
 atol = 2

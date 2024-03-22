@@ -20,6 +20,7 @@ Imports:
     janitor,
     Rcpp (>= 1.0.11),
     reshape2,
+    scales,
     stats,
     tidyr,
     usethis

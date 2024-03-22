@@ -9,7 +9,11 @@ ami(x, y, L, bins)
 \arguments{
 \item{x}{- a single column time series}
 
+\item{y}{- a single column time series. This can be the same as x}
+
 \item{L}{- the maximum lag of the time series. This is usually the same as the sampling frequency.}
+
+\item{bins}{- the number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you.}
 }
 \value{
 The output of the algorithm is a list that includes:
@@ -27,9 +31,11 @@ AMI is part of the phase space reconstruction step that is needed for some nonli
 \examples{
 
 x = rnorm(1000)
-L = 100
+y = x
+L = 50
+bins = 30 # If you do not want to specify a bin number, you can set it to 0.
 
-ami_out = AMI(x, L)
+ami_out = ami(x, y, L, bins)
 
 
 }

@@ -14,10 +14,22 @@ Plot method for false nearest neighbors.
 }
 \examples{
 
-# Create a time series and perform FNN algorithm
+# When performing phase space reconstruction there are two crucial steps. 
+# - The first step is running the ami function. 
+
+#' # Create a time series
 x = fgn_sim(n = 1000, H = 0.9)
 
-tau = ami_out$tau[1,1]
+# Specify the parameters for ami
+y = x
+L = 50
+bins = 30
+
+ami_out = ami(x, y, L, bins)
+
+# - The second step is running the fnn function
+# Specify the parameters for fnn
+tau = 3 # You can get this value like: ami_out$tau[1,1]
 mmax = 12
 rtol = 15
 atol = 2

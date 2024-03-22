@@ -6,10 +6,22 @@
 #' 
 #' @examples
 #' 
-#' # Create a time series and perform FNN algorithm
+#' # When performing phase space reconstruction there are two crucial steps. 
+#' # - The first step is running the ami function. 
+#' 
+#' #' # Create a time series
 #' x = fgn_sim(n = 1000, H = 0.9)
 #' 
-#' tau = ami_out$tau[1,1]
+#' # Specify the parameters for ami
+#' y = x
+#' L = 50
+#' bins = 30
+#' 
+#' ami_out = ami(x, y, L, bins)
+#' 
+#' # - The second step is running the fnn function
+#' # Specify the parameters for fnn
+#' tau = 3 # You can get this value like: ami_out$tau[1,1]
 #' mmax = 12
 #' rtol = 15
 #' atol = 2
@@ -32,7 +44,7 @@ plot_fnn = function(x){
     geom_line(linewidth = 1) +
     geom_point(size = 2) +
     geom_point(data = emb_dim, aes(x = emb_dim[1,1], y = emb_dim[1,2]), size = 4, color = "#C8102E") + 
-    scale_x_continuous(breaks = scales::pretty_breaks(n = nrow(dat) + 1)) +
+    scale_x_continuous(breaks = pretty_breaks(n = nrow(dat) + 1)) +
     geom_label(label = paste0("dim = ", emb_dim[1,1],  "\n", "%FNN = ", round(emb_dim[1,2], 3)), 
                x = nrow(dat) - 1, 
                y = emb_dim[1,2] *1.3, 
@@ -40,6 +52,6 @@ plot_fnn = function(x){
                fill = "lightgray") +
     labs(title = "False Nearest Neighbors", 
          x = "Lag", 
-         y = "% False Neighbors") +
+         y = "% False Neighbors")
     theme_nonan()
 }

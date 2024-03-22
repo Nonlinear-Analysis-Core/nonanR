@@ -14,12 +14,13 @@ Plot method for average mutual information.
 }
 \examples{
 
-# Create a time series and perform DFA
+# Create a time series
 x = fgn_sim(n = 1000, H = 0.9)
-L = 1
+y = x
+L = 50
 bins = 30
 
-ami_out = ami(x, x, L, bins)
+ami_out = ami(x, y, L, bins)
 
 # Plot ami_out
 plot_ami(ami_out)

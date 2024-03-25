@@ -284,7 +284,113 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                ) #sidebarlayout
                                       ) # symbolic entropy tabpanel
                                       
-                           ) # navbarMenu
+                           ), # navbarMenu
+                           
+                           # PSR -----------------------------------------------------------------
+                           navbarMenu("Phase Space Reconstruction",
+                                      
+                                      ## RQA ---------------------------------------------------------------------
+                                      
+                                      tabPanel("RQA", 
+                                               h4(strong("RQA")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoice4", "Select Data:", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("rqax", "Select X axis:", choices = NULL),
+                                                   selectInput("rqay", "Select Y axis:", choices = NULL),
+                                                   numericInput("embed", "Embedding Dimension:", value = 1),
+                                                   numericInput("delay", "Delay:", value = 1, min = 0),
+                                                   numericInput("normalize", "Normalization:", value = 0, min = 0, max = 2),
+                                                   numericInput("rescale", "Rescale:", value = 1, step = 1, min = 0, max = 2),
+                                                   numericInput("mindiagline", "Min Length:", value = 2, step = 1, min = 1),
+                                                   numericInput("minvertline", "Min Length:", value = 2, step = 1, min = 1),
+                                                   numericInput("twin", "Theiler Window:", value = 0, step = 0.1),
+                                                   numericInput("radius", "Radius:", value = 0.0001, step = 0.0001, min = 0),
+                                                   # numericInput("whiteline", "Rescale:", value = 2, step = 0.1),
+                                                   numericInput("recpt", "Plot:", value = 1, step = 1, min = 0, max = 1),
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goRQA", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportRQA", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ) # fluidRow for action buttons
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('rqaTS')), # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow( 
+                                                     column(4,  plotOutput('rqaPlot')), 
+                                                     column(4,  plotOutput('histogram_rqa')),
+                                                     column(4,  plotOutput('autocorr_rqa'))
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("rqaResults"), 
+                                                   br(),
+                                                   br(),
+                                                   #tableOutput("datHead") # This was largely for debugging
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ), # RQA tabpanel
+                                      
+                                      ## LyE ---------------------------------------------------------------------
+                                      tabPanel("Lyapunov Exponent", 
+                                               h4(strong("Lyapunov Exponent")),
+                                               h2("This is in progress and will be included in a future release."),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoiceMFDFA", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("lyex", "Select X axis:", choices = NULL),
+                                                   selectInput("lyey", "Select Y axis:", choices = NULL),
+                                                   numericInput("dim", "Embedding Dimension:", value = 3, step = 1), 
+                                                   numericInput("tau", "Delay:", value = 1),
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("golye", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportlye", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ) # fluidRow for action buttons
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('lyeTS')), # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow( 
+                                                     column(2),
+                                                     column(8, plotOutput('lyePlot')), 
+                                                     column(2)
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow( 
+                                                     column(6,  plotOutput('histogram_lye')),
+                                                     column(6,  plotOutput('autocorr_lye'))
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("lyeResults"), 
+                                                   br(),
+                                                   br(),
+                                                   #tableOutput("datHead") # This was largely for debugging
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ), # MFDFA tabpanel
+                           ), # navbarPage
                 ) # navbar page
 ) # fluidpage
 
@@ -328,8 +434,10 @@ server <- function(input, output) {
 
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$dfay]])) +
       geom_line() +
-      labs(title = paste0("Time series of ", input$dfay)) + 
+      labs(title = paste0("Time series of ", input$dfay), 
+           x = "Index") + 
       theme_nonan()
+    
   })
   
   # Set the scales for the DFA function
@@ -442,7 +550,8 @@ server <- function(input, output) {
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$mfdfay]])) +
       geom_line() +
-      labs(title = paste0("Time series of ", input$mfdfay)) + 
+      labs(title = paste0("Time series of ", input$mfdfay), 
+           x = "Index") + 
       theme_nonan()
   })
   
@@ -567,7 +676,8 @@ server <- function(input, output) {
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$SEy]])) +
       geom_line() +
-      labs(title = paste0("Time series of ", input$SEy)) + 
+      labs(title = paste0("Time series of ", input$SEy), 
+           x = "Index") + 
       theme_nonan()
     
   })
@@ -666,7 +776,8 @@ server <- function(input, output) {
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$AEy]])) +
       geom_line() +
-      labs(title = paste0("Time series of ", input$AEy)) + 
+      labs(title = paste0("Time series of ", input$AEy), 
+           x = "Index") + 
       theme_nonan()
     
     
@@ -781,7 +892,8 @@ server <- function(input, output) {
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$SymEy]])) +
       geom_line() +
-      labs(title = paste0("Time series of ", input$SymEy)) + 
+      labs(title = paste0("Time series of ", input$SymEy),
+           x = "Index") + 
       theme_nonan()
   })
   
@@ -847,6 +959,252 @@ server <- function(input, output) {
   #   head(get(input$dataChoice3))
   #   head(SymE_dat())
   # })
+  
+  # RQA ---------------------------------------------------------------------
+  
+  # get a list of the column names in the data frame
+  n4 = reactive({
+    names(get(input$dataChoice4))
+  })
+  
+  
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoice4, {
+    updateSelectInput(inputId = "rqax", choices = n4())
+    updateSelectInput(inputId = "rqay", choices = n4(), selected = n4()[2])
+  })
+  
+  # Select the desired data frame and by default the second column for analysis
+  rqa_dat = reactive({
+    get(input$dataChoice4) |>
+      select(all_of(input$rqay)) |>
+      as.matrix()
+  })
+  
+  # plot the time series of the data
+  output$rqaTS <- renderPlotly({
+    
+    plot_dat = get(input$dataChoice4)
+    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
+    #         color = I('black')) %>% # Aesthetics for the plot
+    #   layout(title = list(text = paste0("Time series of ", input$dfay)),
+    #          xaxis = list(title = "data Index"),
+    #          yaxis = list(title = paste0(input$dfay)))
+    
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$rqay]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$rqay), 
+           x = "Index") + 
+      theme_nonan()
+  })
+  
+  # Run ami and fnn if the button is selected.
+  # Add in a reactive if statement here 
+  emb_dim = reactive({
+    logscale(input$minScale, input$maxScale, input$scaleRatio) 
+  })
+  
+  # DFA calculation
+  rqaResult <- eventReactive(input$goRQA, {
+    rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = input$embed, delay = input$delay, normalize = input$normalize, 
+        rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin, 
+        radius = input$radius, whiteline = 0, recpt = input$recpt)
+    
+  })
+  
+  # DFA plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goRQA, {
+    output$rqaPlot <- renderPlot({
+      plot_rqa(rqaResult())
+    })
+  }) # observeEvent
+  
+  # Histogram plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goRQA, {
+    output$histogram_rqa <- renderPlot({
+      #hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
+      
+      w = ceiling(nrow(rqa_dat()) * 0.03) # calculate the number of bins
+      n = colnames(rqa_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(rqa_dat()), aes(x = .data[[n]])) +
+        geom_histogram( color="white", fill="black", bins = w) +
+        labs(title = paste("Histogram of ", input$rqay), 
+             x = input$rqay) +
+        theme_nonan()
+      
+    })
+  }) # observeEvent
+  
+  # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goRQA, {
+    output$autocorr_rqa <-  renderPlot({
+      
+      a = acf(rqa_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(rqa_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$rqay)) + 
+        theme_nonan() # add the nonan plot theme on
+      
+    })
+  }) # observeEvent
+  
+  
+  # Print out the DFA results
+  observeEvent(input$goRQA, {
+    output$rqaResults <- renderPrint({
+      # rqaResult()
+      cat("rr:", rqaResult()$rqa$rr, "\n", 
+          "det:", rqaResult()$rqa$det, "\n",
+          "div:", rqaResult()$rqa$div, "\n",
+          "nrline:", rqaResult()$rqa$nrline, "\n", 
+          "ratio:", rqaResult()$rqa$ratio, "\n", 
+          "maxline:", rqaResult()$rqa$maxline, "\n", 
+          "mealine:", rqaResult()$rqa$mealine, "\n", 
+          "lam:", rqaResult()$rqa$lam, "\n", 
+          "tt:", rqaResult()$rqa$tt, "\n", 
+          "vmax:", rqaResult()$rqa$vmax, "\n", 
+          "entropy:", rqaResult()$rqa$entropy, "\n", 
+          "rentropy:", rqaResult()$rqa$rentropy, "\n")
+      
+    })
+  })
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportRQA, {
+    assign("rqa_out", rqaResult(), envir = globalenv())
+    
+    output$rqaResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
+  
+  
+  # Print the data so we can see what column is actually being selected. For debugging only
+  #output$datHead <- renderTable({
+  # head(dfa_dat())
+  #})
+  
+  # LyE ---------------------------------------------------------------------
+  
+  # # get a list of the column names in the data frame
+  # n = reactive({
+  #   names(get(input$dataChoice))
+  # })
+  # 
+  # 
+  # # Update x and y choices based on the selected dataframe
+  # observeEvent(input$dataChoice, {
+  #   updateSelectInput(inputId = "dfax", choices = n())
+  #   updateSelectInput(inputId = "dfay", choices = n(), selected = n()[2])
+  # })
+  # 
+  # # Select the desired data frame and by default the second column for analysis
+  # dfa_dat = reactive({
+  #   get(input$dataChoice) |>
+  #     select(all_of(input$dfay)) |>
+  #     as.matrix()
+  # })
+  # 
+  # # plot the time series of the data
+  # output$dfaTS <- renderPlotly({
+  #   
+  #   plot_dat = get(input$dataChoice5)
+  #   # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
+  #   #         color = I('black')) %>% # Aesthetics for the plot
+  #   #   layout(title = list(text = paste0("Time series of ", input$dfay)),
+  #   #          xaxis = list(title = "data Index"),
+  #   #          yaxis = list(title = paste0(input$dfay)))
+  #   
+  #   ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$dfay]])) +
+  #     geom_line() +
+  #     labs(title = paste0("Time series of ", input$dfay)) + 
+  #     theme_nonan()
+  # })
+  # 
+  # # Set the scales for the DFA function
+  # scales = reactive({
+  #   logscale(input$minScale, input$maxScale, input$scaleRatio) 
+  # })
+  # 
+  # # DFA calculation
+  # dfaResult <- eventReactive(input$goDFA, {
+  #   dfa(dfa_dat(), order = input$order, verbose = 1, scales = scales(), scale_ratio = input$scaleRatio)
+  #   
+  # })
+  # 
+  # # DFA plot -- generate the plot only when the "Go" button has been clicked
+  # observeEvent(input$goDFA, {
+  #   output$dfaPlot <- renderPlot({
+  #     plot_dfa(dfaResult())
+  #   })
+  # }) # observeEvent
+  # 
+  # # Histogram plot -- generate the plot only when the "Go" button has been clicked
+  # observeEvent(input$goDFA, {
+  #   output$histogram <- renderPlot({
+  #     #hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
+  #     
+  #     w = ceiling(nrow(dfa_dat()) * 0.03) # calculate the number of bins
+  #     n = colnames(dfa_dat())[1] # Get the column name to use below
+  #     ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
+  #       geom_histogram( color="white", fill="black", bins = w) +
+  #       labs(title = paste("Histogram of ", input$dfay), 
+  #            x = input$dfay) +
+  #       theme_nonan()
+  #     
+  #   })
+  # }) # observeEvent
+  # 
+  # # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  # observeEvent(input$goDFA, {
+  #   output$autocorr <-  renderPlot({
+  #     
+  #     a = acf(dfa_dat(), plot = F)
+  #     conf.level <- 0.95 # set this at 0.95 for 95% confidence
+  #     ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(dfa_dat())) # calculate the confidence intervals
+  #     df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+  #     
+  #     ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+  #       geom_hline(aes(yintercept = 0)) + # lag = 0
+  #       geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+  #       geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+  #       geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+  #       labs(title = paste("Autocorrelation of ", input$dfay)) + 
+  #       theme_nonan() # add the nonan plot theme on
+  #     
+  #   })
+  # }) # observeEvent
+  # 
+  # 
+  # # Print out the DFA results
+  # observeEvent(input$goDFA, {
+  #   output$dfaResults <- renderPrint({
+  #     cat("Log Scales:", dfaResult()$log_scales, "\n", "Log RMS:", dfaResult()$log_rms, "\n", "Alpha:", dfaResult()$alpha)
+  #     
+  #   })
+  # })
+  # 
+  # # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  # observeEvent(input$exportDFA, {
+  #   assign("dfa_out", dfaResult(), envir = globalenv())
+  #   
+  #   output$dfaResults <- renderPrint({
+  #     cat("Exported to global environment. Close the app to view.")
+  #   }) # renderPrint
+  # }) # observeEvent
+  # 
+  # 
+  # # Print the data so we can see what column is actually being selected. For debugging only
+  # #output$datHead <- renderTable({
+  # # head(dfa_dat())
+  # #})
   
 } # server
 

@@ -5,7 +5,6 @@
 #' 
 #' @noRd
 #' @keywords internal
-#' @export
 iaafft <- function(signal,N=1){
   # this function generates surrogates using the iterated amplitude
   # adjusted fourier transform discussed in Ihlen & Vereijken, 2010

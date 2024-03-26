@@ -15,7 +15,6 @@
 #' 
 #' @noRd
 #' @keywords internal
-#' @export
 logscale = function(scale_min, scale_max, scale_ratio){
   number_of_scales =  ceiling(log(scale_max/scale_min)/log(scale_ratio));
   scales = rep(NA, number_of_scales)

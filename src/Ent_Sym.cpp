@@ -25,12 +25,12 @@ int binToDec(arma::ivec binSeq, unsigned int seqLength);
 //' thresholdVal = 2
 //' seqLength = 0.2
 //' 
-//' SymE = SymbolicEntropy(x, thresholdVal, seqLength)
+//' SymE = Ent_Sym(x, thresholdVal, seqLength)
 //' 
 //' @references
 //' Aziz, W., Arif, M. Complexity analysis of stride interval time series by threshold dependent symbolic entropy. Eur J Appl Physiol 98, 30–40 (2006). https://doi.org/10.1007/s00421-006-0226-5
 // [[Rcpp::export]]
-double SymbolicEntropy(arma::vec x, double thresholdVal, unsigned int seqLength) {
+double Ent_Sym(arma::vec x, double thresholdVal, unsigned int seqLength) {
    
   unsigned int dataSize = x.n_elem;
    

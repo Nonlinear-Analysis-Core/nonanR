@@ -11,19 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// ApproximateEntropy
-double ApproximateEntropy(arma::colvec x, int dim, double R);
-RcppExport SEXP _nonanR_ApproximateEntropy(SEXP xSEXP, SEXP dimSEXP, SEXP RSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::colvec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
-    Rcpp::traits::input_parameter< double >::type R(RSEXP);
-    rcpp_result_gen = Rcpp::wrap(ApproximateEntropy(x, dim, R));
-    return rcpp_result_gen;
-END_RCPP
-}
 // ApproximateEntropyTest
 double ApproximateEntropyTest(arma::colvec x, int dim, double R);
 RcppExport SEXP _nonanR_ApproximateEntropyTest(SEXP xSEXP, SEXP dimSEXP, SEXP RSEXP) {
@@ -37,29 +24,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SampleEntropy
-double SampleEntropy(arma::colvec x, int m, double R);
-RcppExport SEXP _nonanR_SampleEntropy(SEXP xSEXP, SEXP mSEXP, SEXP RSEXP) {
+// Ent_Ap
+double Ent_Ap(arma::colvec x, int dim, double R);
+RcppExport SEXP _nonanR_Ent_Ap(SEXP xSEXP, SEXP dimSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::colvec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< double >::type R(RSEXP);
+    rcpp_result_gen = Rcpp::wrap(Ent_Ap(x, dim, R));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Ent_Samp
+double Ent_Samp(arma::colvec x, int m, double R);
+RcppExport SEXP _nonanR_Ent_Samp(SEXP xSEXP, SEXP mSEXP, SEXP RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::colvec >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type m(mSEXP);
     Rcpp::traits::input_parameter< double >::type R(RSEXP);
-    rcpp_result_gen = Rcpp::wrap(SampleEntropy(x, m, R));
+    rcpp_result_gen = Rcpp::wrap(Ent_Samp(x, m, R));
     return rcpp_result_gen;
 END_RCPP
 }
-// SymbolicEntropy
-double SymbolicEntropy(arma::vec x, double thresholdVal, unsigned int seqLength);
-RcppExport SEXP _nonanR_SymbolicEntropy(SEXP xSEXP, SEXP thresholdValSEXP, SEXP seqLengthSEXP) {
+// Ent_Sym
+double Ent_Sym(arma::vec x, double thresholdVal, unsigned int seqLength);
+RcppExport SEXP _nonanR_Ent_Sym(SEXP xSEXP, SEXP thresholdValSEXP, SEXP seqLengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
     Rcpp::traits::input_parameter< double >::type thresholdVal(thresholdValSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type seqLength(seqLengthSEXP);
-    rcpp_result_gen = Rcpp::wrap(SymbolicEntropy(x, thresholdVal, seqLength));
+    rcpp_result_gen = Rcpp::wrap(Ent_Sym(x, thresholdVal, seqLength));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -193,10 +193,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_nonanR_ApproximateEntropy", (DL_FUNC) &_nonanR_ApproximateEntropy, 3},
     {"_nonanR_ApproximateEntropyTest", (DL_FUNC) &_nonanR_ApproximateEntropyTest, 3},
-    {"_nonanR_SampleEntropy", (DL_FUNC) &_nonanR_SampleEntropy, 3},
-    {"_nonanR_SymbolicEntropy", (DL_FUNC) &_nonanR_SymbolicEntropy, 3},
+    {"_nonanR_Ent_Ap", (DL_FUNC) &_nonanR_Ent_Ap, 3},
+    {"_nonanR_Ent_Samp", (DL_FUNC) &_nonanR_Ent_Samp, 3},
+    {"_nonanR_Ent_Sym", (DL_FUNC) &_nonanR_Ent_Sym, 3},
     {"_nonanR_ami", (DL_FUNC) &_nonanR_ami, 4},
     {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},
     {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 2},

@@ -1,21 +1,30 @@
 ---
 title: "About_NONAN.Rmd"
-author: "Joel Sommerfeld"
+author: "Nonlinear Analysis Core"
 date: "2023-11-21"
 output: html_document
 ---
 
-### How to use our app
+### **How to use our app**
 
 -   Analysis methods are grouped according to their "analysis type"
--   Select the analysis you want from the drop down menu
--   Some parameters will have defaults set for you but it is strongly recommended that you set these yourself
--   A plot will be displayed of the time series analysed
--   A histogram is shown for you to check the distribution of your data
--   Autocorrelation is shown for some methods as a sanity check for the results of the selected analysis
 
-### About the Nonlinear Analysis Core
+-   Select the analysis you want from the drop down menu
+
+-   Choose the data you want to perform the analysis on
+
+    -   Some parameters will have defaults set for you but it is strongly recommended that you set these yourself
+
+-   Click the "Analyze" button to start the analysis
+
+-   Type in a variable name and click the "Export" button to send your results to the global environment
+
+### **About the Nonlinear Analysis Core**
 
 The Nonlinear Analysis Core (NONAN) is a non-profit service center based at the Center for Research in Human Movement Variability at the University of Nebraska at Omaha. We provide software, consulting, and educational resources for innovative analysis of time series data. These methods go beyond averages by looking at the time-varying characteristics of a time signal. NONAN provides access to a multitude of nonlinear analysis tools as well as assistance in experimental design, data processing, quality assurance, interpretation and dissemination. NONAN is also actively exploring and validating new techniques and algorithms for future use. In addition to our nonlinear methods, statistical analyses can also be performed.
 
 The Center for Research in Human Movement Variability (MOVCENTR) was established in 2014 through a National Institutes of Health (NIH) Centers of Biomedical Research Excellence (COBRE) The MOVCENTR fosters productive research within our thematic scientific focus by producing highly promising young faculty striving for independent research. Each research project is supported by the Center to achieve this mission. The motor related disorders encompassed by these projects illustrate our overall vision for a research center striving to generate high impact, high-quality research in human movement variability and emphasized the clinical translational nature of our mentoring approach.
+
+#### Contact Info
+
+You can report any issues or bugs with the package to us via [bmchnonan\@unomaha.edu](mailto:bmchnonan@unomaha.edu) or on [GitHub](https://www.youtube.com/watch?v=xvFZjo5PgG0)

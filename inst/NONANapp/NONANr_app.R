@@ -708,7 +708,7 @@ server <- function(input, output) {
   
   # Entropy calculation
   SEresult <- eventReactive(input$goSEENT, {
-    SampleEntropy(SE_dat(), m = input$SEm, R = input$SEr)
+    Ent_Samp(SE_dat(), m = input$SEm, R = input$SEr)
   })
   
   # Print out the sample entropy results
@@ -809,7 +809,7 @@ server <- function(input, output) {
   
   # Entropy calculation
   AEresult <- eventReactive(input$goAENT, {
-    ApproximateEntropy(AE_dat(), dim = input$AEdim, R = input$AEr)
+    Ent_Ap(AE_dat(), dim = input$AEdim, R = input$AEr)
   })
   
   # Print out the approximate entropy results
@@ -923,7 +923,7 @@ server <- function(input, output) {
   
   # Entropy calculation
   SymEresult <- eventReactive(input$goSymENT, {
-    SymbolicEntropy(SymE_dat(), thresholdVal = input$SymEthresh, seqLength = input$SymEseql)
+    Ent_Sym(SymE_dat(), thresholdVal = input$SymEthresh, seqLength = input$SymEseql)
   })
   
   # Print out the approximate entropy results

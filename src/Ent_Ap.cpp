@@ -25,9 +25,9 @@ using namespace arma;
 //' dim = 8
 //' R = 0.2
 //' 
-//' AE = ApproximateEntropy(x, dim, R)
+//' AE = Ent_Ap(x, dim, R)
 // [[Rcpp::export]]
-double ApproximateEntropy(arma::colvec x, int dim, double R) {
+double Ent_Ap(arma::colvec x, int dim, double R) {
  
  double AE = 0.0;
   
@@ -63,19 +63,4 @@ double ApproximateEntropy(arma::colvec x, int dim, double R) {
   return(AE);
   
 }
-  
 
-
-
-  /*** R
-  #source("C:/Users/jsommerfeld/Desktop/Rcode/ApEn.R")
-   
-  #y = rnorm(1000)
-  
-  #dim = nonlinearTseries::estimateEmbeddingDim(y, do.plot = FALSE)
-  
-  
-  #rbenchmark::benchmark("R" = Ent_Ap(y, dim, 0.2), 
-   #                    "C++" = ApproximateEntropy(y, dim, 0.2), replications = 1)
-  
-  */

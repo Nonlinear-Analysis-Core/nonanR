@@ -23,12 +23,12 @@ using namespace Rcpp;
 //' m = 2
 //' R = 0.2
 //' 
-//' SE = SampleEntropy(x, m, R)
+//' SE = Ent_Samp(x, m, R)
 //' 
 //' @references
 //' Richman, J.S., Moorman, J.R., 2000. Physiological time-series analysis using approximate entropy and sample entropy. Am. J. Physiol. Heart Circ. Physiol. 278. https://doi.org/10.1152/ajpheart.2000.278.6.H2039
 // [[Rcpp::export]]
-double SampleEntropy(arma::colvec x, int m, double R) {
+double Ent_Samp(arma::colvec x, int m, double R) {
   
   
   double SE = 0.0;
@@ -69,18 +69,3 @@ double SampleEntropy(arma::colvec x, int m, double R) {
   
 }
 
-
-// You can include R code blocks in C++ files processed with sourceCpp
-// (useful for testing and development). The R code will be automatically 
-// run after the compilation.
-//
-
-/*** R
-#source("C:/Users/jsommerfeld/Desktop/Rcode/SampEn.R")
-
-#y = rnorm(1000)
-
-#rbenchmark::benchmark("R" = SampEn(y, 2, 0.2), 
-#                      "C++" = SampleEntropy(y, 2, 0.2), replications = 1)
-
-*/

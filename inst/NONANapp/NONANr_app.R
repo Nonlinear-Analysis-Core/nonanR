@@ -67,9 +67,11 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    actionButton("exportDFA", "Export",
                                                                 style = "position: absolute; right: 19px;")
                                                  )
-                                                   ) # fluidRow for action buttons
-                                                   
+                                                   ), # fluidRow for action buttons
+                                                 
+                                                   textInput("exportDFAname", "Choose a name for your variable before exporting", "dfa_out"),
                                                  ), # sidebarpanel
+                                                 
                                                  mainPanel(
                                                    fluidRow( 
                                                      column(12,  plotlyOutput('dfaTS')), # single row just for the time series plot
@@ -114,7 +116,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                             actionButton("exportMFDFA", "Export",
                                                                          style = "position: absolute; right: 19px;")
                                                      )
-                                                   ) # fluidRow for action buttons
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportMFDFAname", "Choose a name for your variable before exporting", "mfdfa_out"),
                                                    
                                                  ), # sidebarpanel
                                                  mainPanel(
@@ -173,6 +176,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                                          style = "position: absolute; right: 19px;")
                                                      )
                                                    ), # fluidRow for action buttons
+                                                   textInput("exportSEENTname", "Choose a name for your variable before exporting", "sampEnt_out"),
                                                    
                                                  ), # sidebarpanel
                                                  
@@ -218,6 +222,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                                          style = "position: absolute; right: 19px;")
                                                      )
                                                    ), # fluidRow for action buttons
+                                                   textInput("exportAENTname", "Choose a name for your variable before exporting", "apEnt_out"),
                                                    
                                                  ), # sidebarpanel
                                                  
@@ -262,6 +267,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                                          style = "position: absolute; right: 19px;")
                                                      )
                                                    ), # fluidRow for action buttons
+                                                   textInput("exportSymENTname", "Choose a name for your variable before exporting", "symEnt_out"),
                                                    
                                                  ), # sidebarpanel
                                                  
@@ -317,7 +323,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                             actionButton("exportRQA", "Export",
                                                                          style = "position: absolute; right: 19px;")
                                                      )
-                                                   ) # fluidRow for action buttons
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportRQAname", "Choose a name for your variable before exporting", "rqa_out"),
                                                    
                                                  ), # sidebarpanel
                                                  mainPanel(
@@ -361,7 +368,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                             actionButton("exportlye", "Export",
                                                                          style = "position: absolute; right: 19px;")
                                                      )
-                                                   ) # fluidRow for action buttons
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportLYEname", "Choose a name for your variable before exporting", "lye_out"),
                                                    
                                                  ), # sidebarpanel
                                                  mainPanel(
@@ -400,8 +408,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
 # Define server logic 
 server <- function(input, output) {
   
-  
-    # DFA ---------------------------------------------------------------------
+  # Fractal Methods ---------------------------------------------------------------------
+    ## DFA ---------------------------------------------------------------------
 
   # get a list of the column names in the data frame
   n = reactive({
@@ -465,11 +473,12 @@ server <- function(input, output) {
       
       w = ceiling(nrow(dfa_dat()) * 0.03) # calculate the number of bins
       n = colnames(dfa_dat())[1] # Get the column name to use below
-      ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
+      p = ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
         geom_histogram( color="white", fill="black", bins = w) +
         labs(title = paste("Histogram of ", input$dfay), 
             x = input$dfay) +
        theme_nonan()
+      p
 
     })
   }) # observeEvent
@@ -505,7 +514,7 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportDFA, {
-    assign("dfa_out", dfaResult(), envir = globalenv())
+    assign(input$exportDFAname, dfaResult(), envir = globalenv())
     
     output$dfaResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -518,7 +527,7 @@ server <- function(input, output) {
   # head(dfa_dat())
   #})
   
-  # MFDFA ---------------------------------------------------------------------
+  ## MFDFA ---------------------------------------------------------------------
   
   # get a list of the column names in the data frame
   n_mfdfa = reactive({
@@ -629,7 +638,7 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportMFDFA, {
-    assign("mfdfa_out", mfdfaResult(), envir = globalenv())
+    assign(input$exportMFDFAname, mfdfaResult(), envir = globalenv())
     
     output$mfdfaResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -642,8 +651,8 @@ server <- function(input, output) {
   # head(dfa_dat())
   #})
   
-  
-  # Sample Entropy -----------------------------------------------------------------
+  # Entropy -----------------------------------------------------------------
+  ## Sample Entropy -----------------------------------------------------------------
   
   # get a list of the column names in the data frame
   n1 = reactive({
@@ -696,7 +705,7 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportSEENT, {
-    assign("samp_ent_out", SEresult(), envir = globalenv())
+    assign(input$exportSEENTname, SEresult(), envir = globalenv())
     
     output$SEresults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -743,7 +752,7 @@ server <- function(input, output) {
   #   head(get(input$dataChoice1))
   # })
   
-  # Approximate Entropy -----------------------------------------------------------------
+  ## Approximate Entropy -----------------------------------------------------------------
   
   # get a list of the column names in the data frame
   n2 = reactive({
@@ -797,7 +806,7 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportAENT, {
-    assign("approx_ent_out", AEresult(), envir = globalenv())
+    assign(input$exportAENTname, AEresult(), envir = globalenv())
     
     output$AEresults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -846,7 +855,7 @@ server <- function(input, output) {
   # })
   
   
-  # Symbolic Entropy --------------------------------------------------------
+  ## Symbolic Entropy --------------------------------------------------------
   
   # get a list of the column names in the data frame
   n3 = reactive({
@@ -911,7 +920,7 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportSymENT, {
-    assign("sym_ent_out", SymEresult(), envir = globalenv())
+    assign(input$exportSymENTname, SymEresult(), envir = globalenv())
     
     output$SymEresults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -960,7 +969,8 @@ server <- function(input, output) {
   #   head(SymE_dat())
   # })
   
-  # RQA ---------------------------------------------------------------------
+  # PSR ---------------------------------------------------------------------
+  ## RQA ---------------------------------------------------------------------
   
   # get a list of the column names in the data frame
   n4 = reactive({
@@ -1078,7 +1088,7 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportRQA, {
-    assign("rqa_out", rqaResult(), envir = globalenv())
+    assign(input$exportRQAname, rqaResult(), envir = globalenv())
     
     output$rqaResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -1091,7 +1101,7 @@ server <- function(input, output) {
   # head(dfa_dat())
   #})
   
-  # LyE ---------------------------------------------------------------------
+  ## LyE ---------------------------------------------------------------------
   
   # # get a list of the column names in the data frame
   # n = reactive({
@@ -1193,7 +1203,7 @@ server <- function(input, output) {
   # 
   # # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   # observeEvent(input$exportDFA, {
-  #   assign("dfa_out", dfaResult(), envir = globalenv())
+  #   assign(input$exportLYEname, dfaResult(), envir = globalenv())
   #   
   #   output$dfaResults <- renderPrint({
   #     cat("Exported to global environment. Close the app to view.")

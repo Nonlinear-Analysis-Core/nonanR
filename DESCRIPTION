@@ -1,11 +1,11 @@
 Package: nonanR
 Type: Package
-Title: Nonlinear Analysis Methods for Human Movement Data
+Title: Nonlinear Analysis Methods for Time Series Analysis
 Version: 0.0.1
 Date: 2023-11-14
 Author: Joel Sommerfeld
 Maintainer: Nonlinear Analysis Core <bmchnonan@unomaha.edu>
-Description: This is a collection of functions that can be used for the nonlinear analysis of human movement time series data. 
+Description: This is a collection of functions that can be used for the nonlinear analysis of time series data. 
 License: GPL (>= 3) + file LICENSE
 Depends: 
     R (>= 2.10), 

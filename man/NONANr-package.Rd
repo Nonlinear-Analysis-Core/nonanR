@@ -4,8 +4,8 @@
 \name{nonanR-package}
 \alias{nonanR}
 \alias{nonanR-package}
-\title{nonanR: Nonlinear Analysis Methods for Human Movement Data}
+\title{nonanR: Nonlinear Analysis Methods for Time Series Analysis}
 \description{
-This is a collection of functions that can be used for the nonlinear analysis of human movement time series data.
+This is a collection of functions that can be used for the nonlinear analysis of time series data.
 }
 \keyword{internal}

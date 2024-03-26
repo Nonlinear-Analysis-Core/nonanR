@@ -77,13 +77,13 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                      
                                                      column(width = 6,
                                                             actionButton("goDFA", "Analyze")
-                                                 ),
-                                                 column(width = 6,
-                                                   actionButton("exportDFA", "Export",
-                                                                style = "position: absolute; right: 19px;")
-                                                 )
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportDFA", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
                                                    ), # fluidRow for action buttons
-                                                 
+                                                   
                                                    textInput("exportDFAname", "Choose a name for your variable before exporting", "dfa_out"),
                                                  ), # sidebarpanel
                                                  
@@ -161,6 +161,56 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ), # MFDFA tabpanel
+                                      ## bayesH ---------------------------------------------------------------------
+                                      
+                                      tabPanel("bayesH", 
+                                               h4(strong("bayesH")),
+                                               h2("This is in progress and will be included in a future release."),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoicebayesH", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("bayesHx", "Select X axis:", choices = NULL),
+                                                   selectInput("bayesHy", "Select Y axis:", choices = NULL),
+                                                   numericInput("bayesN", "Posterior Simulations:", value = 50, step = 1, min = 1), 
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("gobayesH", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportbayesH", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportbayesHname", "Choose a name for your variable before exporting", "bayesH_out"),
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('bayesHTS')), # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow( 
+                                                     column(2),
+                                                     column(8, plotOutput('bayesHPlot')), 
+                                                     column(2)
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow( 
+                                                     column(6,  plotOutput('histogram_bayesH')),
+                                                     column(6,  plotOutput('autocorr_bayesH'))
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("bayesHResults"), 
+                                                   br(),
+                                                   br(),
+                                                   #tableOutput("datHead") # This was largely for debugging
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ),
                            ), # navbarPage
                            
                            
@@ -369,7 +419,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                h2("This is in progress and will be included in a future release."),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoiceMFDFA", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dataChoiceLYE", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
                                                    selectInput("lyex", "Select X axis:", choices = NULL),
                                                    selectInput("lyey", "Select Y axis:", choices = NULL),
                                                    numericInput("dim", "Embedding Dimension:", value = 3, step = 1), 
@@ -424,8 +474,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
 server <- function(input, output) {
   
   # Fractal Methods ---------------------------------------------------------------------
-    ## DFA ---------------------------------------------------------------------
-
+  ## DFA ---------------------------------------------------------------------
+  
   # get a list of the column names in the data frame
   n = reactive({
     names(get(input$dataChoice))
@@ -454,7 +504,7 @@ server <- function(input, output) {
     #   layout(title = list(text = paste0("Time series of ", input$dfay)),
     #          xaxis = list(title = "data Index"),
     #          yaxis = list(title = paste0(input$dfay)))
-
+    
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$dfay]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$dfay), 
@@ -491,10 +541,10 @@ server <- function(input, output) {
       p = ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
         geom_histogram( color="white", fill="black", bins = w) +
         labs(title = paste("Histogram of ", input$dfay), 
-            x = input$dfay) +
-       theme_nonan()
+             x = input$dfay) +
+        theme_nonan()
       p
-
+      
     })
   }) # observeEvent
   
@@ -523,8 +573,8 @@ server <- function(input, output) {
   observeEvent(input$goDFA, {
     output$dfaResults <- renderPrint({
       cat("Log Scales:", dfaResult()$log_scales, "\n", "Log RMS:", dfaResult()$log_rms, "\n", "Alpha:", dfaResult()$alpha)
-
-      })
+      
+    })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
@@ -666,6 +716,107 @@ server <- function(input, output) {
   # head(dfa_dat())
   #})
   
+  ## bayesH -----------------------------------------------------------------
+
+  # get a list of the column names in the data frame
+  n_bayes = reactive({
+    names(get(input$dataChoicebayesH))
+  })
+
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoicebayesH, {
+    updateSelectInput(inputId = "bayesHx", choices = n_bayes())
+    updateSelectInput(inputId = "bayesHy", choices = n_bayes(), selected = n_bayes()[2])
+  })
+
+
+  # Select the desired data frame and by default the second column for analysis
+  bayesH_dat = reactive({
+    get(input$dataChoicebayesH) |>
+      select(all_of(input$bayesHy)) |>
+      as.matrix()
+  })
+
+  # plot the time series of the data
+  output$bayesHTS <- renderPlotly({
+
+    plot_dat = get(input$dataChoicebayesH)
+    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SEy]], type = 'scatter', mode = 'lines',
+    #         color = I('black')) %>% # Aesthetics for the plot
+    #   layout(title = list(text = paste0("Time series of ", input$SEy)),
+    #          xaxis = list(title = "data Index"),
+    #          yaxis = list(title = paste0(input$SEy)))
+
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$bayesHy]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$bayesHy),
+           x = "Index") +
+      theme_nonan()
+
+  })
+
+  # Entropy calculation
+  bayesHresult <- eventReactive(input$gobayesH, {
+    #bayesH(bayesH_dat(), n = input$bayesN)
+    rnorm(input$bayesN)
+  })
+
+  # Print out the sample entropy results
+  observeEvent(input$gobayesH, {
+    output$bayesHResults <- renderPrint({
+      cat("bayesH:", bayesHresult())
+    })
+  })
+
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportbayesH, {
+    assign(input$exportbayesHname, bayesHresult(), envir = globalenv())
+
+    output$bayesHResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
+
+  # Histogram plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$gobayesH, {
+    output$histogram_bayesH <- renderPlot({
+      #hist(SE_dat(), main = paste("Histogram of ", input$SEy), xlab = input$SEy)
+
+      w = ceiling(nrow(bayesH_dat()) * 0.03) # calculate the number of bins
+      n = colnames(bayesH_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(bayesH_dat()), aes(x = .data[[n]])) +
+        geom_histogram( color="white", fill="black", bins = w) +
+        labs(title = paste("Histogram of ", input$bayesHy),
+             x = input$bayesHy) +
+        theme_nonan()
+    })
+  }) # observeEvent
+
+  # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$gobayesH, {
+    output$autocorr_bayesH <-  renderPlot({
+
+      a = acf(bayesH_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(bayesH_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) +
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$bayesHy)) +
+        theme_nonan() # add the nonan plot theme on
+
+    })
+  }) # observeEvent
+
+  #Print the data so we can see what column is actually being selected. For debugging only
+  output$SEdatHead <- renderTable({
+    head(get(input$dataChoice1))
+  })
+  
   # Entropy -----------------------------------------------------------------
   ## Sample Entropy -----------------------------------------------------------------
   
@@ -759,7 +910,7 @@ server <- function(input, output) {
         labs(title = paste("Autocorrelation of ", input$SEy)) + 
         theme_nonan() # add the nonan plot theme on    
       
-      })
+    })
   }) # observeEvent
   
   # Print the data so we can see what column is actually being selected. For debugging only
@@ -861,7 +1012,7 @@ server <- function(input, output) {
         labs(title = paste("Autocorrelation of ", input$AEy)) + 
         theme_nonan() # add the nonan plot theme on   
       
-      })
+    })
   }) # observeEvent
   
   # Print the data so we can see what column is actually being selected. For debugging only

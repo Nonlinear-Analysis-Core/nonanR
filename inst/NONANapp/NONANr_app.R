@@ -10,8 +10,23 @@
 #right_dat = data.frame("stride_number" = 1:1000, "stride_time_right" = fgn_sim(1000, 0.8))
 
 
-myDataFrames <- names(which(unlist(eapply(.GlobalEnv,is.data.frame))))
-loadedData <- data()$results[,3]
+# myDataFrames <- names(which(unlist(eapply(.GlobalEnv,is.data.frame))))
+# loadedData <- data()$results[,3]
+
+# Attempt to retrieve data frame names in the global environment
+tryCatch({
+  myDataFrames <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
+  
+  if (length(myDataFrames) == 0) {
+    stop("No data frame in global environment. Please load in data.")
+  } else {
+    # If there are data frames, continue with your code
+    loadedData <- data()$results[, 3]
+  }
+}, error = function(e) {
+  # If an error occurs (i.e., no data frames found), return custom error message
+  message("No data frame in global environment. Please load in data.")
+})
 
 
 # UI ----------------------------------------------------------------------

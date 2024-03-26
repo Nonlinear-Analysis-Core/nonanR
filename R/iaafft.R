@@ -2,6 +2,9 @@
 #' 
 #' @param signal is a real valued time serires 
 #' @param N is the number of desired surrogates. Default is 1
+#' 
+#' @noRd
+#' @keywords internal
 #' @export
 iaafft <- function(signal,N=1){
   # this function generates surrogates using the iterated amplitude

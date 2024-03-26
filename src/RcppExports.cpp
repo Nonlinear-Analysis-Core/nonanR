@@ -38,7 +38,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // SampleEntropy
-arma::mat SampleEntropy(arma::colvec x, int m, double R);
+double SampleEntropy(arma::colvec x, int m, double R);
 RcppExport SEXP _nonanR_SampleEntropy(SEXP xSEXP, SEXP mSEXP, SEXP RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

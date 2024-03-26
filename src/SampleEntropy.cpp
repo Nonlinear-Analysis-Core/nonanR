@@ -28,10 +28,10 @@ using namespace Rcpp;
 //' @references
 //' Richman, J.S., Moorman, J.R., 2000. Physiological time-series analysis using approximate entropy and sample entropy. Am. J. Physiol. Heart Circ. Physiol. 278. https://doi.org/10.1152/ajpheart.2000.278.6.H2039
 // [[Rcpp::export]]
-arma::mat SampleEntropy(arma::colvec x, int m, double R) {
+double SampleEntropy(arma::colvec x, int m, double R) {
   
   
-  arma::mat SE = arma::mat(1, 1); // 1x1 matrix
+  double SE = 0.0;
   double Bmr, Amr;
   
   double r = R * stddev(x);

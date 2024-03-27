@@ -6,8 +6,6 @@
 #' A data frame with 10,000 rows and 18 columns:
 #' \describe{
 #'   \item{time}{Time in seconds. Data is sampled at 200Hz}
-#'   \item{pelvis_pitch_deg}{Pelvis angle in reference to the direction of heading}
-#'   \item{head_pitch_deg}{Head angle in reference to the direction of heading}
 #'   \item{thigh_pitch_lt_deg}{Left thigh angle in reference to the direction of heading}
 #'   \item{shank_pitch_lt_deg}{Left shank angle in reference to the direction of heading}
 #'   \item{contact_lt}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
@@ -38,8 +36,6 @@
 #' A data frame with 10,000 rows and 18 columns:
 #' \describe{
 #'   \item{time}{Time in seconds. Data is sampled at 200Hz}
-#'   \item{pelvis_pitch_deg}{Pelvis angle in reference to the direction of heading}
-#'   \item{head_pitch_deg}{Head angle in reference to the direction of heading}
 #'   \item{thigh_pitch_lt_deg}{Left thigh angle in reference to the direction of heading}
 #'   \item{shank_pitch_lt_deg}{Left shank angle in reference to the direction of heading}
 #'   \item{contact_lt}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}
@@ -70,8 +66,6 @@
 #' A data frame with 10,000 rows and 18 columns:
 #' \describe{
 #'   \item{time}{Time in seconds. Data is sampled at 200Hz}
-#'   \item{pelvis_pitch_deg}{Pelvis angle in reference to the direction of heading}
-#'   \item{head_pitch_deg}{Head angle in reference to the direction of heading}
 #'   \item{thigh_pitch_lt_deg}{Left thigh angle in reference to the direction of heading}
 #'   \item{shank_pitch_lt_deg}{Left shank angle in reference to the direction of heading}
 #'   \item{contact_lt}{Pre calculated heel contact events for the left leg. 0 means the foot is in the air and 1000 indicates contact with the ground}

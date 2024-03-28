@@ -3,18 +3,19 @@ using namespace Rcpp;
 using namespace arma;
 // [[Rcpp::depends(RcppArmadillo)]]
 
-//' Average Mutual Information
+//' Lyapunov Rosenstein Method
 //'
 //' Calculate the average mutual information of a time series.
+//' 
 //'
-//' @param x - a single column time series
-//' @param y - a single column time series. This can be the same as x
-//' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
-//' @param bins - the number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you. 
+//' @param x - A single column time series.
+//' @param tau - The first local minimum from the data. This is a value returned from the \code{ami} function.
+//' @param dim - An integer reflecting the embedding dimension at which there is the lowest number of false neighbors. This is a value returned from the \code{fnn} function
+//' @param fs - The sampling frequency that the data was collected at. 
 //' @returns The output of the algorithm is a list that includes:
 //' \itemize{
-//'  \item \code{tau} A data frame of the local minima of the AMI values and the corresponding lag
-//'  \item \code{ami} A data frame of all the AMI values at each lag
+//'  \item \code{M} The number of matched pairs
+//'  \item \code{out} A matrix of all the matched pairs and the average line divergence from which the slope is calculated. The matched pairs are columns 1 and 2. The average line divergence is column 3.
 //' } 
 //' @import Rcpp
 //' @export
@@ -25,14 +26,14 @@ using namespace arma;
 //' @examples
 //'
 //' x = rnorm(1000)
-//' y = x
-//' L = 50
-//' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
+//' tau = 3 # You can get this value like: ami_out$tau[1,1]
+//' dim = 4 # You can get this value like: fnn_out$dim
+//' fs = 60
 //'
-//' ami_out = ami(x, y, L, bins)
+//' lye_out = LyE_R(x = x, tau = tau, dim = dim, fs = fs)
 
 // [[Rcpp::export]]
-List LyE_R(arma::vec x, int tau, int dim, int fs) {
+List lye_r(arma::vec x, int tau, int dim, int fs) {
   
   //Mat<double> x = armaGetPr(prhs[0]);
   //int fs = armaGetScalar<int>(prhs[1]);						// Sampling frequency
@@ -125,28 +126,19 @@ List LyE_R(arma::vec x, int tau, int dim, int fs) {
   
   avgLinDiv = nonzeros(avgLinDiv);
   
+  // Find the long slope of the data
+  
+  
+  // Find the short slope of the data
+  
+  
+  //compute slope of the line
+  //arma::colvec lye_long = lm_c(log_scale,log_rms);
+  
   // Set variables for output.
-  
-  //plhs[0] = armaCreateMxMatrix(M, 3, mxDOUBLE_CLASS);
-  
-  //armaSetData(plhs[0], out);
   return List::create(Named("M") = M, Named("out") = out);
   
   
 } 
 
-
-/* Lyapunov Rosenstein Method
- * inputs  - X, If this is a single dimentional array the code will use tau
- *              and dim to perform a phase space reconstruction. If this is
- *              a multidimentional array the phase space reconstruction will
- *              not be used.
- *         - Fs, sampling frequency in units s^-1
- *         - tau, time lag
- *         - dim, embedding dimension
- * outputs - out, contains the starting matched pairs and the average line
- *                divergence from which the slope is calculated. The matched
- *                paris are columns 1 and 2. The average line divergence is
- *                column 3.
- */
   

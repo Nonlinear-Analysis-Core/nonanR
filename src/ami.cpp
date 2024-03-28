@@ -34,9 +34,6 @@ using namespace arma;
 //'
 // [[Rcpp::export]]
 List ami(arma::colvec x, arma::colvec y, int L, int bins) {
-  // Mat<double> x = armaGetPr(prhs[0]);		// time series
-  // int L = armaGetScalar<int>(prhs[1]);		// maximal lag
-  // int bins = armaGetScalar<int>(prhs[2]);		// number of bins
   
   vec data;
   data = conv_to<vec>::from(x.col(0));
@@ -115,7 +112,7 @@ List ami(arma::colvec x, arma::colvec y, int L, int bins) {
   // Processing for return values.
   mat retTau = nonzeros(tau);
   retTau = reshape(retTau, retTau.n_rows / 2, 2); // Puts lag vals and AMI side-by-side
-  arma::vec lags = linspace(0, L, 50);
+  arma::vec lags = linspace(0, L, L);
   mat retV = join_rows(lags, v);
   
   // plhs[0] = armaCreateMxMatrix(retTau.n_rows, retTau.n_cols, mxDOUBLE_CLASS);

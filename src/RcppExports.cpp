@@ -63,6 +63,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// LyE_R
+List LyE_R(arma::vec x, int tau, int dim, int fs);
+RcppExport SEXP _nonanR_LyE_R(SEXP xSEXP, SEXP tauSEXP, SEXP dimSEXP, SEXP fsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< int >::type fs(fsSEXP);
+    rcpp_result_gen = Rcpp::wrap(LyE_R(x, tau, dim, fs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ami
 List ami(arma::colvec x, arma::colvec y, int L, int bins);
 RcppExport SEXP _nonanR_ami(SEXP xSEXP, SEXP ySEXP, SEXP LSEXP, SEXP binsSEXP) {
@@ -191,12 +205,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rqa_nonan
+List rqa_nonan(arma::vec data, unsigned int dim, unsigned int tau, int normalize, int rescale, int method, double threshold, int mindiag, int minvert);
+RcppExport SEXP _nonanR_rqa_nonan(SEXP dataSEXP, SEXP dimSEXP, SEXP tauSEXP, SEXP normalizeSEXP, SEXP rescaleSEXP, SEXP methodSEXP, SEXP thresholdSEXP, SEXP mindiagSEXP, SEXP minvertSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< int >::type normalize(normalizeSEXP);
+    Rcpp::traits::input_parameter< int >::type rescale(rescaleSEXP);
+    Rcpp::traits::input_parameter< int >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< int >::type mindiag(mindiagSEXP);
+    Rcpp::traits::input_parameter< int >::type minvert(minvertSEXP);
+    rcpp_result_gen = Rcpp::wrap(rqa_nonan(data, dim, tau, normalize, rescale, method, threshold, mindiag, minvert));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_nonanR_ApproximateEntropyTest", (DL_FUNC) &_nonanR_ApproximateEntropyTest, 3},
     {"_nonanR_Ent_Ap", (DL_FUNC) &_nonanR_Ent_Ap, 3},
     {"_nonanR_Ent_Samp", (DL_FUNC) &_nonanR_Ent_Samp, 3},
     {"_nonanR_Ent_Sym", (DL_FUNC) &_nonanR_Ent_Sym, 3},
+    {"_nonanR_LyE_R", (DL_FUNC) &_nonanR_LyE_R, 4},
     {"_nonanR_ami", (DL_FUNC) &_nonanR_ami, 4},
     {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},
     {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 2},
@@ -206,6 +240,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nonanR_seq_int", (DL_FUNC) &_nonanR_seq_int, 1},
     {"_nonanR_mfdfa", (DL_FUNC) &_nonanR_mfdfa, 5},
     {"_nonanR_rqa", (DL_FUNC) &_nonanR_rqa, 12},
+    {"_nonanR_rqa_nonan", (DL_FUNC) &_nonanR_rqa_nonan, 9},
     {NULL, NULL, 0}
 };
 

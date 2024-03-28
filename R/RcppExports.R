@@ -117,6 +117,39 @@ Ent_Sym <- function(x, thresholdVal, seqLength) {
 #' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
 #'
 #' ami_out = ami(x, y, L, bins)
+NULL
+
+LyE_R <- function(x, tau, dim, fs) {
+    .Call('_nonanR_LyE_R', PACKAGE = 'nonanR', x, tau, dim, fs)
+}
+
+#' Average Mutual Information
+#'
+#' Calculate the average mutual information of a time series.
+#'
+#' @param x - a single column time series
+#' @param y - a single column time series. This can be the same as x
+#' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
+#' @param bins - the number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you. 
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{
+#'  \item \code{tau} A data frame of the local minima of the AMI values and the corresponding lag
+#'  \item \code{ami} A data frame of all the AMI values at each lag
+#' } 
+#' @import Rcpp
+#' @export
+#'
+#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+#' 
+#' 
+#' @examples
+#'
+#' x = rnorm(1000)
+#' y = x
+#' L = 50
+#' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
+#'
+#' ami_out = ami(x, y, L, bins)
 #'
 #'
 ami <- function(x, y, L, bins) {
@@ -398,5 +431,9 @@ mfdfa <- function(x, q, order, scales, scale_ratio) {
 #' - Marwan, N., Romano, M. C. Theil, M., & Kurths, J. (2007). Recurrence plots for the analysis of complex systems. Physics Reports, 438, 237-329.
 rqa <- function(ts1, ts2, embed = 1L, delay = 1L, normalize = 1L, rescale = 1L, mindiagline = 2L, minvertline = 2L, t_win = 0L, radius = 0.0001, whiteline = 0L, recpt = 0L) {
     .Call('_nonanR_rqa', PACKAGE = 'nonanR', ts1, ts2, embed, delay, normalize, rescale, mindiagline, minvertline, t_win, radius, whiteline, recpt)
+}
+
+rqa_nonan <- function(data, dim = 1L, tau = 1L, normalize = 1L, rescale = 1L, method = 1L, threshold = 0.0001, mindiag = 2L, minvert = 2L) {
+    .Call('_nonanR_rqa_nonan', PACKAGE = 'nonanR', data, dim, tau, normalize, rescale, method, threshold, mindiag, minvert)
 }
 

@@ -13,8 +13,7 @@
 #' @examples
 #' scales <- logscale(scale_min = 16, scale_max = 1024, scale_ratio = 2)
 #' 
-#' @noRd
-#' @keywords internal
+#' @export
 logscale = function(scale_min, scale_max, scale_ratio){
   number_of_scales =  ceiling(log(scale_max/scale_min)/log(scale_ratio));
   scales = rep(NA, number_of_scales)

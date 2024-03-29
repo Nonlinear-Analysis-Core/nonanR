@@ -31,7 +31,7 @@ using namespace arma;
 //' fs = 60
 //'
 //' lye_out = LyE_R(x = x, tau = tau, dim = dim, fs = fs)
-
+//' 
 // [[Rcpp::export]]
 List lye_r(arma::vec x, int tau, int dim, int fs) {
   

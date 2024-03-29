@@ -379,8 +379,16 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    numericInput("radius", "Radius:", value = 0.0001, step = 0.0001, min = 0),
                                                    # numericInput("whiteline", "Rescale:", value = 2, step = 0.1),
                                                    numericInput("recpt", "Plot:", value = 1, step = 1, min = 0, max = 1),
+                                                   # fluidRow(
+                                                   #   column(width = 7, 
+                                                   #          checkboxInput(inputId = "psr_rqa", 
+                                                   #                        label = "Automatically perform FNN and AMI?", 
+                                                   #                        value = TRUE)),
+                                                   #   column(width = 5, 
+                                                   #          numericInput(inputId = "lag_rqa", 
+                                                   #                       label = "Choose a maximum lag.", 
+                                                   #                       value = NULL))),
                                                    fluidRow(
-                                                     
                                                      column(width = 6,
                                                             actionButton("goRQA", "Analyze")
                                                      ),
@@ -1182,10 +1190,32 @@ server <- function(input, output) {
   
   # DFA calculation
   rqaResult <- eventReactive(input$goRQA, {
-    rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = input$embed, delay = input$delay, normalize = input$normalize, 
-        rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin, 
+    
+    rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = input$embed, delay = input$delay, normalize = input$normalize,
+        rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin,
         radius = input$radius, whiteline = 0, recpt = input$recpt)
     
+    # if (input$psr_rqa && input$lag_rqa){
+    #   
+    #   # AMI
+    #   ami_out = ami(x = rqa_dat(), y = rqa_dat(), L = input$lag_rqa, bins = 0) # Freely determine bins
+    #   tau = as.data.frame(ami_out[1]) # tau data frame
+    #   min_tau = tau[1,1]
+    #   
+    #   # FNN
+    #   fnn_out = fnn(x = rqa_dat(), tau = ami_out$tau[1,1], mmax = 12, rtol = 15, atol = 2) # Use defaults
+    #   emb_dim = as.numeric(fnn_out[2])
+    #   
+    #   # RQA
+    #   rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = emb_dim, delay = min_tau, normalize = input$normalize, 
+    #       rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin, 
+    #       radius = input$radius, whiteline = 0, recpt = input$recpt)
+    # } else {
+    # 
+    # rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = input$embed, delay = input$delay, normalize = input$normalize, 
+    #     rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin, 
+    #     radius = input$radius, whiteline = 0, recpt = input$recpt)
+    # }
   })
   
   # DFA plot -- generate the plot only when the "Go" button has been clicked

@@ -25,7 +25,6 @@
 #' mmax = 12
 #' rtol = 15
 #' atol = 2
-#' L = 1
 #' 
 #' fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
 #' 
@@ -52,6 +51,6 @@ plot_fnn = function(x){
                fill = "lightgray") +
     labs(title = "False Nearest Neighbors", 
          x = "Lag", 
-         y = "% False Neighbors")
+         y = "% False Neighbors") + 
     theme_nonan()
 }

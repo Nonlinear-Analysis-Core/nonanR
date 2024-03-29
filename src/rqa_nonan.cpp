@@ -3,61 +3,79 @@
 #include <RcppArmadillo.h>
 using namespace Rcpp;
 
-/* output = rqa_nonan(data, dim, tau, normalize, rescale, method, threshold, mindiag, minvert)
- * Patch Note 111423
- * Fixed issues with recurrence rate!
- * Need to work on the line stats and it's all done
- * 
- * inputs
- * - data: A column vector of the time series
- * - dim: An integer indicating the embedding dimension for phase space reconstruction
- * - tau: An integer indicating the time delay for phase space reconstruction
- * - normalize
- *      - 0: No normalization
- *      - 1: Normalize by minimum and maximum values
- *      - 2: Z-score
- * - rescale
- *      - 0: No rescaling
- *      - 1: Rescale to the mean distance of distance matrix
- *      - 2: Rescale to the max distance of distance matrix
- * - method
- *      - 1: Analysis based on set radius
- *      - 2: Analysis based on set recurrence (includes radius search)
- * - threshold
- *      - if method is 1, radius to compute recurrence plot
- *      - if method is 2, desired recurrence from computed recurrence plot.
- *        radius that satisfies the desired recurrence will be searched.
- * - mindiag: An integer indicating the minimum length to identify diagonal line
- * - minvert: An integer indicating the minimum length to identify vertical line
- *
- *
- * author - Seung Kyeom Kim, 2023.
- *
- * remarks -
- * reference
- *
- *
- */
+arma::mat psr(arma::vec& x, int dim, int tau); // Phase space reconstruction
 
-// Phase space reconstruction
-arma::mat psr(arma::vec& x, int dim, int tau);
-// Distance matrix
-void dist_mat(arma::mat& x1, arma::mat& x2, arma::mat& dist);
-// Recurrence plot - Radius
-void rp1(arma::mat& x, double radius);
-// Recurrence plot - Recurrence
-void rp2(arma::mat& x, double& recurrence, double radius0, double radius1);
-// Variance metrics of recurrence
-List line_stats(arma::mat& rp, int mindiag, int minvert);
-// Recurrence rate
-double rr(arma::mat& rp);
-// Diagonal line lengths
-arma::vec diagonal_lines(arma::mat& rp, int mindiag);
-// Vertical line lengths
-arma::vec vertical_lines(arma::mat& rp, int minvert);
+void dist_mat(arma::mat& x1, arma::mat& x2, arma::mat& dist); // Distance matrix
 
-// Set default values for some parameters
-const double tol = 0.0001;
+void rp1(arma::mat& x, double radius); // Recurrence plot - Radius
+
+void rp2(arma::mat& x, double& recurrence, double radius0, double radius1); // Recurrence plot - Recurrence
+
+List line_stats(arma::mat& rp, int mindiag, int minvert); // Variance metrics of recurrence
+
+double rr(arma::mat& rp); // Recurrence rate
+
+arma::vec diagonal_lines(arma::mat& rp, int mindiag); // Diagonal line lengths
+
+arma::vec vertical_lines(arma::mat& rp, int minvert); // Vertical line lengths
+
+const double tol = 0.0001; // Set default values for some parameters
+
+//' Fast Recurrence Quantification Analysis
+//' 
+//' This function perform recurrence quantification analysis faster.
+//' 
+//' @param data A numerical time series
+//' @param dim The embedding dimension of the time series
+//' @param tau The optimal time delay (lag)
+//' @param normalize Should the time series be normalized? (0 = no, 1 = unit interval, 2 = z-score)
+//' @param rescale Should the distance matrix be rescaled? (0 = no, 1 = mean norm, 2 = max norm)
+//' @param method Which criteria will be used to perform the analysis? (1 = radius, 2 = reccurence) 
+//' @param threshold A value that specifies the criteria (If method = 1, radius to compute recurrence plot, If method = 2, desired recurrence from computed recurrence plot)
+//' @param mindiag The smallest number of diagonal points to be considered a line
+//' @param minvert The smallest number of vertical points to be considered a line
+//' 
+//' @returns The output of the algorithm is a list that includes : 
+//' 
+//' RQA : 
+//' \itemize{
+ //'  \item \code{rec}: (Recurrence rate), the overall percentage of recurrent points
+ //'  \item \code{det}: (determinism), the percentage of recurrent points that fall on a line
+ //'  \item \code{div}: (divergence), inverse of determinism i.e. 1/det
+ //'  \item \code{nrline}: (number of lines), total number of lines in the upper triangle
+ //'  \item \code{ratio}: (ratio), percent determinism/percent recurrence i.e det/rr
+ //'  \item \code{dmax}: (longest line), the number points in the longest diagonal line
+ //'  \item \code{dmean}: (average line), average length of diagonal lines
+ //'  \item \code{lam}: (laminarity), perecentage of points that fall on vertical lines
+ //'  \item \code{vmean}: (trapping time), average length of vertical lines
+ //'  \item \code{vmax}: (longest vertical line), the number of points in the longest vertical line
+ //'  \item \code{entropy}: (Shannon entropy), based on distribution of line lengths
+ //'  \item \code{rentropy}: (relative entropy), Shannon entropy normalized by number of lines 
+//' }
+//' 
+//' RP : Recurrence plot
+//' 
+//' Radius : The radius used to generate the recurrence plot
+//' 
+ //' @import Rcpp
+ //' @export
+ //' 
+ //' @details This function performs recurrence quantification analysis (RQA) on time series data that have (potentially) been embedded in higher dimension than the originating series. A common approach for univariate series involves several steps: First, identify the optimal time delay as either the first zero crossing of the autocorrelation function or the first minimum of the average mutual information function. Second, the time series is unfolded into embed dimensions by creating time-delayed copies of the original series. One method for determining the number of dimensions is by the method of False Nearest Neighbors. Third, a distance matrix is computed among the embedded points of the series. A recurrence plot is constructed by passing the distance matrix through a heavyside function: distances less than or equal to the chosen radius are marked as 1 (recurrent); distances falling outside the radius are marked as 0 (not recurrent).
+ //' 
+ //' After constructing the recurrence plot, a number of measures are computed to characterize recurrent structure in the time series. These measures and their interpretation are well documented in the literature. We provide simple definitions for each recurrence metric below. In addition, we provide references to standard readings including a very readable introduction to RQA (i.e., Webber & Zbilut, 2005; Marwan et al., 2007).
+ //' 
+ //' @examples
+ //' # Create a sample time series
+ //' x = fgn_sim(n = 100, H = 0.8)
+ //' 
+ //' # Compute RQA
+ //' x.rqa = rqa_nonan(x, 1, 1, 0, 0, 2, 5, 2, 2)
+ //' 
+ //' @references 
+ //' - Webber, C. L., & Zbilut, J. P. (2005). Recurrence quantification analysis of nonlinear dynamical time series. In S. Riley and G. C. Van Orden (eds). Tutorials in contemporary nonlinear methods for the behavioral sciences.
+ //' 
+ //' - Marwan, N., Romano, M. C. Theil, M., & Kurths, J. (2007). Recurrence plots for the analysis of complex systems. Physics Reports, 438, 237-329.
+
 
 // [[Rcpp::export]]
 List rqa_nonan(arma::vec data, 

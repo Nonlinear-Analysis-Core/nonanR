@@ -33,7 +33,6 @@ tau = 3 # You can get this value like: ami_out$tau[1,1]
 mmax = 12
 rtol = 15
 atol = 2
-L = 1
 
 fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
 

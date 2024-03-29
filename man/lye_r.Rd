@@ -35,6 +35,6 @@ tau = 3 # You can get this value like: ami_out$tau[1,1]
 dim = 4 # You can get this value like: fnn_out$dim
 fs = 60
 
-lye_out = LyE_R(x = x, tau = tau, dim = dim, fs = fs)
+lye_out = lye_r(x = x, tau = tau, dim = dim, fs = fs)
 
 }

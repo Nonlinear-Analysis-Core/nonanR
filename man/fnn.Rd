@@ -21,7 +21,7 @@ fnn(x, tau, mmax, rtol, atol)
 The output of the algorithm is a list that includes:
 \itemize{
  \item \code{dE} A column vector of the percentages of false neighbors at the embedding dimensions up to \code{mmax}
- \item \code{dim} An integer reflecting the time delay at which there is the lowest number of false neighbors
+ \item \code{dim} An integer reflecting the embedding dimension at which there is the lowest number of false neighbors
 }
 }
 \description{

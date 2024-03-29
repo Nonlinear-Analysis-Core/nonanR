@@ -13,7 +13,7 @@
 #' dim = 4 # You can get this value like: fnn_out$dim
 #' fs = 60
 #'
-#' lye_out = LyE_R(x = x, tau = tau, dim = dim, fs = fs)
+#' lye_out = lye_r(x = x, tau = tau, dim = dim, fs = fs)
 #' 
 #' # Plot ami_out
 #' plot_lye_r(lye_out)

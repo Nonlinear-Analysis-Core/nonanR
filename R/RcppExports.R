@@ -123,6 +123,10 @@ ami <- function(x, y, L, bins) {
     .Call('_nonanR_ami', PACKAGE = 'nonanR', x, y, L, bins)
 }
 
+cppsr <- function(x, m) {
+    .Call('_nonanR_cppsr', PACKAGE = 'nonanR', x, m)
+}
+
 #' Detrended Fluctuation Analysis
 #' 
 #' Something a little more can go here
@@ -273,6 +277,44 @@ seq_int <- function(length) {
 #' 
 lye_r <- function(x, tau, dim, fs) {
     .Call('_nonanR_lye_r', PACKAGE = 'nonanR', x, tau, dim, fs)
+}
+
+#' Lyapunov Rosenstein Method
+#'
+#' Calculate Lyapunov exponent of a time series.
+#' 
+#' @param x - A single column time series.
+#' @param samp_rate- A double indicating the sampling rate of the time series.
+#' @param mean_freq - A double indicating the mean frequency of the time series.
+#' @param nsteps - Number of time steps to consider for calculating the Lyapunov exponent.
+#' @param regpoints - Number of points to include in fitting a line on the divergence plot.
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{
+#'  \item \code{lye} The Lyapunov exponent of the time series.
+#'  \item \code{time_steps} A vector of the indices of the time steps used to calculate the Lyapunov exponent.
+#'  \item \code{mean_distances} A vector of mean log distances used to calculate the Lyapunov exponent.
+#' } 
+#' @import Rcpp
+#' @export
+#'
+#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+#' 
+#' 
+#' @examples
+#'
+#' x = rnorm(1000)
+#' tau = 3 # You can get this value like: ami_out$tau[1,1]
+#' dim = 4 # You can get this value like: fnn_out$dim
+#' fs = 60
+#'
+#' lye_out = lye_rosenstein(x = x, tau = tau, dim = dim, fs = fs)
+#' 
+lye_rosenstein <- function(X, samp_rate, mean_freq, nsteps, regpoints) {
+    .Call('_nonanR_lye_rosenstein', PACKAGE = 'nonanR', X, samp_rate, mean_freq, nsteps, regpoints)
+}
+
+meanfreq <- function(signal, samp_rate) {
+    .Call('_nonanR_meanfreq', PACKAGE = 'nonanR', signal, samp_rate)
 }
 
 #' Multifractal Detrended Fluctuation Analysis

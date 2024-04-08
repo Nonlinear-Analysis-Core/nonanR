@@ -1,4 +1,3 @@
-#define ARMA_NO_DEBUG //decomment to speed up code once tested
 #include <RcppArmadillo.h>
 using namespace Rcpp;
 using namespace arma;

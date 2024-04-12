@@ -25,7 +25,7 @@ arma::vec mean_log_distance(const arma::uvec& step_time, const arma::uvec& nn, c
 //' @import Rcpp
 //' @export
 //'
-//' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+//' @details Lyapunov exponent is the rate of divergence between two neighboring points of a trajectory in a state space.
 //' 
 //' 
 //' @examples

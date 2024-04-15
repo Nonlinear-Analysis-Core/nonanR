@@ -29,7 +29,7 @@ The output of the algorithm is a list that includes:
 Calculate Lyapunov exponent of a time series.
 }
 \details{
-AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+Lyapunov exponent is the rate of divergence between two neighboring points of a trajectory in a state space.
 }
 \examples{
 

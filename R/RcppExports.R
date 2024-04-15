@@ -123,6 +123,27 @@ ami <- function(x, y, L, bins) {
     .Call('_nonanR_ami', PACKAGE = 'nonanR', x, y, L, bins)
 }
 
+#' Constant Embedding Parameters and Principal Component Analysis-based Phase Space Reconstruction
+#'
+#' Reconstruct attractor based on constant embedding parameters and principle component analysis.
+#' 
+#' @param x - A single column time series.
+#' @param m - An integer indicating the embedding dimension of the time series.
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{
+#'  \item \code{Yprime} The reconstructed attractor of the time series.
+#' } 
+#' @import Rcpp
+#' @export
+#'
+#' @details Constant embedding parameters and principal component analysis-based phase space reconstruction (CPPSR) is a specific version of phase space reconstruction that is applicable on low-dimensional systems (dimension < 3).
+#' 
+#' @examples
+#'
+#' x = sin(2*pi*10) + 2*cos(2*pi*5)
+#'
+#' Yprime = cppsr(x = x, m = 2)
+#' 
 cppsr <- function(x, m) {
     .Call('_nonanR_cppsr', PACKAGE = 'nonanR', x, m)
 }
@@ -297,7 +318,7 @@ lye_r <- function(x, tau, dim, fs) {
 #' @import Rcpp
 #' @export
 #'
-#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+#' @details Lyapunov exponent is the rate of divergence between two neighboring points of a trajectory in a state space.
 #' 
 #' 
 #' @examples
@@ -313,6 +334,30 @@ lye_rosenstein <- function(X, samp_rate, mean_freq, nsteps, regpoints) {
     .Call('_nonanR_lye_rosenstein', PACKAGE = 'nonanR', X, samp_rate, mean_freq, nsteps, regpoints)
 }
 
+#' Mean Frequency Estimation
+#'
+#' Calculate mean frequency of a time series.
+#' 
+#' @param signal - A single column time series.
+#' @param samp_rate- A double indicating the sampling rate of the time series.
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{
+#'  \item \code{mean_frequency} The mean frequency of the time series.
+#' } 
+#' @import Rcpp
+#' @export
+#'
+#' @details Mean frequency is needed for the Lyapunov exponent estimation.
+#' 
+#' 
+#' @examples
+#'
+#' fs = 100
+#' t = seq(0, 3, 1/fs)
+#' x = sin(2*pi*10) + 2*cos(2*pi*5)
+#'
+#' mean_frequency = meanfreq(signal = x, samp_rate = fs)
+#' 
 meanfreq <- function(signal, samp_rate) {
     .Call('_nonanR_meanfreq', PACKAGE = 'nonanR', signal, samp_rate)
 }

@@ -5,7 +5,7 @@
 \alias{healthy_middle}
 \title{Gaitprint data for a healthy middle-aged person}
 \format{
-A data frame with 10,000 rows and 18 columns:
+A data frame with 10,000 rows and 16 columns:
 \describe{
   \item{time}{Time in seconds. Data is sampled at 200Hz}
   \item{thigh_pitch_lt_deg}{Left thigh angle in reference to the direction of heading}
@@ -29,7 +29,7 @@ A data frame with 10,000 rows and 18 columns:
 healthy_middle
 }
 \description{
-A subset of data from the NONAN Gaitprint data repository. The age range for healthy young people is 35-54 years old. For details on the collections and data descriptions see the paper cited in the references. To get the full versions of the data please visit \url{https://springernature.figshare.com/collections/NONAN_GaitPrint_An_IMU_gait_database_of_healthy_young_adults/6415061/1}.
+A subset of data from the NONAN Gaitprint data repository. The age range for healthy young people is 36-55 years old. For details on the collections and data descriptions see the paper cited in the references. To get the full versions of the data please visit \url{https://springernature.figshare.com/collections/NONAN_GaitPrint_An_IMU_gait_database_of_healthy_young_adults/6415061/1}.
 }
 \references{
 \url{https://www.nature.com/articles/s41597-023-02704-z}

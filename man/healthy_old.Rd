@@ -5,7 +5,7 @@
 \alias{healthy_old}
 \title{Gaitprint data for a healthy older person}
 \format{
-A data frame with 10,000 rows and 18 columns:
+A data frame with 10,000 rows and 16 columns:
 \describe{
   \item{time}{Time in seconds. Data is sampled at 200Hz}
   \item{thigh_pitch_lt_deg}{Left thigh angle in reference to the direction of heading}

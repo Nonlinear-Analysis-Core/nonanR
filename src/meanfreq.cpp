@@ -25,7 +25,7 @@ arma::vec computePSD(const arma::vec& signal, double samp_rate);
 //'
 //' fs = 100
 //' t = seq(0, 3, 1/fs)
-//' x = sin(2*pi*10) + 2*cos(2*pi*5)
+//' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 //'
 //' mean_frequency = meanfreq(signal = x, samp_rate = fs)
 //' 

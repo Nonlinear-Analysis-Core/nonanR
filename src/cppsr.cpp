@@ -6,7 +6,7 @@ using namespace arma;
 // [[Rcpp::depends(RcppArmadillo)]]
 
 arma::mat phaseSpaceReconstruction(const arma::vec& x, int tau, int m);
-  
+
 //' Constant Embedding Parameters and Principal Component Analysis-based Phase Space Reconstruction
 //'
 //' Reconstruct attractor based on constant embedding parameters and principle component analysis.
@@ -24,33 +24,40 @@ arma::mat phaseSpaceReconstruction(const arma::vec& x, int tau, int m);
 //' 
 //' @examples
 //'
-//' x = sin(2*pi*10) + 2*cos(2*pi*5)
+//' t = seq(0, 1, 0.01)
+//' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
+//' tau = 1 # tau for CPPSR is fixed to tau = 1
+//' mmax = 12
+//' rtol = 15
+//' atol = 2
+//' 
+//' fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
 //'
-//' Yprime = cppsr(x = x, m = 2)
+//' y_cppsr= cppsr(x = x, m = fnn_out$dim)
 //' 
 // [[Rcpp::export]]
-arma::mat cppsr(const arma::vec& x, int m) {
-  // Assuming tau = 1 for these calculations
-  arma::mat Y = phaseSpaceReconstruction(x, 1, m);
-  
-  // Perform PCA on the reconstructed phase space matrix
-  // Directly using arma::princomp as it performs PCA
-  arma::mat coefficients;
-  arma::mat Yprime;
-  arma::vec latent;
-  arma::princomp(coefficients, Yprime, latent, Y);
-  
-  // Return the principal component scores, which are the PCA-transformed data
-  return Yprime;
-}
-
-arma::mat phaseSpaceReconstruction(const arma::vec& x, int tau, int m) {
-  int n = x.n_elem - (m - 1) * tau; // Calculate the number of rows in the reconstructed matrix
-  arma::mat Y(n, m);
-  
-  for (int i = 0; i < m; ++i) {
-    Y.col(i) = x.subvec(i * tau, i * tau + n - 1);
-  }
-  
-  return Y;
-}
+ arma::mat cppsr(const arma::vec& x, int m) {
+   // Assuming tau = 1 for these calculations
+   arma::mat Y = phaseSpaceReconstruction(x, 1, m);
+   
+   // Perform PCA on the reconstructed phase space matrix
+   // Directly using arma::princomp as it performs PCA
+   arma::mat coefficients;
+   arma::mat Yprime;
+   arma::vec latent;
+   arma::princomp(coefficients, Yprime, latent, Y);
+   
+   // Return the principal component scores, which are the PCA-transformed data
+   return Yprime;
+ }
+ 
+ arma::mat phaseSpaceReconstruction(const arma::vec& x, int tau, int m) {
+   int n = x.n_elem - (m - 1) * tau; // Calculate the number of rows in the reconstructed matrix
+   arma::mat Y(n, m);
+   
+   for (int i = 0; i < m; ++i) {
+     Y.col(i) = x.subvec(i * tau, i * tau + n - 1);
+   }
+   
+   return Y;
+ }

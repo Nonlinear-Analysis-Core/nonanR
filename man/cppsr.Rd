@@ -25,8 +25,15 @@ Constant embedding parameters and principal component analysis-based phase space
 }
 \examples{
 
-x = sin(2*pi*10) + 2*cos(2*pi*5)
+t = seq(0, 1, 0.01)
+x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
+tau = 1 # tau for CPPSR is fixed to tau = 1
+mmax = 12
+rtol = 15
+atol = 2
 
-Yprime = cppsr(x = x, m = 2)
+fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
+
+y_cppsr= cppsr(x = x, m = fnn_out$dim)
 
 }

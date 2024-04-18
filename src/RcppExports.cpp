@@ -105,14 +105,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // fgn_sim
-arma::vec fgn_sim(int n, double H);
-RcppExport SEXP _nonanR_fgn_sim(SEXP nSEXP, SEXP HSEXP) {
+arma::vec fgn_sim(int n, double H, double mean, double std);
+RcppExport SEXP _nonanR_fgn_sim(SEXP nSEXP, SEXP HSEXP, SEXP meanSEXP, SEXP stdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< double >::type H(HSEXP);
-    rcpp_result_gen = Rcpp::wrap(fgn_sim(n, H));
+    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< double >::type std(stdSEXP);
+    rcpp_result_gen = Rcpp::wrap(fgn_sim(n, H, mean, std));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -253,7 +255,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nonanR_ami", (DL_FUNC) &_nonanR_ami, 4},
     {"_nonanR_cppsr", (DL_FUNC) &_nonanR_cppsr, 2},
     {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},
-    {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 2},
+    {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 4},
     {"_nonanR_fnn", (DL_FUNC) &_nonanR_fnn, 5},
     {"_nonanR_poly_residuals", (DL_FUNC) &_nonanR_poly_residuals, 2},
     {"_nonanR_lm_c", (DL_FUNC) &_nonanR_lm_c, 2},

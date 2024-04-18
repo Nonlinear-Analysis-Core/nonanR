@@ -140,9 +140,16 @@ ami <- function(x, y, L, bins) {
 #' 
 #' @examples
 #'
-#' x = sin(2*pi*10) + 2*cos(2*pi*5)
+#' t = seq(0, 1, 0.01)
+#' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
+#' tau = 1 # tau for CPPSR is fixed to tau = 1
+#' mmax = 12
+#' rtol = 15
+#' atol = 2
+#' 
+#' fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
 #'
-#' Yprime = cppsr(x = x, m = 2)
+#' y_cppsr= cppsr(x = x, m = fnn_out$dim)
 #' 
 cppsr <- function(x, m) {
     .Call('_nonanR_cppsr', PACKAGE = 'nonanR', x, m)
@@ -206,7 +213,9 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
 #' Create a time series with a specified Hurst value. 
 #' 
 #' @param n The length of the resulting time series
-#' @param H The Hurst value of the resulting time series
+#' @param H The Hurst value of the resulting time series. This value should be between 0.01 and 0.99
+#' @param mean The desired mean of the resulting time series. Default is 0.
+#' @param mean The desired standard deviation of the resulting time series. Default is 1.
 #' 
 #' @returns The output of the algorithm is a numeric vector of length \code{n}.  
 #' 
@@ -216,8 +225,8 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
 #' @examples 
 #' 
 #' ts_out = fgn_sim(n = 1000, H = 0.7)
-fgn_sim <- function(n = 1000L, H = 0.7) {
-    .Call('_nonanR_fgn_sim', PACKAGE = 'nonanR', n, H)
+fgn_sim <- function(n, H, mean = 0, std = 1) {
+    .Call('_nonanR_fgn_sim', PACKAGE = 'nonanR', n, H, mean, std)
 }
 
 #' False Nearest Neighbor
@@ -323,12 +332,33 @@ lye_r <- function(x, tau, dim, fs) {
 #' 
 #' @examples
 #'
-#' x = rnorm(1000)
-#' tau = 3 # You can get this value like: ami_out$tau[1,1]
-#' dim = 4 # You can get this value like: fnn_out$dim
-#' fs = 60
+#' fs = 100
+#' t = seq(0, 10, 1/fs)
+#' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
+#' 
+#' mean_frequency = meanfreq(signal = x, samp_rate = fs)
+#' 
+#' mmax = 12
+#' rtol = 15
+#' atol = 2
+#' 
+#' time_delay = ami_out = ami(x, x, 50, 30)
+#' tau = time_delay$tau[1,1] # Optimal time delay estimated by AMI
+#' 
+#' embed = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
+#' dim = embed$dim # Optimal embedding dimension estimated by FNN
+#' 
+#' psr_length = length(x) - tau*(dim-1)
+#' start = 1
+#' stop = psr_length
+#' X = matrix(nrow = psr_length, ncol = dim)
+#' for (i in 1:dim) {
+#'   X[,i] = x[start:stop]
+#'   start = start + tau
+#'   stop = stop + tau
+#' }
 #'
-#' lye_out = lye_rosenstein(x = x, tau = tau, dim = dim, fs = fs)
+#' lye_out = lye_rosenstein(X = X, samp_rate = fs, mean_freq = mean_frequency, nsteps = 500, regpoints = 10:500)
 #' 
 lye_rosenstein <- function(X, samp_rate, mean_freq, nsteps, regpoints) {
     .Call('_nonanR_lye_rosenstein', PACKAGE = 'nonanR', X, samp_rate, mean_freq, nsteps, regpoints)
@@ -354,7 +384,7 @@ lye_rosenstein <- function(X, samp_rate, mean_freq, nsteps, regpoints) {
 #'
 #' fs = 100
 #' t = seq(0, 3, 1/fs)
-#' x = sin(2*pi*10) + 2*cos(2*pi*5)
+#' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 #'
 #' mean_frequency = meanfreq(signal = x, samp_rate = fs)
 #' 

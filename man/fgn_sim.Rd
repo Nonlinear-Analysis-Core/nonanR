@@ -4,12 +4,14 @@
 \alias{fgn_sim}
 \title{Fractional Gaussian Noise Simulation}
 \usage{
-fgn_sim(n = 1000L, H = 0.7)
+fgn_sim(n, H, mean = 0, std = 1)
 }
 \arguments{
 \item{n}{The length of the resulting time series}
 
-\item{H}{The Hurst value of the resulting time series}
+\item{H}{The Hurst value of the resulting time series. This value should be between 0.01 and 0.99}
+
+\item{mean}{The desired standard deviation of the resulting time series. Default is 1.}
 }
 \value{
 The output of the algorithm is a numeric vector of length \code{n}.

@@ -9,7 +9,9 @@ using namespace Rcpp;
 //' Create a time series with a specified Hurst value. 
 //' 
 //' @param n The length of the resulting time series
-//' @param H The Hurst value of the resulting time series
+//' @param H The Hurst value of the resulting time series. This value should be between 0.01 and 0.99
+//' @param mean The desired mean of the resulting time series. Default is 0.
+//' @param mean The desired standard deviation of the resulting time series. Default is 1.
 //' 
 //' @returns The output of the algorithm is a numeric vector of length \code{n}.  
 //' 
@@ -20,10 +22,14 @@ using namespace Rcpp;
 //' 
 //' ts_out = fgn_sim(n = 1000, H = 0.7)
 // [[Rcpp::export]]
- arma::vec fgn_sim(int n = 1000, double H = 0.7) {
+ arma::vec fgn_sim(int n, double H, double mean  = 0, double std = 1) {
    // Settings
-   double mean = 0;
-   double std = 1;
+   //double mean = 0;
+   //double std = 1;
+   
+   if (H < 0.01 | H > 0.99 ) {
+     stop("H not valid. Please enter a H value between 0.01 and 0.99");
+   }
    arma::vec ans(n); // Resulting FGN
 
    // Generate Sequence

@@ -8,6 +8,7 @@
 #' @importFrom cowplot plot_grid
 #' @importFrom data.table fread
 #' @importFrom janitor clean_names
+#' @importFrom RANN nn2
 #' @importFrom scales pretty_breaks
 #' @importFrom shinythemes shinytheme
 #' @importFrom stats fft

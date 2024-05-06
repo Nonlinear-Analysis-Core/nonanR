@@ -18,6 +18,7 @@ Imports:
     cowplot,
     data.table,
     janitor,
+    RANN,
     Rcpp (>= 1.0.11),
     reshape2,
     scales,

@@ -28,7 +28,7 @@ The output of the algorithm is a list that includes:
 Calculate the average mutual information of a time series.
 }
 \details{
-AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+FNN is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
 }
 \examples{
 

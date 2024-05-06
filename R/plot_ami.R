@@ -33,8 +33,8 @@ plot_ami = function(x){
     geom_point(size = 2) +
     geom_point(data = min_tau, aes(x = min_tau[,1], y = min_tau[,2]), size = 4, color = "#C8102E") + 
     geom_label(label = paste0("Tau = ", round(min_tau[,2], 3),  "\n", "Lag = ", min_tau[,1]), 
-                              x = min_tau[,1] + 5, 
-                              y = min_tau[,2] *5, 
+                              x = ceiling(3/4 * nrow(dat)), 
+                              y = min_tau[,2] * 5, 
                label.size = NA, 
                fill = "lightgray") +
     labs(title = "AMI vs Lag", 

@@ -39,4 +39,18 @@ fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
 # Plot fnn_out
 plot_fnn(fnn_out)
 
+## Second example
+# Generate example time series data
+x = rnorm(1000)
+
+# Function paramters
+maxDim = 10
+delay = 1 # You can get this value like: ami_out$tau[1,1]
+rtol = 10
+atol = 15
+fnn_tol = 0.01
+
+# Compute false nearest neighbors
+fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, atol = atol, fnn_tol = fnn_tol)
+
 }

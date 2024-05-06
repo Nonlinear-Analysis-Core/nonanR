@@ -246,7 +246,7 @@ fgn_sim <- function(n, H, mean = 0, std = 1) {
 #' @import Rcpp
 #' @export
 #'
-#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+#' @details FNN is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
 #' 
 #' 
 #' @examples

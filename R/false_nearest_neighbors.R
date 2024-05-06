@@ -15,18 +15,24 @@
 #'   \item{dim}{Embedding dimension at which the percentage of FNN drops below fnn_tol}
 #' }
 #'
-#' @importFrom RANN nn2
+#' @details
+#' FNN is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+#' 
 #'
 #' @examples
 #' # Generate example time series data
-#' data <- rnorm(1000)
+#' x = rnorm(1000)
+#' 
+#' # Function paramters
+#' maxDim = 10
+#' delay = 1 # You can get this value like: ami_out$tau[1,1]
+#' rtol = 10
+#' atol = 15
+#' fnn_tol = 0.01
 #'
 #' # Compute false nearest neighbors
-#' result <- false_nearest_neighbors(data, maxDim = 10, delay = 1, rtol = 10, atol = 15, fnn_tol = 0.01)
+#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, atol = atol, fnn_tol = fnn_tol)
 #'
-#' # Print the results
-#' print(result$fnn)
-#' print(result$dim)
 #'
 #' @export
 false_nearest_neighbors <- function(data, maxDim, delay, rtol, atol, fnn_tol) {

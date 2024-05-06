@@ -31,6 +31,20 @@
 #' # Plot fnn_out
 #' plot_fnn(fnn_out)
 #' 
+#' ## Second example
+#' # Generate example time series data
+#' x = rnorm(1000)
+#' 
+#' # Function paramters
+#' maxDim = 10
+#' delay = 1 # You can get this value like: ami_out$tau[1,1]
+#' rtol = 10
+#' atol = 15
+#' fnn_tol = 0.01
+#'
+#' # Compute false nearest neighbors
+#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, atol = atol, fnn_tol = fnn_tol)
+#' 
 #' @export
 plot_fnn = function(x){
   
@@ -39,14 +53,14 @@ plot_fnn = function(x){
   #emb_dim = as.numeric(x[2]) # embedding dimension
   emb_dim = cbind.data.frame(as.numeric(x[2]), dat[as.numeric(x[2]),])
   
-  ggplot(dat, aes(x = 1:nrow(dat), y = dat[,1])) + 
+  ggplot(dat, aes(x = 1:nrow(dat), y = dat[,1] * 100)) + 
     geom_line(linewidth = 1) +
     geom_point(size = 2) +
     geom_point(data = emb_dim, aes(x = emb_dim[1,1], y = emb_dim[1,2]), size = 4, color = "#C8102E") + 
     scale_x_continuous(breaks = pretty_breaks(n = nrow(dat) + 1)) +
     geom_label(label = paste0("dim = ", emb_dim[1,1],  "\n", "%FNN = ", round(emb_dim[1,2], 3)), 
                x = nrow(dat) - 1, 
-               y = emb_dim[1,2] *1.3, 
+               y = 30, 
                label.size = NA, 
                fill = "lightgray") +
     labs(title = "False Nearest Neighbors", 

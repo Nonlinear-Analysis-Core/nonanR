@@ -23,7 +23,7 @@ arma::mat psr(arma::vec x, int m, int tao, int npoints); // Phase space reconstr
 //' @import Rcpp
 //' @export
 //'
-//' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+//' @details FNN is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
 //' 
 //' 
 //' @examples

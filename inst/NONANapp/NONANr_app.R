@@ -546,12 +546,13 @@ server <- function(input, output) {
       
       w = ceiling(nrow(dfa_dat()) * 0.03) # calculate the number of bins
       n = colnames(dfa_dat())[1] # Get the column name to use below
-      p = ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
-        geom_histogram( color="white", fill="black", bins = w) +
-        labs(title = paste("Histogram of ", input$dfay), 
+      ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        labs(title = paste("Density Plot of", input$dfay), 
              x = input$dfay) +
         theme_nonan()
-      p
+      
       
     })
   }) # observeEvent
@@ -667,8 +668,9 @@ server <- function(input, output) {
       w = ceiling(nrow(mfdfa_dat()) * 0.03) # calculate the number of bins
       n = colnames(mfdfa_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(mfdfa_dat()), aes(x = .data[[n]])) +
-        geom_histogram( color="white", fill="black", bins = w) +
-        labs(title = paste("Histogram of ", input$mfdfay), 
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        labs(title = paste("Density Plot of ", input$mfdfay), 
              x = input$mfdfay) +
         theme_nonan()
       
@@ -793,8 +795,9 @@ server <- function(input, output) {
       w = ceiling(nrow(bayesH_dat()) * 0.03) # calculate the number of bins
       n = colnames(bayesH_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(bayesH_dat()), aes(x = .data[[n]])) +
-        geom_histogram( color="white", fill="black", bins = w) +
-        labs(title = paste("Histogram of ", input$bayesHy),
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        labs(title = paste("Density Plot of ", input$bayesHy),
              x = input$bayesHy) +
         theme_nonan()
     })
@@ -894,8 +897,9 @@ server <- function(input, output) {
       w = ceiling(nrow(SE_dat()) * 0.03) # calculate the number of bins
       n = colnames(SE_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(SE_dat()), aes(x = .data[[n]])) +
-        geom_histogram( color="white", fill="black", bins = w) +
-        labs(title = paste("Histogram of ", input$SEy), 
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        labs(title = paste("Density Plot of ", input$SEy), 
              x = input$SEy) +
         theme_nonan()
     })
@@ -995,8 +999,9 @@ server <- function(input, output) {
       w = ceiling(nrow(AE_dat()) * 0.03) # calculate the number of bins
       n = colnames(AE_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(AE_dat()), aes(x = .data[[n]])) +
-        geom_histogram( color="white", fill="black", bins = w) +
-        labs(title = paste("Histogram of ", input$AEy), 
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        labs(title = paste("Density Plot of ", input$AEy), 
              x = input$AEy) +
         theme_nonan()
       
@@ -1109,8 +1114,9 @@ server <- function(input, output) {
       w = ceiling(nrow(SymE_dat()) * 0.03) # calculate the number of bins
       n = colnames(SymE_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(SymE_dat()), aes(x = .data[[n]])) +
-        geom_histogram( color="white", fill="black", bins = w) +
-        labs(title = paste("Histogram of ", input$SymEy), 
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        labs(title = paste("Density Plot of ", input$SymEy), 
              x = input$SymEy) +
         theme_nonan()
       
@@ -1233,8 +1239,9 @@ server <- function(input, output) {
       w = ceiling(nrow(rqa_dat()) * 0.03) # calculate the number of bins
       n = colnames(rqa_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(rqa_dat()), aes(x = .data[[n]])) +
-        geom_histogram( color="white", fill="black", bins = w) +
-        labs(title = paste("Histogram of ", input$rqay), 
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        labs(title = paste("Density Plot of ", input$rqay), 
              x = input$rqay) +
         theme_nonan()
       
@@ -1360,8 +1367,9 @@ server <- function(input, output) {
   #     w = ceiling(nrow(dfa_dat()) * 0.03) # calculate the number of bins
   #     n = colnames(dfa_dat())[1] # Get the column name to use below
   #     ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
-  #       geom_histogram( color="white", fill="black", bins = w) +
-  #       labs(title = paste("Histogram of ", input$dfay), 
+  #      # geom_histogram( color="white", fill="black", bins = w) +
+  #       geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+  #       labs(title = paste("Density Plot of ", input$dfay), 
   #            x = input$dfay) +
   #       theme_nonan()
   #     

@@ -21,7 +21,8 @@ tryCatch({
     stop("No data frame in global environment. Please load in data.")
   } else {
     # If there are data frames, continue with your code
-    loadedData <- data()$results[, 3]
+    #loadedData <- data()$results[, 3]
+    print("Using loaded data")
   }
 }, error = function(e) {
   # If an error occurs (i.e., no data frames found), return custom error message
@@ -66,7 +67,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                h4(strong("DFA")),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoice", "Select Data:", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dataChoice", "Select Data:", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
                                                    selectInput("dfax", "Select X axis:", choices = NULL),
                                                    selectInput("dfay", "Select Y axis:", choices = NULL),
                                                    numericInput("order", "Order:", value = 1),
@@ -114,7 +115,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                h4(strong("MFDFA")),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoiceMFDFA", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dataChoiceMFDFA", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
                                                    selectInput("mfdfax", "Select X axis:", choices = NULL),
                                                    selectInput("mfdfay", "Select Y axis:", choices = NULL),
                                                    numericInput("q", "Select a q order:", value = 3, step = 1), 
@@ -168,7 +169,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                h2("This is in progress and will be included in a future release."),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoicebayesH", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dataChoicebayesH", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
                                                    selectInput("bayesHx", "Select X axis:", choices = NULL),
                                                    selectInput("bayesHy", "Select Y axis:", choices = NULL),
                                                    numericInput("bayesN", "Posterior Simulations:", value = 50, step = 1, min = 1), 
@@ -224,8 +225,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                h4(strong("Sample Entropy")),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoice1", "select Data", choices = list("Your Data" = c(myDataFrames), 
-                                                                                                            "R Datasets" = c(loadedData), 
+                                                   selectInput("dataChoice1", "select Data", choices = list("Your Data" = c(myDataFrames) , 
                                                                                                             selected = NULL)),
                                                    selectInput("SEx", "Select X axis", choices = NULL),
                                                    selectInput("SEy", "Select Y axis", choices = NULL),
@@ -271,7 +271,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                sidebarLayout(
                                                  sidebarPanel(
                                                    selectInput("dataChoice2", "select Data", choices = list("Your Data" = c(myDataFrames), 
-                                                                                                            "R Datasets" = c(loadedData), 
                                                                                                             selected = NULL)),
                                                    selectInput("AEx", "Select X axis", choices = NULL),
                                                    selectInput("AEy", "Select Y axis", choices = NULL),
@@ -316,7 +315,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                sidebarLayout(
                                                  sidebarPanel(
                                                    selectInput("dataChoice3", "select Data", choices = list("Your Data" = c(myDataFrames), 
-                                                                                                            "R Datasets" = c(loadedData), 
                                                                                                             selected = NULL)),
                                                    selectInput("SymEx", "Select X axis", choices = NULL),
                                                    selectInput("SymEy", "Select Y axis", choices = NULL),
@@ -366,7 +364,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                h4(strong("RQA")),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoice4", "Select Data:", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dataChoice4", "Select Data:", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
                                                    selectInput("rqax", "Select X axis:", choices = NULL),
                                                    selectInput("rqay", "Select Y axis:", choices = NULL),
                                                    numericInput("embed", "Embedding Dimension:", value = 1),
@@ -378,7 +376,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    numericInput("twin", "Theiler Window:", value = 0, step = 0.1),
                                                    numericInput("radius", "Radius:", value = 0.0001, step = 0.0001, min = 0),
                                                    # numericInput("whiteline", "Rescale:", value = 2, step = 0.1),
-                                                   numericInput("recpt", "Plot:", value = 1, step = 1, min = 0, max = 1),
+                                                   # numericInput("recpt", "Plot:", value = 1, step = 1, min = 0, max = 1),
                                                    # fluidRow(
                                                    #   column(width = 7, 
                                                    #          checkboxInput(inputId = "psr_rqa", 
@@ -427,7 +425,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                h2("This is in progress and will be included in a future release."),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoiceLYE", "Select Data", choices = list("Your Data" = c(myDataFrames), "R Datasets" = c(loadedData), selected = NULL)),
+                                                   selectInput("dataChoiceLYE", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
                                                    selectInput("lyex", "Select X axis:", choices = NULL),
                                                    selectInput("lyey", "Select Y axis:", choices = NULL),
                                                    numericInput("dim", "Embedding Dimension:", value = 3, step = 1), 
@@ -727,71 +725,71 @@ server <- function(input, output) {
   #})
   
   ## bayesH -----------------------------------------------------------------
-
+  
   # get a list of the column names in the data frame
   n_bayes = reactive({
     names(get(input$dataChoicebayesH))
   })
-
+  
   # Update x and y choices based on the selected dataframe
   observeEvent(input$dataChoicebayesH, {
     updateSelectInput(inputId = "bayesHx", choices = n_bayes())
     updateSelectInput(inputId = "bayesHy", choices = n_bayes(), selected = n_bayes()[2])
   })
-
-
+  
+  
   # Select the desired data frame and by default the second column for analysis
   bayesH_dat = reactive({
     get(input$dataChoicebayesH) |>
       select(all_of(input$bayesHy)) |>
       as.matrix()
   })
-
+  
   # plot the time series of the data
   output$bayesHTS <- renderPlotly({
-
+    
     plot_dat = get(input$dataChoicebayesH)
     # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SEy]], type = 'scatter', mode = 'lines',
     #         color = I('black')) %>% # Aesthetics for the plot
     #   layout(title = list(text = paste0("Time series of ", input$SEy)),
     #          xaxis = list(title = "data Index"),
     #          yaxis = list(title = paste0(input$SEy)))
-
+    
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$bayesHy]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$bayesHy),
            x = "Index") +
       theme_nonan()
-
+    
   })
-
+  
   # Entropy calculation
   bayesHresult <- eventReactive(input$gobayesH, {
     #bayesH(bayesH_dat(), n = input$bayesN)
     rnorm(input$bayesN)
   })
-
+  
   # Print out the sample entropy results
   observeEvent(input$gobayesH, {
     output$bayesHResults <- renderPrint({
       cat("bayesH:", bayesHresult())
     })
   })
-
+  
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportbayesH, {
     assign(input$exportbayesHname, bayesHresult(), envir = globalenv())
-
+    
     output$bayesHResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
     }) # renderPrint
   }) # observeEvent
-
+  
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$gobayesH, {
     output$histogram_bayesH <- renderPlot({
       #hist(SE_dat(), main = paste("Histogram of ", input$SEy), xlab = input$SEy)
-
+      
       w = ceiling(nrow(bayesH_dat()) * 0.03) # calculate the number of bins
       n = colnames(bayesH_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(bayesH_dat()), aes(x = .data[[n]])) +
@@ -802,16 +800,16 @@ server <- function(input, output) {
         theme_nonan()
     })
   }) # observeEvent
-
+  
   # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$gobayesH, {
     output$autocorr_bayesH <-  renderPlot({
-
+      
       a = acf(bayesH_dat(), plot = F)
       conf.level <- 0.95 # set this at 0.95 for 95% confidence
       ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(bayesH_dat())) # calculate the confidence intervals
       df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
-
+      
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
         geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
@@ -819,10 +817,10 @@ server <- function(input, output) {
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$bayesHy)) +
         theme_nonan() # add the nonan plot theme on
-
+      
     })
   }) # observeEvent
-
+  
   #Print the data so we can see what column is actually being selected. For debugging only
   output$SEdatHead <- renderTable({
     head(get(input$dataChoice1))
@@ -1199,7 +1197,7 @@ server <- function(input, output) {
     
     rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = input$embed, delay = input$delay, normalize = input$normalize,
         rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin,
-        radius = input$radius, whiteline = 0, recpt = input$recpt)
+        radius = input$radius, whiteline = 0, recpt = 1)
     
     # if (input$psr_rqa && input$lag_rqa){
     #   

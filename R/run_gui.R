@@ -21,6 +21,10 @@ runGUI <- function() {
     stop("Could not find example directory. Try re-installing `nonanR`.", call. = FALSE)
   }
   
-  shiny::runApp(appDir, display.mode = "normal")
-
+  suppressWarnings(
+    suppressMessages(
+      shiny::runApp(appDir, display.mode = "normal")
+    )
+  )
+  
 }

@@ -19,18 +19,25 @@ using namespace arma;
 //' @import Rcpp
 //' @export
 //'
-//' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+//' @details Average Mutual Information (AMI) is an integral part of state space reconstruction, used to find the optimal time delay (tau) of a system. Tau is needed in algorithms such as Recurrence Quantification Analysis (RQA) and Lyapunov Exponents (LyE). AMI measures the probability that some information in one time series is shared with the same series delayed by one time step. Typically, this step precedes the False Nearest Neighbor (FNN) analysis. For practical implementation, NONAN prefers a histogram-based approach due to its relative speed compared to kernel density methods. Important consideration should be given to factors such as the length of the time series, the presence of artifacts in the data, additional noise, and the sampling rate when using this function.
+//' The formula for AMI is as follows: 
 //' 
+//' \eqn{I(k) = \sum_{t = 1}^{n} P(x_t, x_{t+k}) log_2 [\frac{P(x_t, x_{t+k})}{P(x_t)P(x_{t+k})} ]}
+//' 
+//' Where \eqn{P(x_t)} is the probability density function of the original time series, \eqn{P(x_{t+k})} is the probability density function of the time series shifted by a time delay \eqn{t}, and \eqn{P(x_t, x_{t+k})} is the joint probability density function of the original time series and the time series shifted by \eqn{t}. 
+//' 
+//' @references 
+//' Scott, D. W. (1979). On optimal and data-based histograms. Biometrika, 66(3), 605–610. https://doi.org/10.1093/biomet/66.3.605
+//' 
+//' Raffalt, P. C., Senderling, B., & Stergiou, N. (2020). Filtering affects the calculation of the largest Lyapunov exponent. Computers in Biology and Medicine, 122, 103786. https://doi.org/10.1016/j.compbiomed.2020.103786
 //' 
 //' @examples
-//'
 //' x = rnorm(1000)
 //' y = x
 //' L = 50
 //' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
 //'
 //' ami_out = ami(x, y, L, bins)
-//'
 //'
 // [[Rcpp::export]]
 List ami(arma::colvec x, arma::colvec y, int L, int bins) {

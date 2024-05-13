@@ -30,7 +30,15 @@ A list containing the following elements:
 Computes the false nearest neighbors for a given time series.
 }
 \details{
-FNN is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+Finding the embedding dimensions is typically the second step in the phase space reconstruction. This can be done using the False Nearest Neighbors which minimizes the number of false neighbors as the attractor (input time series) is unfolded at increasingly higher and higher dimensions. In the package, FNN follows the calculation of average mutual information (AMI), where the output tau serves as an input into this function. 
+
+The False Nearest Neighbors algorithm calculates the distance between a vector and its nearest neighbor in an m-dimensional space, repeating the process for each subsequent dimension by incrementing m by 1. True neighbors exhibit minimal change in distance between dimensions d and d+1. The algorithm then computes the ratio of the difference in distances between vectors at dimensions d and d+1 to the distance at dimension d. If this ratio exceeds a predefined threshold, `rtol`, the vector is determined to be a false neighbor. As the dimension increases, the percentage of false neighbors should decrease as the dynamics of the attractor unfold. The first dimension where the percentage drops to 0 (or very close to it) is chosen as the optimal embedding dimension for the data.
+
+The calculation for False Nearest Neighbors can be represented by the following equation:
+
+\eqn{\frac{||\hat{V}(t) - \hat{V}^{NN}t||^2 - || V(t) - V^{NN}(t)||^2} {||V(t) - V^{NN}(t)||} >R_{tol}}
+
+Where \eqn{||V(t) – V(t)^{NN}||} is the distance between two vectors, and \eqn{||\hat{V}(t) – \hat{V}(t)^{NN}||} is the distance between the vector and its neighbor in d+1 dimensional space. If the vectors truly are neighbors, the results of \eqn{||\hat{V}(t) - \hat{V}^{NN}t||^2 - || V(t) - V^{NN}(t)||^2} should be constant. If a false neighbor is detected and is greater than \eqn{R_{tol} = 15} then the vector is determined to be a false neighbor.
 }
 \examples{
 # Generate example time series data

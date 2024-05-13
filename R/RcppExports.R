@@ -19,7 +19,17 @@ ApproximateEntropyTest <- function(x, dim, R) {
 #' @useDynLib nonanR
 #' @export
 #' 
-#' @details Here are some additional details about approximate entropy.
+#' @details
+#' Approximate entropy is a measure of a systems regularity or predictability. First introduced in 1991 by Steven Pincus as a way to quantify the predictability of heart rate variability, it has since been used in a wider physiology research and even extended to economics. Approximate entropy is aims to overcome the effects of noise in the time series.
+#' 
+#' The steps in the algorithm are generally rather simple. The time series is divided up into vectors of length \eqn{m}. Each vector is then compared to the original time series as well as all other vectors with matches to similar ones counted. In this function Euclidean distance is used to match vector within the tolerance specified by \eqn{r}. The log average of the counts is taken and the process is repeated for vectors of length \eqn{m+1}. The final step is subtracting the conditional probability of \eqn{m + 1} from that of \eqn{m}. 
+#' 
+#' Approximate entropy is measured in bits and is bound between 0 bits (entirely predictable) to 2 bits (completely random). Approximate entropy has been found to be inconsistent in its results, very data hungry and also contains a bias towards more predictability as a result of the self-match.
+#' 
+#' @references
+#' Pincus, S. M. (1991). Approximate entropy as a measure of system complexity. Proceedings of the National Academy of Sciences, 88(6), 2297–2301. https://doi.org/10.1073/pnas.88.6.2297
+#' 
+#' Yentes, J. M., & Raffalt, P. C. (2021). Entropy Analysis in Gait Research: Methodological Considerations and Recommendations. Annals of Biomedical Engineering, 49(3), 979–990. https://doi.org/10.1007/s10439-020-02616-8
 #' 
 #' @examples
 #' 

@@ -7,6 +7,8 @@
 lye_rosenstein(X, samp_rate, mean_freq, nsteps, regpoints)
 }
 \arguments{
+\item{samp_rate}{- A double indicating the sampling rate of the time series.}
+
 \item{mean_freq}{- A double indicating the mean frequency of the time series.}
 
 \item{nsteps}{- Number of time steps to consider for calculating the Lyapunov exponent.}
@@ -14,8 +16,6 @@ lye_rosenstein(X, samp_rate, mean_freq, nsteps, regpoints)
 \item{regpoints}{- Number of points to include in fitting a line on the divergence plot.}
 
 \item{x}{- A single column time series.}
-
-\item{samp_rate-}{A double indicating the sampling rate of the time series.}
 }
 \value{
 The output of the algorithm is a list that includes:
@@ -35,15 +35,15 @@ Lyapunov exponent is the rate of divergence between two neighboring points of a 
 
 fs = 100
 t = seq(0, 10, 1/fs)
-x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
+s_wave = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 
-mean_frequency = meanfreq(signal = x, samp_rate = fs)
+mean_frequency = meanfreq(signal = s_wave, samp_rate = fs)
 
 mmax = 12
 rtol = 15
 atol = 2
 
-time_delay = ami_out = ami(x, x, 50, 30)
+time_delay = ami(x, x, 50, 30)
 tau = time_delay$tau[1,1] # Optimal time delay estimated by AMI
 
 embed = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
@@ -59,6 +59,6 @@ for (i in 1:dim) {
   stop = stop + tau
 }
 
-lye_out = lye_rosenstein(X = X, samp_rate = fs, mean_freq = mean_frequency, nsteps = 500, regpoints = 10:500)
+lye_out = lye_rosenstein(x = z, samp_rate = fs, mean_freq = mean_frequency, nsteps = 500, regpoints = 10:500)
 
 }

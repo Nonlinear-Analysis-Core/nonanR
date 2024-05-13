@@ -11,7 +11,7 @@ using namespace Rcpp;
 //' @param n The length of the resulting time series
 //' @param H The Hurst value of the resulting time series. This value should be between 0.01 and 0.99
 //' @param mean The desired mean of the resulting time series. Default is 0.
-//' @param mean The desired standard deviation of the resulting time series. Default is 1.
+//' @param std The desired standard deviation of the resulting time series. Default is 1.
 //' 
 //' @returns The output of the algorithm is a numeric vector of length \code{n}.  
 //' 

@@ -12,7 +12,7 @@ arma::vec mean_log_distance(const arma::uvec& step_time, const arma::uvec& nn, c
 //' Calculate Lyapunov exponent of a time series.
 //' 
 //' @param x - A single column time series.
-//' @param samp_rate- A double indicating the sampling rate of the time series.
+//' @param samp_rate - A double indicating the sampling rate of the time series.
 //' @param mean_freq - A double indicating the mean frequency of the time series.
 //' @param nsteps - Number of time steps to consider for calculating the Lyapunov exponent.
 //' @param regpoints - Number of points to include in fitting a line on the divergence plot.
@@ -32,15 +32,15 @@ arma::vec mean_log_distance(const arma::uvec& step_time, const arma::uvec& nn, c
 //'
 //' fs = 100
 //' t = seq(0, 10, 1/fs)
-//' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
+//' s_wave = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 //' 
-//' mean_frequency = meanfreq(signal = x, samp_rate = fs)
+//' mean_frequency = meanfreq(signal = s_wave, samp_rate = fs)
 //' 
 //' mmax = 12
 //' rtol = 15
 //' atol = 2
 //' 
-//' time_delay = ami_out = ami(x, x, 50, 30)
+//' time_delay = ami(x, x, 50, 30)
 //' tau = time_delay$tau[1,1] # Optimal time delay estimated by AMI
 //' 
 //' embed = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
@@ -56,7 +56,7 @@ arma::vec mean_log_distance(const arma::uvec& step_time, const arma::uvec& nn, c
 //'   stop = stop + tau
 //' }
 //'
-//' lye_out = lye_rosenstein(X = X, samp_rate = fs, mean_freq = mean_frequency, nsteps = 500, regpoints = 10:500)
+//' lye_out = lye_rosenstein(x = z, samp_rate = fs, mean_freq = mean_frequency, nsteps = 500, regpoints = 10:500)
 //' 
 // [[Rcpp::export]]
 List lye_rosenstein(const arma::mat& X, double samp_rate, double mean_freq, int nsteps, const arma::uvec& regpoints) {

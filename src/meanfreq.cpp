@@ -10,7 +10,7 @@ arma::vec computePSD(const arma::vec& signal, double samp_rate);
 //' Calculate mean frequency of a time series.
 //' 
 //' @param signal - A single column time series.
-//' @param samp_rate- A double indicating the sampling rate of the time series.
+//' @param samp_rate - A double indicating the sampling rate of the time series.
 //' @returns The output of the algorithm is a list that includes:
 //' \itemize{
 //'  \item \code{mean_frequency} The mean frequency of the time series.

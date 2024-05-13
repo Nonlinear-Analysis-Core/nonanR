@@ -232,7 +232,7 @@ dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
 #' @param n The length of the resulting time series
 #' @param H The Hurst value of the resulting time series. This value should be between 0.01 and 0.99
 #' @param mean The desired mean of the resulting time series. Default is 0.
-#' @param mean The desired standard deviation of the resulting time series. Default is 1.
+#' @param std The desired standard deviation of the resulting time series. Default is 1.
 #' 
 #' @returns The output of the algorithm is a numeric vector of length \code{n}.  
 #' 
@@ -331,7 +331,7 @@ lye_r <- function(x, tau, dim, fs) {
 #' Calculate Lyapunov exponent of a time series.
 #' 
 #' @param x - A single column time series.
-#' @param samp_rate- A double indicating the sampling rate of the time series.
+#' @param samp_rate - A double indicating the sampling rate of the time series.
 #' @param mean_freq - A double indicating the mean frequency of the time series.
 #' @param nsteps - Number of time steps to consider for calculating the Lyapunov exponent.
 #' @param regpoints - Number of points to include in fitting a line on the divergence plot.
@@ -351,15 +351,15 @@ lye_r <- function(x, tau, dim, fs) {
 #'
 #' fs = 100
 #' t = seq(0, 10, 1/fs)
-#' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
+#' s_wave = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 #' 
-#' mean_frequency = meanfreq(signal = x, samp_rate = fs)
+#' mean_frequency = meanfreq(signal = s_wave, samp_rate = fs)
 #' 
 #' mmax = 12
 #' rtol = 15
 #' atol = 2
 #' 
-#' time_delay = ami_out = ami(x, x, 50, 30)
+#' time_delay = ami(x, x, 50, 30)
 #' tau = time_delay$tau[1,1] # Optimal time delay estimated by AMI
 #' 
 #' embed = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
@@ -375,7 +375,7 @@ lye_r <- function(x, tau, dim, fs) {
 #'   stop = stop + tau
 #' }
 #'
-#' lye_out = lye_rosenstein(X = X, samp_rate = fs, mean_freq = mean_frequency, nsteps = 500, regpoints = 10:500)
+#' lye_out = lye_rosenstein(x = z, samp_rate = fs, mean_freq = mean_frequency, nsteps = 500, regpoints = 10:500)
 #' 
 lye_rosenstein <- function(X, samp_rate, mean_freq, nsteps, regpoints) {
     .Call('_nonanR_lye_rosenstein', PACKAGE = 'nonanR', X, samp_rate, mean_freq, nsteps, regpoints)
@@ -386,7 +386,7 @@ lye_rosenstein <- function(X, samp_rate, mean_freq, nsteps, regpoints) {
 #' Calculate mean frequency of a time series.
 #' 
 #' @param signal - A single column time series.
-#' @param samp_rate- A double indicating the sampling rate of the time series.
+#' @param samp_rate - A double indicating the sampling rate of the time series.
 #' @returns The output of the algorithm is a list that includes:
 #' \itemize{
 #'  \item \code{mean_frequency} The mean frequency of the time series.

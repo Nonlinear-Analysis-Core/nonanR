@@ -9,7 +9,7 @@ meanfreq(signal, samp_rate)
 \arguments{
 \item{signal}{- A single column time series.}
 
-\item{samp_rate-}{A double indicating the sampling rate of the time series.}
+\item{samp_rate}{- A double indicating the sampling rate of the time series.}
 }
 \value{
 The output of the algorithm is a list that includes:

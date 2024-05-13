@@ -11,7 +11,9 @@ fgn_sim(n, H, mean = 0, std = 1)
 
 \item{H}{The Hurst value of the resulting time series. This value should be between 0.01 and 0.99}
 
-\item{mean}{The desired standard deviation of the resulting time series. Default is 1.}
+\item{mean}{The desired mean of the resulting time series. Default is 0.}
+
+\item{std}{The desired standard deviation of the resulting time series. Default is 1.}
 }
 \value{
 The output of the algorithm is a numeric vector of length \code{n}.

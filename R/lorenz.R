@@ -13,8 +13,6 @@
 #'
 #' @returns The output of the algorithm is a data frame that contains the synthesized Lorenz attractor. The first column is the time vector. The second column is the x component of the Lorenz attractor. The third column is the y component of the Lorenz attractor. The fourth column is the z component of the Lorenz attractor.
 #'
-#' @import deSolve
-#'
 #' @details The most commonly investigated set of control parameters are sigma = 10, rho = 28, beta = 8/3. The most commonly investigated set of initial condition is x0 = 0, y0 = -0.01, z0 = 9.
 #'
 #' This function requires "deSolve" library.
@@ -33,7 +31,7 @@
 #' L = 50
 #' bins = 0 # If you do not want to specify a bin number, you can set it to 0.
 #' ami_out = ami(x, y, L, bins) # Optimal time delay is ami_out$tau[1,1]
-#' tau = ami_out[1,1]
+#' tau = ami_out$tau[1,1]
 #' 
 #' # Compute RQA
 #' x.recpt = rqa(x, x, 3, tau, 0, 1, 2, 2, 0, .0001, 0, 1)

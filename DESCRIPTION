@@ -17,6 +17,7 @@ Depends:
 Imports: 
     cowplot,
     data.table,
+    deSolve,
     janitor,
     RANN,
     Rcpp (>= 1.0.11),

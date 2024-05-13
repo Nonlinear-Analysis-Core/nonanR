@@ -57,7 +57,7 @@ y = lorenz.df$x0
 L = 50
 bins = 0 # If you do not want to specify a bin number, you can set it to 0.
 ami_out = ami(x, y, L, bins) # Optimal time delay is ami_out$tau[1,1]
-tau = ami_out[1,1]
+tau = ami_out$tau[1,1]
 
 # Compute RQA
 x.recpt = rqa(x, x, 3, tau, 0, 1, 2, 2, 0, .0001, 0, 1)

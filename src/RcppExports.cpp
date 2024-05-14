@@ -77,6 +77,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bayesH
+arma::vec bayesH(arma::vec x, unsigned int n);
+RcppExport SEXP _nonanR_bayesH(SEXP xSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(bayesH(x, n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cppsr
 arma::mat cppsr(const arma::vec& x, int m);
 RcppExport SEXP _nonanR_cppsr(SEXP xSEXP, SEXP mSEXP) {
@@ -253,6 +265,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nonanR_Ent_Samp", (DL_FUNC) &_nonanR_Ent_Samp, 3},
     {"_nonanR_Ent_Sym", (DL_FUNC) &_nonanR_Ent_Sym, 3},
     {"_nonanR_ami", (DL_FUNC) &_nonanR_ami, 4},
+    {"_nonanR_bayesH", (DL_FUNC) &_nonanR_bayesH, 2},
     {"_nonanR_cppsr", (DL_FUNC) &_nonanR_cppsr, 2},
     {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},
     {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 4},

@@ -140,6 +140,34 @@ ami <- function(x, y, L, bins) {
     .Call('_nonanR_ami', PACKAGE = 'nonanR', x, y, L, bins)
 }
 
+#' Bayesian Inference of Hurst Exponent
+#' 
+#' Infer Hurst exponent of a time series based on accept-reject algorithm.
+#' 
+#' @param x - A vector of time series
+#' @param n - An integer indicating the number of Hurst exponents to infer
+#' 
+#' @returns The output of the algorithm is a probability distribution of the Hurst exponents inferred
+#' 
+#' @import Rcpp
+#' @export
+#' 
+#' @details Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. Common practice is to take the median of the probability distribution as the estimated Hurst exponent.
+#' 
+#' @examples
+#' 
+#' x = fgn_sim(n = 128, H = 0.9)
+#' 
+#' h.pdf = bayesH(x = x, n = 200)
+#' H = median(h.pdf)
+#' 
+#' @references 
+#' - Tyralis, H., & Koutsoyiannis, D. (2014). A Bayesian statistical model for deriving the predictive distribution of hydroclimatic variables. Climate dynamics, 42, 2867-2883.
+#' 
+bayesH <- function(x, n) {
+    .Call('_nonanR_bayesH', PACKAGE = 'nonanR', x, n)
+}
+
 #' Constant Embedding Parameters and Principal Component Analysis-based Phase Space Reconstruction
 #'
 #' Reconstruct attractor based on constant embedding parameters and principle component analysis.

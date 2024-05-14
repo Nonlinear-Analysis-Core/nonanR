@@ -11,7 +11,7 @@ arma::vec mean_log_distance(const arma::uvec& step_time, const arma::uvec& nn, c
 //'
 //' Calculate Lyapunov exponent of a time series.
 //' 
-//' @param x - A single column time series.
+//' @param X - A single column time series.
 //' @param samp_rate - A double indicating the sampling rate of the time series.
 //' @param mean_freq - A double indicating the mean frequency of the time series.
 //' @param nsteps - Number of time steps to consider for calculating the Lyapunov exponent.
@@ -32,31 +32,32 @@ arma::vec mean_log_distance(const arma::uvec& step_time, const arma::uvec& nn, c
 //'
 //' fs = 100
 //' t = seq(0, 10, 1/fs)
-//' s_wave = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
+//' ts = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 //' 
-//' mean_frequency = meanfreq(signal = s_wave, samp_rate = fs)
+//' mean_frequency = meanfreq(signal = ts, samp_rate = fs)
 //' 
 //' mmax = 12
 //' rtol = 15
 //' atol = 2
 //' 
-//' time_delay = ami(x, x, 50, 30)
+//' time_delay = ami(ts, ts, 50, 30)
 //' tau = time_delay$tau[1,1] # Optimal time delay estimated by AMI
 //' 
-//' embed = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
+//' embed = fnn(x = ts, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
 //' dim = embed$dim # Optimal embedding dimension estimated by FNN
 //' 
-//' psr_length = length(x) - tau*(dim-1)
+//' psr_length = length(ts) - tau*(dim-1)
 //' start = 1
 //' stop = psr_length
 //' X = matrix(nrow = psr_length, ncol = dim)
 //' for (i in 1:dim) {
-//'   X[,i] = x[start:stop]
+//'   X[,i] = ts[start:stop]
 //'   start = start + tau
 //'   stop = stop + tau
 //' }
 //'
-//' lye_out = lye_rosenstein(x = z, samp_rate = fs, mean_freq = mean_frequency, nsteps = 500, regpoints = 10:500)
+//' lye_out = lye_rosenstein(X = X, samp_rate = fs, mean_freq = mean_frequency, 
+//'                          nsteps = 500, regpoints = 10:500)
 //' 
 // [[Rcpp::export]]
 List lye_rosenstein(const arma::mat& X, double samp_rate, double mean_freq, int nsteps, const arma::uvec& regpoints) {

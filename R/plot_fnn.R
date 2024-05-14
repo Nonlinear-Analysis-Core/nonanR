@@ -43,7 +43,8 @@
 #' fnn_tol = 0.01
 #'
 #' # Compute false nearest neighbors
-#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, atol = atol, fnn_tol = fnn_tol)
+#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+#'                                   atol = atol, fnn_tol = fnn_tol)
 #' 
 #' @export
 plot_fnn = function(x){

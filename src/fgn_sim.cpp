@@ -27,7 +27,7 @@ using namespace Rcpp;
    //double mean = 0;
    //double std = 1;
    
-   if (H < 0.01 | H > 0.99 ) {
+   if ((H < 0.01) || (H > 0.99) ) {
      stop("H not valid. Please enter a H value between 0.01 and 0.99");
    }
    arma::vec ans(n); // Resulting FGN

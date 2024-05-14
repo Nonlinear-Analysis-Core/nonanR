@@ -39,7 +39,8 @@
 #' fnn_tol = 0.01
 #'
 #' # Compute false nearest neighbors
-#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, atol = atol, fnn_tol = fnn_tol)
+#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+#'                                   atol = atol, fnn_tol = fnn_tol)
 #'
 #' @references
 #' Kennel, M. B., & Abarbanel, H. D. I. (2002). False neighbors and false strands: A reliable minimum embedding dimension algorithm. Phys. Rev. E, 66(2), 026209. https://doi.org/10.1103/PhysRevE.66.026209

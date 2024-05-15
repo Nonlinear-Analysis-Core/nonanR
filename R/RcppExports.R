@@ -100,6 +100,39 @@ Ent_Sym <- function(x, thresholdVal, seqLength) {
     .Call('_nonanR_Ent_Sym', PACKAGE = 'nonanR', x, thresholdVal, seqLength)
 }
 
+#' Lyapunov Rosenstein Method
+#'
+#' Calculate the average mutual information of a time series.
+#' 
+#'
+#' @param x - A single column time series.
+#' @param tau - The first local minimum from the data. This is a value returned from the \code{ami} function.
+#' @param dim - An integer reflecting the embedding dimension at which there is the lowest number of false neighbors. This is a value returned from the \code{fnn} function
+#' @param fs - The sampling frequency that the data was collected at. 
+#' @returns The output of the algorithm is a list that includes:
+#' \itemize{
+#'  \item \code{M} The number of matched pairs
+#'  \item \code{out} A matrix of all the matched pairs and the average line divergence from which the slope is calculated. The matched pairs are columns 1 and 2. The average line divergence is column 3.
+#' } 
+#' @import Rcpp
+#' @export
+#'
+#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
+#' 
+#' 
+#' @examples
+#'
+#' x = rnorm(1000)
+#' tau = 3 # You can get this value like: ami_out$tau[1,1]
+#' dim = 4 # You can get this value like: fnn_out$dim
+#' fs = 60
+#'
+#' lye_out = lye_r(x = x, tau = tau, dim = dim, fs = fs)
+#' 
+lye_r <- function(x, tau, dim, fs) {
+    .Call('_nonanR_lye_r', PACKAGE = 'nonanR', x, tau, dim, fs)
+}
+
 #' Average Mutual Information
 #'
 #' Calculate the average mutual information of a time series.
@@ -138,6 +171,34 @@ Ent_Sym <- function(x, thresholdVal, seqLength) {
 #'
 ami <- function(x, y, L, bins) {
     .Call('_nonanR_ami', PACKAGE = 'nonanR', x, y, L, bins)
+}
+
+#' Bayesian Inference of Hurst Exponent
+#' 
+#' Infer Hurst exponent of a time series based on accept-reject algorithm.
+#' 
+#' @param x - A vector of time series
+#' @param n - An integer indicating the number of Hurst exponents to infer
+#' 
+#' @returns The output of the algorithm is a probability distribution of the Hurst exponents inferred
+#' 
+#' @import Rcpp
+#' @export
+#' 
+#' @details Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. Common practice is to take the median of the probability distribution as the estimated Hurst exponent.
+#' 
+#' @examples
+#' 
+#' x = fgn_sim(n = 128, H = 0.9)
+#' 
+#' h.pdf = bayesH(x = x, n = 200)
+#' H = median(h.pdf)
+#' 
+#' @references 
+#' - Tyralis, H., & Koutsoyiannis, D. (2014). A Bayesian statistical model for deriving the predictive distribution of hydroclimatic variables. Climate dynamics, 42, 2867-2883.
+#' 
+bayesH <- function(x, n) {
+    .Call('_nonanR_bayesH', PACKAGE = 'nonanR', x, n)
 }
 
 #' Constant Embedding Parameters and Principal Component Analysis-based Phase Space Reconstruction
@@ -291,39 +352,6 @@ lm_c <- function(xs, yr) {
 
 seq_int <- function(length) {
     .Call('_nonanR_seq_int', PACKAGE = 'nonanR', length)
-}
-
-#' Lyapunov Rosenstein Method
-#'
-#' Calculate the average mutual information of a time series.
-#' 
-#'
-#' @param x - A single column time series.
-#' @param tau - The first local minimum from the data. This is a value returned from the \code{ami} function.
-#' @param dim - An integer reflecting the embedding dimension at which there is the lowest number of false neighbors. This is a value returned from the \code{fnn} function
-#' @param fs - The sampling frequency that the data was collected at. 
-#' @returns The output of the algorithm is a list that includes:
-#' \itemize{
-#'  \item \code{M} The number of matched pairs
-#'  \item \code{out} A matrix of all the matched pairs and the average line divergence from which the slope is calculated. The matched pairs are columns 1 and 2. The average line divergence is column 3.
-#' } 
-#' @import Rcpp
-#' @export
-#'
-#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
-#' 
-#' 
-#' @examples
-#'
-#' x = rnorm(1000)
-#' tau = 3 # You can get this value like: ami_out$tau[1,1]
-#' dim = 4 # You can get this value like: fnn_out$dim
-#' fs = 60
-#'
-#' lye_out = lye_r(x = x, tau = tau, dim = dim, fs = fs)
-#' 
-lye_r <- function(x, tau, dim, fs) {
-    .Call('_nonanR_lye_r', PACKAGE = 'nonanR', x, tau, dim, fs)
 }
 
 #' Lyapunov Rosenstein Method

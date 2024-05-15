@@ -58,6 +58,7 @@ plot_lye = function(x){
     geom_line(linewidth = 1) +
     geom_segment(data = reg.dat, aes(x = x_start, y = y_start, 
                      xend = x_end, yend = y_end),
+
                  linewidth = 0.6, color="#C8102E") + 
     geom_label(label = plot.text, 
                x = Inf, y = -Inf, 

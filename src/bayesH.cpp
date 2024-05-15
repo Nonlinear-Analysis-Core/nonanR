@@ -29,6 +29,7 @@ void free_vector(VECTOR cVector);
 //' @returns The output of the algorithm is a probability distribution of the Hurst exponents inferred
 //' 
 //' @import Rcpp
+//' @export
 //' 
 //' @details Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. Common practice is to take the median of the probability distribution as the estimated Hurst exponent.
 //' 

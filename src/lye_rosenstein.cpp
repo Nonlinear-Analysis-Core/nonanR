@@ -74,7 +74,8 @@ List lye_rosenstein(const arma::mat& X, double samp_rate, double mean_freq, int 
   
   return List::create(Named("lye") = lye,
                       Named("time_steps") = time_steps,
-                      Named("mean_distances") = mean_distances);
+                      Named("mean_distances") = mean_distances,
+                      Named("reg_points") = regpoints);
 }
 
 

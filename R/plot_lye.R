@@ -51,10 +51,14 @@ plot_lye = function(x){
   
   plot.text = paste0("\U03BB = ", x$lye[2])
   
+  reg.dat = data.frame("x_start" = dat[x$reg_points[1],1], "y_start" = predict(m)[1],
+                       "x_end" = dat[x$reg_points[n],1], "y_end" = predict(m)[n])
+  
   ggplot(dat, aes(x = dat[,1], y = dat[,2])) +
     geom_line(linewidth = 1) +
-    geom_segment(aes(x = dat[x$reg_points[1],1], y = predict(m)[1], 
-                     xend = dat[x$reg_points[n],1], yend = predict(m)[n]),
+    geom_segment(data = reg.dat, aes(x = x_start, y = y_start, 
+                     xend = x_end, yend = y_end),
+
                  linewidth = 0.6, color="#C8102E") + 
     geom_label(label = plot.text, 
                x = Inf, y = -Inf, 

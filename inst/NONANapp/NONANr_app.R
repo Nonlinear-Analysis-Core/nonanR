@@ -166,7 +166,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                       
                                       tabPanel("bayesH", 
                                                h4(strong("bayesH")),
-                                               h2("This is in progress and will be included in a future release."),
                                                sidebarLayout(
                                                  sidebarPanel(
                                                    selectInput("dataChoicebayesH", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
@@ -174,7 +173,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    selectInput("bayesHy", "Select Y axis:", choices = NULL),
                                                    numericInput("bayesN", "Posterior Simulations:", value = 50, step = 1, min = 1), 
                                                    fluidRow(
-                                                     
                                                      column(width = 6,
                                                             actionButton("gobayesH", "Analyze")
                                                      ),
@@ -189,13 +187,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                  mainPanel(
                                                    fluidRow( 
                                                      column(12,  plotlyOutput('bayesHTS')), # single row just for the time series plot
-                                                   ), 
-                                                   br(),
-                                                   br(),
-                                                   fluidRow( 
-                                                     column(2),
-                                                     column(8, plotOutput('bayesHPlot')), 
-                                                     column(2)
                                                    ), 
                                                    br(),
                                                    br(),
@@ -546,7 +537,7 @@ server <- function(input, output) {
       n = colnames(dfa_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
         # geom_histogram( color="white", fill="black", bins = w) +
-        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of", input$dfay), 
              x = input$dfay) +
         theme_nonan()
@@ -667,7 +658,7 @@ server <- function(input, output) {
       n = colnames(mfdfa_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(mfdfa_dat()), aes(x = .data[[n]])) +
         # geom_histogram( color="white", fill="black", bins = w) +
-        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of ", input$mfdfay), 
              x = input$mfdfay) +
         theme_nonan()
@@ -765,20 +756,19 @@ server <- function(input, output) {
   
   # Entropy calculation
   bayesHresult <- eventReactive(input$gobayesH, {
-    #bayesH(bayesH_dat(), n = input$bayesN)
-    rnorm(input$bayesN)
+    bayesH(bayesH_dat(), n = input$bayesN)
   })
   
   # Print out the sample entropy results
   observeEvent(input$gobayesH, {
     output$bayesHResults <- renderPrint({
-      cat("bayesH:", bayesHresult())
+      cat("bayesH:", median(bayesHresult()))
     })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportbayesH, {
-    assign(input$exportbayesHname, bayesHresult(), envir = globalenv())
+    assign(input$exportbayesHname, list("hurst_pdf" = bayesHresult(), "median_hurst" =  median(bayesHresult())), envir = globalenv())
     
     output$bayesHResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -794,7 +784,7 @@ server <- function(input, output) {
       n = colnames(bayesH_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(bayesH_dat()), aes(x = .data[[n]])) +
         # geom_histogram( color="white", fill="black", bins = w) +
-        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of ", input$bayesHy),
              x = input$bayesHy) +
         theme_nonan()
@@ -896,7 +886,7 @@ server <- function(input, output) {
       n = colnames(SE_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(SE_dat()), aes(x = .data[[n]])) +
         # geom_histogram( color="white", fill="black", bins = w) +
-        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of ", input$SEy), 
              x = input$SEy) +
         theme_nonan()
@@ -998,7 +988,7 @@ server <- function(input, output) {
       n = colnames(AE_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(AE_dat()), aes(x = .data[[n]])) +
         # geom_histogram( color="white", fill="black", bins = w) +
-        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of ", input$AEy), 
              x = input$AEy) +
         theme_nonan()
@@ -1113,7 +1103,7 @@ server <- function(input, output) {
       n = colnames(SymE_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(SymE_dat()), aes(x = .data[[n]])) +
         # geom_histogram( color="white", fill="black", bins = w) +
-        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of ", input$SymEy), 
              x = input$SymEy) +
         theme_nonan()
@@ -1238,7 +1228,7 @@ server <- function(input, output) {
       n = colnames(rqa_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(rqa_dat()), aes(x = .data[[n]])) +
         # geom_histogram( color="white", fill="black", bins = w) +
-        geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of ", input$rqay), 
              x = input$rqay) +
         theme_nonan()
@@ -1366,7 +1356,7 @@ server <- function(input, output) {
   #     n = colnames(dfa_dat())[1] # Get the column name to use below
   #     ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
   #      # geom_histogram( color="white", fill="black", bins = w) +
-  #       geom_density(color = "black", fill = "grey40", alpha = 0.7, size = 1.1) +
+  #       geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
   #       labs(title = paste("Density Plot of ", input$dfay), 
   #            x = input$dfay) +
   #       theme_nonan()

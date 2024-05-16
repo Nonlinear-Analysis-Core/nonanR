@@ -26,6 +26,17 @@
 #'                    x0 = 0, y0 = -0.01, z0 = 9,
 #'                    duration = 50, fs = 100)
 #'                    
+#'  # Plot Lorenz attractor
+#'  plotly::plot_ly(data = lorenz.df, 
+#'                x = ~x0, 
+#'                y = ~y0,
+#'                z = ~z0,
+#'                color = ~time,
+#'                type = "scatter3d",
+#'                mode = "lines") %>%
+#'  layout(title = "Lorenz Attractor")               
+#'  
+#'                    
 #' x = lorenz.df$x0
 #' y = lorenz.df$x0
 #' L = 50

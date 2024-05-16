@@ -368,6 +368,7 @@ seq_int <- function(length) {
 #'  \item \code{lye} The Lyapunov exponent of the time series.
 #'  \item \code{time_steps} A vector of the indices of the time steps used to calculate the Lyapunov exponent.
 #'  \item \code{mean_distances} A vector of mean log distances used to calculate the Lyapunov exponent.
+#'  \item \code{reg_points} A vector of the points included in fitting a line on the divergence plot.
 #' } 
 #' @import Rcpp
 #' @export

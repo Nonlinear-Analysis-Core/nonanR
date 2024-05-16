@@ -419,8 +419,12 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    selectInput("dataChoiceLYE", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
                                                    selectInput("lyex", "Select X axis:", choices = NULL),
                                                    selectInput("lyey", "Select Y axis:", choices = NULL),
-                                                   numericInput("dim", "Embedding Dimension:", value = 3, step = 1), 
-                                                   numericInput("tau", "Delay:", value = 1),
+                                                   sliderInput("lye_fs", "Sampling Frequency:", value = 100, step = 10, min = 0, max = 2000),
+                                                   numericInput("lye_nsteps", "Number of Time Steps:", value = 500, step = 10),
+                                                   sliderInput("lye_regpoints", "Data point for regression line:", value = c(10, 500), step = 1, min = 0, max = 1000),
+                                                   numericInput("lye_mmax", "mmax:", value = 12, step = 1),
+                                                   numericInput("lye_rtol", "rtol:", value = 15, step = 1),
+                                                   numericInput("lye_atol", "atol:", value = 2, step = 1),
                                                    fluidRow(
                                                      
                                                      column(width = 6,
@@ -440,16 +444,10 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    ), 
                                                    br(),
                                                    br(),
-                                                   fluidRow( 
-                                                     column(2),
-                                                     column(8, plotOutput('lyePlot')), 
-                                                     column(2)
-                                                   ), 
-                                                   br(),
-                                                   br(),
-                                                   fluidRow( 
-                                                     column(6,  plotOutput('histogram_lye')),
-                                                     column(6,  plotOutput('autocorr_lye'))
+                                                   fluidRow(
+                                                     column(4,  plotOutput('lyePlot')),
+                                                     column(4,  plotOutput('histogram_lye')),
+                                                     column(4,  plotOutput('autocorr_lye'))
                                                    ),
                                                    br(),
                                                    br(),
@@ -1257,7 +1255,7 @@ server <- function(input, output) {
   }) # observeEvent
   
   
-  # Print out the DFA results
+  # Print out the RQA results
   observeEvent(input$goRQA, {
     output$rqaResults <- renderPrint({
       # rqaResult()
@@ -1294,119 +1292,131 @@ server <- function(input, output) {
   
   ## LyE ---------------------------------------------------------------------
   
-  # # get a list of the column names in the data frame
-  # n = reactive({
-  #   names(get(input$dataChoice))
-  # })
-  # 
-  # 
-  # # Update x and y choices based on the selected dataframe
-  # observeEvent(input$dataChoice, {
-  #   updateSelectInput(inputId = "dfax", choices = n())
-  #   updateSelectInput(inputId = "dfay", choices = n(), selected = n()[2])
-  # })
-  # 
-  # # Select the desired data frame and by default the second column for analysis
-  # dfa_dat = reactive({
-  #   get(input$dataChoice) |>
-  #     select(all_of(input$dfay)) |>
-  #     as.matrix()
-  # })
-  # 
-  # # plot the time series of the data
-  # output$dfaTS <- renderPlotly({
-  #   
-  #   plot_dat = get(input$dataChoice5)
-  #   # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
-  #   #         color = I('black')) %>% # Aesthetics for the plot
-  #   #   layout(title = list(text = paste0("Time series of ", input$dfay)),
-  #   #          xaxis = list(title = "data Index"),
-  #   #          yaxis = list(title = paste0(input$dfay)))
-  #   
-  #   ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$dfay]])) +
-  #     geom_line() +
-  #     labs(title = paste0("Time series of ", input$dfay)) + 
-  #     theme_nonan()
-  # })
-  # 
-  # # Set the scales for the DFA function
-  # scales = reactive({
-  #   logscale(input$minScale, input$maxScale, input$scaleRatio) 
-  # })
-  # 
-  # # DFA calculation
-  # dfaResult <- eventReactive(input$goDFA, {
-  #   dfa(dfa_dat(), order = input$order, verbose = 1, scales = scales(), scale_ratio = input$scaleRatio)
-  #   
-  # })
-  # 
-  # # DFA plot -- generate the plot only when the "Go" button has been clicked
-  # observeEvent(input$goDFA, {
-  #   output$dfaPlot <- renderPlot({
-  #     plot_dfa(dfaResult())
-  #   })
-  # }) # observeEvent
-  # 
-  # # Histogram plot -- generate the plot only when the "Go" button has been clicked
-  # observeEvent(input$goDFA, {
-  #   output$histogram <- renderPlot({
-  #     #hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
-  #     
-  #     w = ceiling(nrow(dfa_dat()) * 0.03) # calculate the number of bins
-  #     n = colnames(dfa_dat())[1] # Get the column name to use below
-  #     ggplot(as.data.frame(dfa_dat()), aes(x = .data[[n]])) +
-  #      # geom_histogram( color="white", fill="black", bins = w) +
-  #       geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
-  #       labs(title = paste("Density Plot of ", input$dfay), 
-  #            x = input$dfay) +
-  #       theme_nonan()
-  #     
-  #   })
-  # }) # observeEvent
-  # 
-  # # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
-  # observeEvent(input$goDFA, {
-  #   output$autocorr <-  renderPlot({
-  #     
-  #     a = acf(dfa_dat(), plot = F)
-  #     conf.level <- 0.95 # set this at 0.95 for 95% confidence
-  #     ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(dfa_dat())) # calculate the confidence intervals
-  #     df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
-  #     
-  #     ggplot(data = df, mapping = aes(x = lag, y = acf)) +
-  #       geom_hline(aes(yintercept = 0)) + # lag = 0
-  #       geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-  #       geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
-  #       geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
-  #       labs(title = paste("Autocorrelation of ", input$dfay)) + 
-  #       theme_nonan() # add the nonan plot theme on
-  #     
-  #   })
-  # }) # observeEvent
-  # 
-  # 
-  # # Print out the DFA results
-  # observeEvent(input$goDFA, {
-  #   output$dfaResults <- renderPrint({
-  #     cat("Log Scales:", dfaResult()$log_scales, "\n", "Log RMS:", dfaResult()$log_rms, "\n", "Alpha:", dfaResult()$alpha)
-  #     
-  #   })
-  # })
-  # 
-  # # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
-  # observeEvent(input$exportDFA, {
-  #   assign(input$exportLYEname, dfaResult(), envir = globalenv())
-  #   
-  #   output$dfaResults <- renderPrint({
-  #     cat("Exported to global environment. Close the app to view.")
-  #   }) # renderPrint
-  # }) # observeEvent
-  # 
-  # 
-  # # Print the data so we can see what column is actually being selected. For debugging only
-  # #output$datHead <- renderTable({
-  # # head(dfa_dat())
-  # #})
+  # get a list of the column names in the data frame
+  lye_n = reactive({
+    names(get(input$dataChoiceLYE))
+  })
+  
+  
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoiceLYE, {
+    updateSelectInput(inputId = "lyex", choices = lye_n())
+    updateSelectInput(inputId = "lyey", choices = lye_n(), selected = lye_n()[2])
+  })
+  
+
+  # Select the desired data frame and by default the second column for analysis
+  lye_dat = reactive({
+    get(input$dataChoiceLYE) |>
+      select(all_of(input$lyey)) |>
+      as.matrix()
+  })
+
+  # plot the time series of the data
+  output$lyeTS <- renderPlotly({
+
+    plot_dat = get(input$dataChoiceLYE)
+    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines',
+    #         color = I('black')) %>% # Aesthetics for the plot
+    #   layout(title = list(text = paste0("Time series of ", input$dfay)),
+    #          xaxis = list(title = "data Index"),
+    #          yaxis = list(title = paste0(input$dfay)))
+
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$lyey]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$lyey)) +
+      theme_nonan()
+  })
+  
+  
+  # time series - selected with the dropdown
+  # sampling frequency - selected with the slider??
+  
+  
+  # mean frequency - calculated internally
+  lye_result = eventReactive(input$golye, {
+      
+      mean_freq = meanfreq(signal = lye_dat(), samp_rate = input$lye_fs)
+      
+      time_delay = ami(x = lye_dat(), y = lye_dat(), L = input$lye_fs, bins = 0)
+      tau = time_delay$tau[1,1]
+      
+      embed = fnn(x = lye_dat(), tau = tau, mmax = input$lye_mmax, rtol = input$lye_rtol, atol = input$lye_atol)
+      dim = embed$dim
+      
+      psr_length = length(lye_dat()) - tau*(dim-1)
+      start = 1
+      stop = psr_length
+      X = matrix(nrow = psr_length, ncol = dim)
+      for (i in 1:dim) {
+        X[,i] = ts[start:stop]
+        start = start + tau
+        stop = stop + tau
+      }
+      
+      lye_rosenstein(X = lye_dat(), samp_rate = input$lye_fs, mean_freq = mean_freq, 
+                     nsteps = input$lye_nsteps, regpoints = input$lye_regpoints)
+      
+    })
+
+  # lye plot 
+  observeEvent(input$golye, {
+    output$lyePlot <- renderPlot({
+      plot_lye(lye_result())
+    })
+  }) # observeEvent
+  
+  # density plot
+  observeEvent(input$golye, {
+    output$histogram_lye <- renderPlot({
+      w = ceiling(nrow(lye_dat()) * 0.03) # calculate the number of bins
+      n = colnames(lye_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(lye_dat()), aes(x = .data[[n]])) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
+        labs(title = paste("Density Plot of ", input$lyey), 
+             x = input$lyey) +
+        theme_nonan()
+    })
+  }) # observeEvent
+  
+  # acf plot??
+  observeEvent(input$golye, {
+    output$autocorr_lye <-  renderPlot({
+      
+      a = acf(lye_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(lye_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$lyey)) + 
+        theme_nonan() # add the nonan plot theme on   
+      
+    })
+  }) # observeEvent
+  
+    observeEvent(input$golye, {
+    output$lyeResults <- renderPrint({
+      cat("LyE Value:", lye_result()$lye[2])
+    })
+  })
+  
+
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportlye, {
+    assign(input$exportLYEname, lye_result(), envir = globalenv())
+    
+    output$lyeResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
+
+  
   
 } # server
 

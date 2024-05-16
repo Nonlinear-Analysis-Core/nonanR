@@ -49,7 +49,7 @@ plot_lye = function(x){
   m = lm(dat[x$reg_points,2] ~ dat[x$reg_points,1])
   n = length(x$reg_points)
   
-  plot.text = paste0("\U03BB = ", x$lye[2])
+  plot.text = paste0("\U03BB = ", round(x$lye[2], digits = 5))
   
   reg.dat = data.frame("x_start" = dat[x$reg_points[1],1], "y_start" = predict(m)[1],
                        "x_end" = dat[x$reg_points[n],1], "y_end" = predict(m)[n])

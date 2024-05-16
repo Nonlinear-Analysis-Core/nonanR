@@ -104,7 +104,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    verbatimTextOutput("dfaResults"), 
                                                    br(),
                                                    br(),
-                                                   #tableOutput("datHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ), # DFA tabpanel
@@ -158,7 +157,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    verbatimTextOutput("mfdfaResults"), 
                                                    br(),
                                                    br(),
-                                                   #tableOutput("datHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ), # MFDFA tabpanel
@@ -199,7 +197,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    verbatimTextOutput("bayesHResults"), 
                                                    br(),
                                                    br(),
-                                                   #tableOutput("datHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ),
@@ -250,7 +247,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                  verbatimTextOutput("SEresults"), 
                                                  br(),
                                                  br(),
-                                                 # tableOutput("SEdatHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) #sidebarlayout
                                       ), # sample entropy tabpanel
@@ -295,7 +291,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                  verbatimTextOutput("AEresults"), 
                                                  br(),
                                                  br(),
-                                                 #tableOutput("AEdatHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) #sidebarlayout
                                       ), # approximate entropy tabpanel
@@ -339,7 +334,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                  verbatimTextOutput("SymEresults"), 
                                                  br(),
                                                  br(),
-                                                 # tableOutput("SymEdatHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) #sidebarlayout
                                       ) # symbolic entropy tabpanel
@@ -405,7 +399,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    verbatimTextOutput("rqaResults"), 
                                                    br(),
                                                    br(),
-                                                   #tableOutput("datHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ), # RQA tabpanel
@@ -413,7 +406,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                       ## LyE ---------------------------------------------------------------------
                                       tabPanel("Lyapunov Exponent", 
                                                h4(strong("Lyapunov Exponent")),
-                                               h2("This is in progress and will be included in a future release."),
                                                sidebarLayout(
                                                  sidebarPanel(
                                                    selectInput("dataChoiceLYE", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
@@ -454,7 +446,6 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    verbatimTextOutput("lyeResults"), 
                                                    br(),
                                                    br(),
-                                                   #tableOutput("datHead") # This was largely for debugging
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ), # MFDFA tabpanel
@@ -494,11 +485,6 @@ server <- function(input, output) {
   output$dfaTS <- renderPlotly({
     
     plot_dat = get(input$dataChoice)
-    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
-    #         color = I('black')) %>% # Aesthetics for the plot
-    #   layout(title = list(text = paste0("Time series of ", input$dfay)),
-    #          xaxis = list(title = "data Index"),
-    #          yaxis = list(title = paste0(input$dfay)))
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$dfay]])) +
       geom_line() +
@@ -529,7 +515,6 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goDFA, {
     output$histogram <- renderPlot({
-      #hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
       
       w = ceiling(nrow(dfa_dat()) * 0.03) # calculate the number of bins
       n = colnames(dfa_dat())[1] # Get the column name to use below
@@ -583,11 +568,6 @@ server <- function(input, output) {
   }) # observeEvent
   
   
-  # Print the data so we can see what column is actually being selected. For debugging only
-  #output$datHead <- renderTable({
-  # head(dfa_dat())
-  #})
-  
   ## MFDFA ---------------------------------------------------------------------
   
   # get a list of the column names in the data frame
@@ -612,11 +592,6 @@ server <- function(input, output) {
   output$mfdfaTS <- renderPlotly({
     
     plot_dat = get(input$dataChoiceMFDFA)
-    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
-    #         color = I('black')) %>% # Aesthetics for the plot
-    #   layout(title = list(text = paste0("Time series of ", input$dfay)),
-    #          xaxis = list(title = "data Index"),
-    #          yaxis = list(title = paste0(input$dfay)))
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$mfdfay]])) +
       geom_line() +
@@ -629,18 +604,18 @@ server <- function(input, output) {
   q_order = reactive({
     -input$q:input$q
   })
-  # Set the scales for the DFA function
+  # Set the scales for the MFDFA function
   scales = reactive({
     logscale(input$minScale_mfdfa, input$maxScale_mfdfa, input$scaleRatio_mfdfa) 
   })
   
-  # DFA calculation
+  # MFDFA calculation
   mfdfaResult <- eventReactive(input$goMFDFA, {
     mfdfa(mfdfa_dat(), q = q_order(), order = input$order_mfdfa, scales = scales(), scale_ratio = input$scaleRatio_mfdfa)
     
   })
   
-  # DFA plot -- generate the plot only when the "Go" button has been clicked
+  # MFDFA plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goMFDFA, {
     output$mfdfaPlot <- renderPlot({
       plot_mfdfa(mfdfaResult(), do.surrogate = T, nsurrogates = 19, return.ci = T)
@@ -650,8 +625,7 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goMFDFA, {
     output$histogram_mfdfa <- renderPlot({
-      #hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
-      
+
       w = ceiling(nrow(mfdfa_dat()) * 0.03) # calculate the number of bins
       n = colnames(mfdfa_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(mfdfa_dat()), aes(x = .data[[n]])) +
@@ -685,7 +659,7 @@ server <- function(input, output) {
   }) # observeEvent
   
   
-  # Print out the DFA results
+  # Print out the MFDFA results
   observeEvent(input$goMFDFA, {
     output$mfdfaResults <- renderPrint({
       cat("Log Scales:", mfdfaResult()$log_scale, "\n", 
@@ -707,11 +681,6 @@ server <- function(input, output) {
     }) # renderPrint
   }) # observeEvent
   
-  
-  # Print the data so we can see what column is actually being selected. For debugging only
-  #output$datHead <- renderTable({
-  # head(dfa_dat())
-  #})
   
   ## bayesH -----------------------------------------------------------------
   
@@ -738,11 +707,6 @@ server <- function(input, output) {
   output$bayesHTS <- renderPlotly({
     
     plot_dat = get(input$dataChoicebayesH)
-    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SEy]], type = 'scatter', mode = 'lines',
-    #         color = I('black')) %>% # Aesthetics for the plot
-    #   layout(title = list(text = paste0("Time series of ", input$SEy)),
-    #          xaxis = list(title = "data Index"),
-    #          yaxis = list(title = paste0(input$SEy)))
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$bayesHy]])) +
       geom_line() +
@@ -752,12 +716,12 @@ server <- function(input, output) {
     
   })
   
-  # Entropy calculation
+  # bayesH calculation
   bayesHresult <- eventReactive(input$gobayesH, {
     bayesH(bayesH_dat(), n = input$bayesN)
   })
   
-  # Print out the sample entropy results
+  # Print out the median bayesH result
   observeEvent(input$gobayesH, {
     output$bayesHResults <- renderPrint({
       cat("bayesH:", median(bayesHresult()))
@@ -776,8 +740,7 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$gobayesH, {
     output$histogram_bayesH <- renderPlot({
-      #hist(SE_dat(), main = paste("Histogram of ", input$SEy), xlab = input$SEy)
-      
+
       w = ceiling(nrow(bayesH_dat()) * 0.03) # calculate the number of bins
       n = colnames(bayesH_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(bayesH_dat()), aes(x = .data[[n]])) +
@@ -809,11 +772,7 @@ server <- function(input, output) {
     })
   }) # observeEvent
   
-  #Print the data so we can see what column is actually being selected. For debugging only
-  output$SEdatHead <- renderTable({
-    head(get(input$dataChoice1))
-  })
-  
+
   # Entropy -----------------------------------------------------------------
   ## Sample Entropy -----------------------------------------------------------------
   
@@ -840,11 +799,6 @@ server <- function(input, output) {
   output$SEts <- renderPlotly({
     
     plot_dat = get(input$dataChoice1)
-    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SEy]], type = 'scatter', mode = 'lines', 
-    #         color = I('black')) %>% # Aesthetics for the plot
-    #   layout(title = list(text = paste0("Time series of ", input$SEy)),
-    #          xaxis = list(title = "data Index"),
-    #          yaxis = list(title = paste0(input$SEy)))
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$SEy]])) +
       geom_line() +
@@ -878,7 +832,6 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSEENT, {
     output$SEhist <- renderPlot({
-      #hist(SE_dat(), main = paste("Histogram of ", input$SEy), xlab = input$SEy)
       
       w = ceiling(nrow(SE_dat()) * 0.03) # calculate the number of bins
       n = colnames(SE_dat())[1] # Get the column name to use below
@@ -910,11 +863,7 @@ server <- function(input, output) {
       
     })
   }) # observeEvent
-  
-  # Print the data so we can see what column is actually being selected. For debugging only
-  # output$SEdatHead <- renderTable({
-  #   head(get(input$dataChoice1))
-  # })
+
   
   ## Approximate Entropy -----------------------------------------------------------------
   
@@ -941,11 +890,6 @@ server <- function(input, output) {
   output$AEts <- renderPlotly({
     
     plot_dat = get(input$dataChoice2)
-    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$AEy]], type = 'scatter', mode = 'lines', 
-    #         color = I('black')) %>% # Aesthetics for the plot
-    #   layout(title = list(text = paste0("Time series of ", input$AEy)),
-    #          xaxis = list(title = "data Index"),
-    #          yaxis = list(title = paste0(input$AEy)))
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$AEy]])) +
       geom_line() +
@@ -953,10 +897,9 @@ server <- function(input, output) {
            x = "Index") + 
       theme_nonan()
     
-    
   })
   
-  # Entropy calculation
+  # Approximate entropy calculation
   AEresult <- eventReactive(input$goAENT, {
     Ent_Ap(AE_dat(), dim = input$AEdim, R = input$AEr)
   })
@@ -980,8 +923,7 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goAENT, {
     output$AEhist <- renderPlot({
-      # hist(AE_dat(), main = paste("Histogram of ", input$AEy), xlab = input$AEy)
-      
+
       w = ceiling(nrow(AE_dat()) * 0.03) # calculate the number of bins
       n = colnames(AE_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(AE_dat()), aes(x = .data[[n]])) +
@@ -1013,12 +955,7 @@ server <- function(input, output) {
       
     })
   }) # observeEvent
-  
-  # Print the data so we can see what column is actually being selected. For debugging only
-  # output$SEdatHead <- renderTable({
-  #   head(get(input$dataChoice1))
-  # })
-  
+
   
   ## Symbolic Entropy --------------------------------------------------------
   
@@ -1033,6 +970,7 @@ server <- function(input, output) {
     updateSelectInput(inputId = "SymEy", choices = n3(), selected = n3()[2])
   })
   
+  # set the threshold value to the mean of the selected column
   observeEvent(input$SymEy, ignoreInit = TRUE, { # ignore init is crucial here so that the app actually loads
     
     mean_val <- get(input$dataChoice3) %>%
@@ -1058,11 +996,6 @@ server <- function(input, output) {
   output$SymEts <- renderPlotly({
     
     plot_dat = get(input$dataChoice3)
-    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$SymEy]], type = 'scatter', mode = 'lines', 
-    #         color = I('black')) %>% # Aesthetics for the plot
-    #   layout(title = list(text = paste0("Time series of ", input$SymEy)),
-    #          xaxis = list(title = "data Index"),
-    #          yaxis = list(title = paste0(input$SymEy)))
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$SymEy]])) +
       geom_line() +
@@ -1071,7 +1004,7 @@ server <- function(input, output) {
       theme_nonan()
   })
   
-  # Entropy calculation
+  # Symbolic entropy calculation
   SymEresult <- eventReactive(input$goSymENT, {
     Ent_Sym(SymE_dat(), thresholdVal = input$SymEthresh, seqLength = input$SymEseql)
   })
@@ -1095,8 +1028,7 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goSymENT, {
     output$SymEhist <- renderPlot({
-      # hist(SymE_dat(), main = paste("Histogram of ", input$SymEy), xlab = input$SymEy)
-      
+
       w = ceiling(nrow(SymE_dat()) * 0.03) # calculate the number of bins
       n = colnames(SymE_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(SymE_dat()), aes(x = .data[[n]])) +
@@ -1129,11 +1061,6 @@ server <- function(input, output) {
     })
   }) # observeEvent
   
-  # Print the data so we can see what column is actually being selected. For debugging only
-  # output$SymEdatHead <- renderTable({
-  #   head(get(input$dataChoice3))
-  #   head(SymE_dat())
-  # })
   
   # PSR ---------------------------------------------------------------------
   ## RQA ---------------------------------------------------------------------
@@ -1161,11 +1088,6 @@ server <- function(input, output) {
   output$rqaTS <- renderPlotly({
     
     plot_dat = get(input$dataChoice4)
-    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines', 
-    #         color = I('black')) %>% # Aesthetics for the plot
-    #   layout(title = list(text = paste0("Time series of ", input$dfay)),
-    #          xaxis = list(title = "data Index"),
-    #          yaxis = list(title = paste0(input$dfay)))
     
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$rqay]])) +
       geom_line() +
@@ -1210,7 +1132,7 @@ server <- function(input, output) {
     # }
   })
   
-  # DFA plot -- generate the plot only when the "Go" button has been clicked
+  # RQA plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goRQA, {
     output$rqaPlot <- renderPlot({
       plot_rqa(rqaResult())
@@ -1220,8 +1142,7 @@ server <- function(input, output) {
   # Histogram plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goRQA, {
     output$histogram_rqa <- renderPlot({
-      #hist(dfa_dat(), main = paste("Histogram of ", input$dfay), xlab = input$dfay)
-      
+
       w = ceiling(nrow(rqa_dat()) * 0.03) # calculate the number of bins
       n = colnames(rqa_dat())[1] # Get the column name to use below
       ggplot(as.data.frame(rqa_dat()), aes(x = .data[[n]])) +
@@ -1285,11 +1206,6 @@ server <- function(input, output) {
   }) # observeEvent
   
   
-  # Print the data so we can see what column is actually being selected. For debugging only
-  #output$datHead <- renderTable({
-  # head(dfa_dat())
-  #})
-  
   ## LyE ---------------------------------------------------------------------
   
   # get a list of the column names in the data frame
@@ -1316,25 +1232,15 @@ server <- function(input, output) {
   output$lyeTS <- renderPlotly({
 
     plot_dat = get(input$dataChoiceLYE)
-    # plot_ly(data = plot_dat, x = ~1:nrow(plot_dat), y = ~.data[[input$dfay]], type = 'scatter', mode = 'lines',
-    #         color = I('black')) %>% # Aesthetics for the plot
-    #   layout(title = list(text = paste0("Time series of ", input$dfay)),
-    #          xaxis = list(title = "data Index"),
-    #          yaxis = list(title = paste0(input$dfay)))
 
     ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$lyey]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$lyey)) +
       theme_nonan()
   })
-  
-  
-  # time series - selected with the dropdown
-  # sampling frequency - selected with the slider??
-  
-  
-  # mean frequency - calculated internally
-  lye_result = eventReactive(input$golye, {
+
+  # LyE calculation
+    lye_result = eventReactive(input$golye, {
       
       mean_freq = meanfreq(signal = lye_dat(), samp_rate = input$lye_fs)
       

@@ -1255,7 +1255,7 @@ server <- function(input, output) {
       stop = psr_length
       X = matrix(nrow = psr_length, ncol = dim)
       for (i in 1:dim) {
-        X[,i] = ts[start:stop]
+        X[,i] = lye_dat()[start:stop]
         start = start + tau
         stop = stop + tau
       }

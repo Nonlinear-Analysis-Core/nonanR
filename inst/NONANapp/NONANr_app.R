@@ -385,7 +385,54 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ), # AMI tabpanel
-                           #), # navbarMenu
+                                      
+                                      
+                                      ## FNN -----------------------------------------------------------------
+                                      tabPanel("False Nearest Neighbours", 
+                                               h4(strong("False Nearest Neighbours")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoiceFNN", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
+                                                   selectInput("fnnx", "Select X axis:", choices = NULL),
+                                                   selectInput("fnny", "Select Y axis:", choices = NULL),
+                                                   numericInput("fnn_maxDim", "Maximum Embedding Dimension:", value = 10),
+                                                   numericInput("fnn_tau", "Time Lag:", value = 1),
+                                                   numericInput("fnn_rtol", "rtol:", value = 10, min = 1, step = 1),
+                                                   numericInput("fnn_atol", "atol:", value = 15, min = 1, step = 1),
+                                                   numericInput("fnn_tol", "Proportion of false neighbours:", value = 0.01, min = 0, max = 1, step = 0.01),
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goFNN", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportFNN", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportFNNname", "Choose a name for your variable before exporting", "fnn_out"),
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('fnnTS')), # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow(
+                                                     column(4,  plotOutput('fnnPlot')),
+                                                     column(4,  plotOutput('histogram_fnn')),
+                                                     column(4,  plotOutput('autocorr_fnn'))
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("fnnResults"), 
+                                                   br(),
+                                                   br()
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ), # FNN tabpanel
+                                      
                                       ## RQA ---------------------------------------------------------------------
                                       
                                       tabPanel("RQA", 
@@ -1196,7 +1243,7 @@ server <- function(input, output) {
   observeEvent(input$goAMI, {
     output$amiResults <- renderPrint({
       tau = as.data.frame(amiResult()[1]) # tau data frame
-      cat("Tau (Time Delay):", tau[1,1])
+      cat("Lag:", tau[1,1])
     })
   })
   
@@ -1246,7 +1293,96 @@ server <- function(input, output) {
   }) # observeEvent
   
   ## FNN ---------------------------------------------------------------------
+  fnn_n = reactive({
+    names(get(input$dataChoiceFNN))
+  })
     
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoiceFNN, {
+    updateSelectInput(inputId = "fnnx", choices = fnn_n())
+    updateSelectInput(inputId = "fnny", choices = fnn_n(), selected = fnn_n()[2])
+  })
+  
+  # Select the desired data frame and by default the second column for analysis
+  fnn_dat = reactive({
+    get(input$dataChoiceFNN) |>
+      select(all_of(input$fnny)) |>
+      as.matrix()
+  })
+  
+  # plot the time series of the data
+  output$fnnTS <- renderPlotly({
+    
+    plot_dat = get(input$dataChoiceFNN)
+    
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$fnny]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$fnny), 
+           x = "Index") + 
+      theme_nonan()
+  })
+  
+  # FNN calculation
+  fnnResult <- eventReactive(input$goFNN, {
+    false_nearest_neighbors(fnn_dat(), maxDim = input$fnn_maxDim, delay = input$fnn_tau, rtol = input$fnn_rtol, atol = input$fnn_atol, fnn_tol = input$fnn_tol)
+    })
+  
+  # FNN plot
+  output$fnnPlot <- renderPlot({
+    plot_fnn(fnnResult())
+  })
+  
+  # Print out the FNN results
+  observeEvent(input$goFNN, {
+    output$fnnResults <- renderPrint({
+      cat("Embedding Dimension:", as.numeric(fnnResult()$dim))
+    })
+  })
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportFNN, {
+    assign(input$exportFNNname, fnnResult(), envir = globalenv())
+    
+    output$fnnResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
+  
+  # Histogram plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goFNN, {
+    output$histogram_fnn <- renderPlot({
+
+      w = ceiling(nrow(fnn_dat()) * 0.03) # calculate the number of bins
+      n = colnames(fnn_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(fnn_dat()), aes(x = .data[[n]])) +
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
+        labs(title = paste("Density Plot of ", input$fnny), 
+             x = input$fnny) +
+        theme_nonan()
+      
+    })
+  }) # observeEvent
+  
+  # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goFNN, {
+    output$autocorr_fnn <-  renderPlot({
+      
+      a = acf(fnn_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(fnn_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$fnny)) + 
+        theme_nonan() # add the nonan plot theme on
+      
+    })
+  }) # observeEvent
   
   
   

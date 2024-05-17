@@ -343,6 +343,49 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                            # PSR -----------------------------------------------------------------
                            navbarMenu("Phase Space Reconstruction",
                                       
+                                      ## AMI -----------------------------------------------------------------
+                                      tabPanel("Average Mutual Information", 
+                                               h4(strong("Average Mutual Information")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoiceAMI", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
+                                                   selectInput("amix", "Select X axis:", choices = NULL),
+                                                   selectInput("amiy", "Select Y axis:", choices = NULL),
+                                                   numericInput("ami_lag", "Lag:", value = 100, step = 10),
+                                                   numericInput("ami_bins", "Number of bins:", value = 30, step = 1, min = 0, max = 1000),
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goAMI", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportAMI", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportAMIname", "Choose a name for your variable before exporting", "ami_out"),
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('amiTS')), # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow(
+                                                     column(4,  plotOutput('amiPlot')),
+                                                     column(4,  plotOutput('histogram_ami')),
+                                                     column(4,  plotOutput('autocorr_ami'))
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("amiResults"), 
+                                                   br(),
+                                                   br()
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ), # AMI tabpanel
+                           #), # navbarMenu
                                       ## RQA ---------------------------------------------------------------------
                                       
                                       tabPanel("RQA", 
@@ -445,11 +488,57 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    br(),
                                                    verbatimTextOutput("lyeResults"), 
                                                    br(),
-                                                   br(),
+                                                   br()
                                                  ) # mainpanel
                                                ) # sidebarlayout
-                                      ), # MFDFA tabpanel
-                           ), # navbarPage
+                                      ) # LYE tabpanel
+                          ), # navbarMenu
+                           
+                                     
+                           # Simulations -----------------------------------------------------------------
+                           navbarMenu("Simulations",
+                                      ## IAAFT ---------------------------------------------------------------------
+                                      tabPanel("IAAFT", 
+                                               h4(strong("IAAFT")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoiceSIM", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
+                                                   selectInput("simx", "Select X axis:", choices = NULL),
+                                                   selectInput("simy", "Select Y axis:", choices = NULL),
+                                                   numericInput("sim_n", "Number of Surrogates:", value = 9, step = 1, min = 1),
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("gosim", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportsim", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportSIMname", "Choose a name for your variable before exporting", "sim_out"),
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('simTS')) # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow(
+                                                     column(4,  plotOutput('simPlot')),
+                                                     column(4,  plotOutput('histogram_sim')),
+                                                     column(4,  plotOutput('autocorr_sim'))
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("simResults"), 
+                                                   br(),
+                                                   br()
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ) # Simulations tabpanel
+                           ) #navbar menu
                 ) # navbar page
 ) # fluidpage
 
@@ -1063,6 +1152,104 @@ server <- function(input, output) {
   
   
   # PSR ---------------------------------------------------------------------
+  ## AMI ---------------------------------------------------------------------
+  ami_n = reactive({
+    names(get(input$dataChoiceAMI))
+  })
+  
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoiceAMI, {
+    updateSelectInput(inputId = "amix", choices = ami_n())
+    updateSelectInput(inputId = "amiy", choices = ami_n(), selected = ami_n()[2])
+  })
+  
+  # Select the desired data frame and by default the second column for analysis
+  ami_dat = reactive({
+    get(input$dataChoiceAMI) |>
+      select(all_of(input$amiy)) |>
+      as.matrix()
+  })
+  
+  # plot the time series of the data
+  output$amiTS <- renderPlotly({
+    
+    plot_dat = get(input$dataChoiceAMI)
+    
+    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$amiy]])) +
+      geom_line() +
+      labs(title = paste0("Time series of ", input$amiy), 
+           x = "Index") + 
+      theme_nonan()
+  })
+  
+  # AMI calculation
+  amiResult <- eventReactive(input$goAMI, {
+    ami(x = ami_dat(), y = ami_dat(), L = input$ami_lag, bins = input$ami_bins) # Freely determine bins
+  })
+  
+  # AMI plot
+  output$amiPlot <- renderPlot({
+    plot_ami(amiResult())
+  })
+  
+  # Print out the AMI results
+  observeEvent(input$goAMI, {
+    output$amiResults <- renderPrint({
+      tau = as.data.frame(amiResult()[1]) # tau data frame
+      cat("Tau (Time Delay):", tau[1,1])
+    })
+  })
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportAMI, {
+    assign(input$exportAMIname, amiResult(), envir = globalenv())
+    
+    output$amiResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
+  
+  # Histogram plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goAMI, {
+    output$histogram_ami <- renderPlot({
+
+      w = ceiling(nrow(ami_dat()) * 0.03) # calculate the number of bins
+      n = colnames(ami_dat())[1] # Get the column name to use below
+      ggplot(as.data.frame(ami_dat()), aes(x = .data[[n]])) +
+        # geom_histogram( color="white", fill="black", bins = w) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
+        labs(title = paste("Density Plot of ", input$amiy), 
+             x = input$amiy) +
+        theme_nonan()
+      
+    })
+  }) # observeEvent
+  
+  # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goAMI, {
+    output$autocorr_ami <-  renderPlot({
+      
+      a = acf(ami_dat(), plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(ami_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = paste("Autocorrelation of ", input$amiy)) + 
+        theme_nonan() # add the nonan plot theme on
+      
+    })
+  }) # observeEvent
+  
+  ## FNN ---------------------------------------------------------------------
+    
+  
+  
+  
   ## RQA ---------------------------------------------------------------------
   
   # get a list of the column names in the data frame

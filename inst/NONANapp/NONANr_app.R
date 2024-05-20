@@ -351,7 +351,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    selectInput("dataChoiceAMI", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
                                                    selectInput("amix", "Select X axis:", choices = NULL),
                                                    selectInput("amiy", "Select Y axis:", choices = NULL),
-                                                   numericInput("ami_lag", "Lag:", value = 100, step = 10),
+                                                   numericInput("ami_lag", "Lag:", value = 100, step = 10, min = 0),
                                                    numericInput("ami_bins", "Number of bins:", value = 30, step = 1, min = 0, max = 1000),
                                                    fluidRow(
                                                      
@@ -452,15 +452,16 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    numericInput("radius", "Radius:", value = 0.0001, step = 0.0001, min = 0),
                                                    # numericInput("whiteline", "Rescale:", value = 2, step = 0.1),
                                                    # numericInput("recpt", "Plot:", value = 1, step = 1, min = 0, max = 1),
-                                                   # fluidRow(
-                                                   #   column(width = 7, 
-                                                   #          checkboxInput(inputId = "psr_rqa", 
-                                                   #                        label = "Automatically perform FNN and AMI?", 
-                                                   #                        value = TRUE)),
-                                                   #   column(width = 5, 
-                                                   #          numericInput(inputId = "lag_rqa", 
-                                                   #                       label = "Choose a maximum lag.", 
-                                                   #                       value = NULL))),
+                                                   fluidRow(
+                                                     column(width = 7,
+                                                            checkboxInput(inputId = "psr_rqa",
+                                                                          label = "Automatically perform FNN and AMI?",
+                                                                          value = TRUE)),
+                                                     column(width = 5,
+                                                            numericInput(inputId = "lag_rqa",
+                                                                         label = "Choose a maximum lag.",
+                                                                         value = 100))
+                                                     ),
                                                    fluidRow(
                                                      column(width = 6,
                                                             actionButton("goRQA", "Analyze")
@@ -1428,31 +1429,26 @@ server <- function(input, output) {
   # DFA calculation
   rqaResult <- eventReactive(input$goRQA, {
     
+    if (input$psr_rqa && input$lag_rqa){
+
+      # AMI
+      ami_out = ami(x = rqa_dat(), y = rqa_dat(), L = input$lag_rqa, bins = 0) # Freely determine bins
+      tau = ami_out$tau[1,1]
+
+      # FNN
+      fnn_out = fnn(x = rqa_dat(), tau = ami_out$tau[1,1], mmax = 12, rtol = 15, atol = 2) # Use defaults
+      emb_dim = as.numeric(fnn_out[2])
+
+      # RQA
+      rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = emb_dim, delay = tau, normalize = input$normalize,
+          rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin,
+          radius = input$radius, whiteline = 0, recpt = 1)
+      
+    } else {
     rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = input$embed, delay = input$delay, normalize = input$normalize,
         rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin,
         radius = input$radius, whiteline = 0, recpt = 1)
-    
-    # if (input$psr_rqa && input$lag_rqa){
-    #   
-    #   # AMI
-    #   ami_out = ami(x = rqa_dat(), y = rqa_dat(), L = input$lag_rqa, bins = 0) # Freely determine bins
-    #   tau = as.data.frame(ami_out[1]) # tau data frame
-    #   min_tau = tau[1,1]
-    #   
-    #   # FNN
-    #   fnn_out = fnn(x = rqa_dat(), tau = ami_out$tau[1,1], mmax = 12, rtol = 15, atol = 2) # Use defaults
-    #   emb_dim = as.numeric(fnn_out[2])
-    #   
-    #   # RQA
-    #   rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = emb_dim, delay = min_tau, normalize = input$normalize, 
-    #       rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin, 
-    #       radius = input$radius, whiteline = 0, recpt = input$recpt)
-    # } else {
-    # 
-    # rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = input$embed, delay = input$delay, normalize = input$normalize, 
-    #     rescale = input$rescale, mindiagline = input$mindiagline, minvertline = input$minvertline, t_win = input$twin, 
-    #     radius = input$radius, whiteline = 0, recpt = input$recpt)
-    # }
+    }
   })
   
   # RQA plot -- generate the plot only when the "Go" button has been clicked
@@ -1503,17 +1499,17 @@ server <- function(input, output) {
   observeEvent(input$goRQA, {
     output$rqaResults <- renderPrint({
       # rqaResult()
-      cat("rr:", rqaResult()$rqa$rr, "\n", 
+      cat("rr:", rqaResult()$rqa$rr, "\n",
           "det:", rqaResult()$rqa$det, "\n",
           "div:", rqaResult()$rqa$div, "\n",
-          "nrline:", rqaResult()$rqa$nrline, "\n", 
-          "ratio:", rqaResult()$rqa$ratio, "\n", 
-          "maxline:", rqaResult()$rqa$maxline, "\n", 
-          "mealine:", rqaResult()$rqa$mealine, "\n", 
-          "lam:", rqaResult()$rqa$lam, "\n", 
-          "tt:", rqaResult()$rqa$tt, "\n", 
-          "vmax:", rqaResult()$rqa$vmax, "\n", 
-          "entropy:", rqaResult()$rqa$entropy, "\n", 
+          "nrline:", rqaResult()$rqa$nrline, "\n",
+          "ratio:", rqaResult()$rqa$ratio, "\n",
+          "maxline:", rqaResult()$rqa$maxline, "\n",
+          "mealine:", rqaResult()$rqa$mealine, "\n",
+          "lam:", rqaResult()$rqa$lam, "\n",
+          "tt:", rqaResult()$rqa$tt, "\n",
+          "vmax:", rqaResult()$rqa$vmax, "\n",
+          "entropy:", rqaResult()$rqa$entropy, "\n",
           "rentropy:", rqaResult()$rqa$rentropy, "\n")
       
     })

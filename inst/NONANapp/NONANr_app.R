@@ -545,44 +545,73 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                      
                            # Simulations -----------------------------------------------------------------
                            navbarMenu("Simulations",
+                                      ## FGN SIM ---------------------------------------------------------------------
+                                      tabPanel("Fractional Gaussian Noise", 
+                                               h4(strong("Fractional Gaussian Noise")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   numericInput("fgn_n", "Number of Points:", value = 1000, step = 1),
+                                                   numericInput("fgn_h", "Hurst Exponent:", value = 0.75, step = 0.01, min = 0.01, max = 0.99),
+                                                   numericInput("fgn_mu", "Mean:", value = 0, step = 0.1),
+                                                   numericInput("fgn_sigma", "Standard Deviation:", value = 1, min = 0.1, step = 0.1),
+                                                   fluidRow(
+                                                     
+                                                     column(width = 6,
+                                                            actionButton("goFGN", "Create")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportFGN", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportFGNname", "Choose a name for your variable before exporting", "fgn_out"),
+                                                   
+                                                 ), # sidebarpanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotlyOutput('fgnTS')), # single row just for the time series plot
+                                                   ), 
+                                                   br(),
+                                                   br(),
+                                                   fluidRow(
+                                                     column(6,  plotOutput('histogram_fgn')),
+                                                     column(6,  plotOutput('autocorr_fgn'))
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("fgnResults"), 
+                                                   br(),
+                                                   br()
+                                                 ) # mainpanel
+                                               ) # sidebarlayout
+                                      ), # FGN tabpanel
+                                      
                                       ## IAAFT ---------------------------------------------------------------------
                                       tabPanel("IAAFT", 
                                                h4(strong("IAAFT")),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoiceSIM", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
-                                                   selectInput("simx", "Select X axis:", choices = NULL),
-                                                   selectInput("simy", "Select Y axis:", choices = NULL),
-                                                   numericInput("sim_n", "Number of Surrogates:", value = 9, step = 1, min = 1),
+                                                   selectInput("dataChoiceIAAFT", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
+                                                   selectInput("iaaftx", "Select X axis:", choices = NULL),
+                                                   selectInput("iaafty", "Select Y axis:", choices = NULL),
+                                                   numericInput("iaaft_surr", "Number of Surrogates:", value = 9, step = 1, min = 1),
                                                    fluidRow(
                                                      
                                                      column(width = 6,
-                                                            actionButton("gosim", "Analyze")
+                                                            actionButton("goIAAFT", "Analyze")
                                                      ),
                                                      column(width = 6,
-                                                            actionButton("exportsim", "Export",
+                                                            actionButton("exportIAAFT", "Export",
                                                                          style = "position: absolute; right: 19px;")
                                                      )
                                                    ), # fluidRow for action buttons
-                                                   textInput("exportSIMname", "Choose a name for your variable before exporting", "sim_out"),
+                                                   textInput("exportSIMname", "Choose a name for your variable before exporting", "iaaft_out"),
                                                    
                                                  ), # sidebarpanel
                                                  mainPanel(
                                                    fluidRow( 
-                                                     column(12,  plotlyOutput('simTS')) # single row just for the time series plot
-                                                   ), 
-                                                   br(),
-                                                   br(),
-                                                   fluidRow(
-                                                     column(4,  plotOutput('simPlot')),
-                                                     column(4,  plotOutput('histogram_sim')),
-                                                     column(4,  plotOutput('autocorr_sim'))
-                                                   ),
-                                                   br(),
-                                                   br(),
-                                                   verbatimTextOutput("simResults"), 
-                                                   br(),
-                                                   br()
+                                                     column(12,  plotOutput('iaaftPlot')) # single row just for the time series plot
+                                                   )
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ) # Simulations tabpanel
@@ -677,8 +706,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$dfay)) + 
         theme_nonan() # add the nonan plot theme on
@@ -786,8 +815,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$mfdfay)) + 
         theme_nonan() # add the nonan plot theme on
@@ -900,8 +929,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) +
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) +
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$bayesHy)) +
         theme_nonan() # add the nonan plot theme on
@@ -992,8 +1021,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$SEy)) + 
         theme_nonan() # add the nonan plot theme on    
@@ -1084,8 +1113,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$AEy)) + 
         theme_nonan() # add the nonan plot theme on   
@@ -1189,8 +1218,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$SymEy)) + 
         theme_nonan() # add the nonan plot theme on   
@@ -1284,8 +1313,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$amiy)) + 
         theme_nonan() # add the nonan plot theme on
@@ -1376,8 +1405,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$fnny)) + 
         theme_nonan() # add the nonan plot theme on
@@ -1485,8 +1514,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$rqay)) + 
         theme_nonan() # add the nonan plot theme on
@@ -1615,8 +1644,8 @@ server <- function(input, output) {
       
       ggplot(data = df, mapping = aes(x = lag, y = acf)) +
         geom_hline(aes(yintercept = 0)) + # lag = 0
-        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + # confidence intervals
-        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = 'white', linewidth = 0.7) + 
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$lyey)) + 
         theme_nonan() # add the nonan plot theme on   
@@ -1641,6 +1670,145 @@ server <- function(input, output) {
     }) # renderPrint
   }) # observeEvent
 
+  
+  # Simulations --------------------------------------------------------------
+  ## FGN SIM -----------------------------------------------------------------
+  
+  # FGN simulation
+  fgn_result = eventReactive(input$goFGN, {
+    fgn_sim(n = input$fgn_n, H = input$fgn_h, mean = input$fgn_mu, std = input$fgn_sigma)
+  })
+  
+  # Turn into a data frame for plotting
+  plot_dat <- eventReactive(input$goFGN, {
+    data.frame("index" = 1:nrow(fgn_result()), "amp" = fgn_result())
+  })
+  
+  # FGN plot
+  observeEvent(input$goFGN, {
+    output$fgnTS <- renderPlotly({
+      
+      # plot_dat = data.frame("index" = 1:nrow(fgn_result()), "amp" = fgn_result())
+      
+      ggplot(plot_dat(), aes(x = index, y = amp)) +
+        geom_line() +
+        labs(title = "Simulated time series") +
+             # caption = paste0("Length: ", input$fgn_n, "H: ", input$fgn_h, "Mean:", input$mu, "SD: ", input$sigma)) +
+        theme_nonan()
+      
+    })
+  }) # observeEvent
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportFGN, {
+    assign(input$exportFGNname, fgn_result(), envir = globalenv())
+    
+    output$fgnResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
+  
+  # plot histogram
+  observeEvent(input$goFGN, {
+    output$histogram_fgn <- renderPlot({
+      w = ceiling(nrow(plot_dat()) * 0.03) # calculate the number of bins
+      n = colnames(plot_dat())[1] # Get the column name to use below
+      ggplot(plot_dat(), aes(x = amp)) +
+        geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
+        labs(title = "Density Plot of FGN",
+             x = "Amplitude") +
+        theme_nonan()
+    })
+  }) # observeEvent
+  
+  # Autocorrelation plot -- generate the plot only when the "Go" button has been clicked
+  observeEvent(input$goFGN, {
+    output$autocorr_fgn <-  renderPlot({
+      
+      a = acf(plot_dat()$amp, plot = F)
+      conf.level <- 0.95 # set this at 0.95 for 95% confidence
+      ciline <- qnorm((1 - conf.level)/2)/sqrt(nrow(plot_dat())) # calculate the confidence intervals
+      df = cbind.data.frame("acf" = a$acf, "lag" = a$lag) # combine the lags and acf into a dataframe for plotting
+      
+      ggplot(data = df, mapping = aes(x = lag, y = acf)) +
+        geom_hline(aes(yintercept = 0)) + # lag = 0
+        geom_hline(aes(yintercept = ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + # confidence intervals
+        geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
+        geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
+        labs(title = "Autocorrelation of FGN") + 
+        theme_nonan() # add the nonan plot theme on
+      
+    })
+  }) # observeEvent
+  
+  # Print out the FGN results
+  observeEvent(input$goFGN, {
+    output$fgnResults <- renderPrint({
+
+      cat("Hurst Exponent:", input$fgn_h, "\n",
+          "Mean:", mean(fgn_result()), "\n",
+          "Standard Deviation:", sd(fgn_result()))
+    })
+  })
+  
+  
+  ## IAAFT ---------------------------------------------------------------
+  
+  # IAAFT data selection
+  iaaft_n = reactive({
+    names(get(input$dataChoiceIAAFT))
+  })
+  
+  
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoiceIAAFT, {
+    updateSelectInput(inputId = "iaaftx", choices = iaaft_n())
+    updateSelectInput(inputId = "iaafty", choices = iaaft_n(), selected = iaaft_n()[2])
+  })
+  
+  
+  # Select the desired data frame and by default the second column for analysis
+  iaaft_dat = reactive({
+    get(input$dataChoiceIAAFT) |>
+      select(all_of(input$iaafty)) |>
+      as.matrix()
+  })
+  
+
+  # IAAFT simulation
+  iaaft_result = eventReactive(input$goIAAFT, {
+    iaafft(signal = iaaft_dat(), N = input$iaaft_surr)
+  })
+  
+  # plot the time series of the data
+  # Electing to not plot this now as the original is included in the plot_iaaft function
+  # output$iaaftPlot <- renderPlotly({
+  #   
+  #   plot_dat = get(input$dataChoiceIAAFT)
+  #   
+  #   ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$iaafty]])) +
+  #     geom_line() +
+  #     labs(title = paste0("Time series of ", input$iaafty), 
+  #          x = "Index") + 
+  #     theme_nonan()
+  #   
+  # })
+  
+  # IAAFT plot
+  observeEvent(input$goIAAFT, {
+    output$iaaftPlot <- renderPlot({
+      plot_iaaft(iaaft_dat(), iaaft_result())
+    })
+  }) # observeEvent
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportIAAFT, {
+    assign(input$exportIAAFTname, iaaft_result(), envir = globalenv())
+    
+    output$iaaftResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
   
   
 } # server

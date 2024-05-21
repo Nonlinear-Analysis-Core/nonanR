@@ -584,7 +584,7 @@ mfdfa <- function(x, q, order, scales, scale_ratio) {
 #' 
 #' L = 50 # Lag - usually the same as the sampling rate
 #' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
-#' ami_out = ami(x, y, L, bins)
+#' ami_out = ami(x, x, L, bins)
 #' 
 #' # Function paramters
 #' maxDim = 10
@@ -599,7 +599,7 @@ mfdfa <- function(x, q, order, scales, scale_ratio) {
 #' 
 #' # Compute RQA
 #' embed = fnn_out$dim
-#' delay = fnn_out$tau
+#' delay = ami_out$tau[1,1]
 #' normalize = 0
 #' rescale = 1
 #' mindiagline = 2

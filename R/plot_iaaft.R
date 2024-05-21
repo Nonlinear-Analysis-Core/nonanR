@@ -18,6 +18,7 @@
 #' @export
 plot_iaaft = function(x, surrogates){
   
+  value <- variable <- NULL
   colnames(surrogates) = paste0("surrogate_", 1:ncol(surrogates))
   
   original_ts = x

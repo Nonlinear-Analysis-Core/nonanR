@@ -582,8 +582,35 @@ mfdfa <- function(x, q, order, scales, scale_ratio) {
 #' # Create a sample time series
 #' x = fgn_sim(n = 100, H = 0.8)
 #' 
+#' L = 50 # Lag - usually the same as the sampling rate
+#' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
+#' ami_out = ami(x, y, L, bins)
+#' 
+#' # Function paramters
+#' maxDim = 10
+#' delay = ami_out$tau[1,1]
+#' rtol = 10
+#' atol = 15
+#' fnn_tol = 0.01
+#' # Compute false nearest neighbors
+#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+#'                                  atol = atol, fnn_tol = fnn_tol)
+#'
+#' 
 #' # Compute RQA
-#' x.recpt = rqa(x, x, 1, 1, 0, 1, 2, 2, 0, .0001, 0, 1)
+#' embed = fnn_out$dim
+#' delay = fnn_out$tau
+#' normalize = 0
+#' rescale = 1
+#' mindiagline = 2
+#' minvertline = 2
+#' t_win = 0
+#' radius = 0.0001
+#' whiteline = 0
+#' recpt = 1
+#' 
+#' x.recpt = rqa(x, x, embed, delay, normalize, rescale, mindiagline, 
+#'               minvertline, t_win, radius, whiteline, recpt)
 #' 
 #' # Return recurrence plot
 #' plot_rqa(x.recpt$rp)

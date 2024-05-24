@@ -15,7 +15,16 @@ using namespace Rcpp;
 //' @import Rcpp
 //' @export
 //'
-//' @details Sample entropy can be used to quantify the complexity of a time series. A higher sample entropy value is associated with a more complex signal (more random). On the other hand a time series with a lower sample entropy value could be considered more predictable and repetitive.
+//' @details 
+//' Sample entropy is another of the entropy algorithms that aims to quantify the predictability of a time series. Originally developed by Richman and Moorman, sample entropy is an improvement on approximate entropy, designed to overcome the lack of consistency seen in physiological time series and to reduce the bias introduced by self-matches.
+//' 
+//' Sample entropy captures the predictability of the time series by taking the negative natural log of the conditional probability that two sequences similar for the first \eqn{m} points remain similar at the next point, within a given tolerance \eqn{r}. Unlike ApEn, SampEn does not include self-matches in this probability calculation, which helps reduce bias and dependency on the length of the time series. The full equation is as follows: 
+//' 
+//' \eqn{SE = -ln(\frac{A}{B})}
+//' 
+//' where \eqn{A} is the number of matching vectors of length \eqn{m +1} and \eqn{B} is the number of matching vectors of length m.
+//' 
+//' Like approximate entropy, sample entropy is measured in bits where lower bits (information content) indicates more predictably thus, a larger value would indicate more randomness and less predictability. While sample entropy is more robust to shorter time series and parameter selections, these things should always be kept in mind for analysis. Best practice is to use a range of parameter values as different values may reveal different results.
 //' 
 //' @examples 
 //' 

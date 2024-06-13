@@ -586,31 +586,31 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                ) # sidebarlayout
                                       ), # FGN tabpanel
                                       
-                                      ## IAAFT ---------------------------------------------------------------------
-                                      tabPanel("IAAFT", 
-                                               h4(strong("IAAFT")),
+                                      ## IAAFFT ---------------------------------------------------------------------
+                                      tabPanel("IAAFFT", 
+                                               h4(strong("IAAFFT")),
                                                sidebarLayout(
                                                  sidebarPanel(
-                                                   selectInput("dataChoiceIAAFT", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
-                                                   selectInput("iaaftx", "Select X axis:", choices = NULL),
-                                                   selectInput("iaafty", "Select Y axis:", choices = NULL),
-                                                   numericInput("iaaft_surr", "Number of Surrogates:", value = 9, step = 1, min = 1),
+                                                   selectInput("dataChoiceIAAFFT", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
+                                                   selectInput("iaafftx", "Select X axis:", choices = NULL),
+                                                   selectInput("iaaffty", "Select Y axis:", choices = NULL),
+                                                   numericInput("iaafft_surr", "Number of Surrogates:", value = 9, step = 1, min = 1),
                                                    fluidRow(
                                                      
                                                      column(width = 6,
-                                                            actionButton("goIAAFT", "Analyze")
+                                                            actionButton("goIAAFFT", "Analyze")
                                                      ),
                                                      column(width = 6,
-                                                            actionButton("exportIAAFT", "Export",
+                                                            actionButton("exportIAAFFT", "Export",
                                                                          style = "position: absolute; right: 19px;")
                                                      )
                                                    ), # fluidRow for action buttons
-                                                   textInput("exportSIMname", "Choose a name for your variable before exporting", "iaaft_out"),
+                                                   textInput("exportSIMname", "Choose a name for your variable before exporting", "iaafft_out"),
                                                    
                                                  ), # sidebarpanel
                                                  mainPanel(
                                                    fluidRow( 
-                                                     column(12,  plotOutput('iaaftPlot')) # single row just for the time series plot
+                                                     column(12,  plotOutput('iaafftPlot')) # single row just for the time series plot
                                                    )
                                                  ) # mainpanel
                                                ) # sidebarlayout
@@ -1752,60 +1752,60 @@ server <- function(input, output) {
   })
   
   
-  ## IAAFT ---------------------------------------------------------------
+  ## IAAFFT ---------------------------------------------------------------
   
-  # IAAFT data selection
-  iaaft_n = reactive({
-    names(get(input$dataChoiceIAAFT))
+  # IAAFFT data selection
+  iaafft_n = reactive({
+    names(get(input$dataChoiceIAAFFT))
   })
   
   
   # Update x and y choices based on the selected dataframe
-  observeEvent(input$dataChoiceIAAFT, {
-    updateSelectInput(inputId = "iaaftx", choices = iaaft_n())
-    updateSelectInput(inputId = "iaafty", choices = iaaft_n(), selected = iaaft_n()[2])
+  observeEvent(input$dataChoiceIAAFFT, {
+    updateSelectInput(inputId = "iaafftx", choices = iaafft_n())
+    updateSelectInput(inputId = "iaaffty", choices = iaafft_n(), selected = iaafft_n()[2])
   })
   
   
   # Select the desired data frame and by default the second column for analysis
-  iaaft_dat = reactive({
-    get(input$dataChoiceIAAFT) |>
-      select(all_of(input$iaafty)) |>
+  iaafft_dat = reactive({
+    get(input$dataChoiceIAAFFT) |>
+      select(all_of(input$iaaffty)) |>
       as.matrix()
   })
   
 
-  # IAAFT simulation
-  iaaft_result = eventReactive(input$goIAAFT, {
-    iaafft(signal = iaaft_dat(), N = input$iaaft_surr)
+  # IAAFFT simulation
+  iaafft_result = eventReactive(input$goIAAFFT, {
+    iaafft(signal = iaafft_dat(), N = input$iaafft_surr)
   })
   
   # plot the time series of the data
-  # Electing to not plot this now as the original is included in the plot_iaaft function
-  # output$iaaftPlot <- renderPlotly({
+  # Electing to not plot this now as the original is included in the plot_iaafft function
+  # output$iaafftPlot <- renderPlotly({
   #   
-  #   plot_dat = get(input$dataChoiceIAAFT)
+  #   plot_dat = get(input$dataChoiceIAAFFT)
   #   
-  #   ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$iaafty]])) +
+  #   ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$iaaffty]])) +
   #     geom_line() +
-  #     labs(title = paste0("Time series of ", input$iaafty), 
+  #     labs(title = paste0("Time series of ", input$iaaffty), 
   #          x = "Index") + 
   #     theme_nonan()
   #   
   # })
   
-  # IAAFT plot
-  observeEvent(input$goIAAFT, {
-    output$iaaftPlot <- renderPlot({
-      plot_iaaft(iaaft_dat(), iaaft_result())
+  # IAAFFT plot
+  observeEvent(input$goIAAFFT, {
+    output$iaafftPlot <- renderPlot({
+      plot_iaafft(iaafft_dat(), iaafft_result())
     })
   }) # observeEvent
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
-  observeEvent(input$exportIAAFT, {
-    assign(input$exportIAAFTname, iaaft_result(), envir = globalenv())
+  observeEvent(input$exportIAAFFT, {
+    assign(input$exportIAAFFTname, iaafft_result(), envir = globalenv())
     
-    output$iaaftResults <- renderPrint({
+    output$iaafftResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
     }) # renderPrint
   }) # observeEvent

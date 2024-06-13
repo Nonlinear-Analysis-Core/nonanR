@@ -1,22 +1,22 @@
-#' IAAFT Surrogates Plot
+#' IAAFFT Surrogates Plot
 #' 
-#' Plot method for IAAFT surrogates.
+#' Plot method for IAAFFT surrogates.
 #' 
 #' @param x Original time series
-#' @param surrogates IAAFT surrogates
+#' @param surrogates IAAFFT surrogates
 #'
 #' @examples
 #' 
 #' # Original time series
 #' x = rnorm(1000)
 #' 
-#' # IAAFT surrogates
-#' iaaft_out = nonanR::iaafft(x, N = 19)
+#' # IAAFFT surrogates
+#' iaafft_out = nonanR::iaafft(x, N = 19)
 #' # Plot
-#' plot_iaaft(x, iaaft_out)
+#' plot_iaafft(x, iaafft_out)
 #' 
 #' @export
-plot_iaaft = function(x, surrogates){
+plot_iaafft = function(x, surrogates){
   
   value <- variable <- NULL
   colnames(surrogates) = paste0("surrogate_", 1:ncol(surrogates))
@@ -29,7 +29,7 @@ plot_iaaft = function(x, surrogates){
   ggplot() +  
     geom_line(data_long, mapping = aes(x = index, y = value, color = variable)) +
     facet_wrap(~variable) + 
-    labs(title = "IAAFT Simulated Time Series", x = "", y = "") +
+    labs(title = "IAAFFT Simulated Time Series", x = "", y = "") +
     theme_nonan() + 
     theme(
       axis.text.x = element_blank(), 

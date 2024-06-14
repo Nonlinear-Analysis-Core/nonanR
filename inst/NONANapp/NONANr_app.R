@@ -450,6 +450,10 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    numericInput("minvertline", "Min Length:", value = 2, step = 1, min = 1),
                                                    numericInput("twin", "Theiler Window:", value = 0, step = 0.1),
                                                    numericInput("radius", "Radius:", value = 0.0001, step = 0.0001, min = 0),
+                                                   numericInput("rqa_maxDim", "Maximum Embedding Dimension:", value = 10),
+                                                   numericInput("rqa_rtol", "rtol:", value = 10, min = 1, step = 1),
+                                                   numericInput("rqa_atol", "atol:", value = 15, min = 1, step = 1),
+                                                   numericInput("rqa_tol", "Proportion of false neighbours:", value = 0.01, min = 0, max = 1, step = 0.01),
                                                    # numericInput("whiteline", "Rescale:", value = 2, step = 0.1),
                                                    # numericInput("recpt", "Plot:", value = 1, step = 1, min = 0, max = 1),
                                                    fluidRow(
@@ -505,9 +509,11 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    sliderInput("lye_fs", "Sampling Frequency:", value = 100, step = 10, min = 0, max = 2000),
                                                    numericInput("lye_nsteps", "Number of Time Steps:", value = 500, step = 10),
                                                    sliderInput("lye_regpoints", "Data point for regression line:", value = c(10, 500), step = 1, min = 0, max = 1000),
-                                                   numericInput("lye_mmax", "mmax:", value = 12, step = 1),
-                                                   numericInput("lye_rtol", "rtol:", value = 15, step = 1),
-                                                   numericInput("lye_atol", "atol:", value = 2, step = 1),
+                                                   numericInput("lye_maxDim", "Maximum Embedding Dimension:", value = 10),
+                                                   numericInput("lye_delay", "Time Lag:", value = 1),
+                                                   numericInput("lye_rtol", "rtol:", value = 10, min = 1, step = 1),
+                                                   numericInput("lye_atol", "atol:", value = 15, min = 1, step = 1),
+                                                   numericInput("lye_tol", "Proportion of false neighbours:", value = 0.01, min = 0, max = 1, step = 0.01),
                                                    fluidRow(
                                                      
                                                      column(width = 6,
@@ -1354,7 +1360,8 @@ server <- function(input, output) {
   
   # FNN calculation
   fnnResult <- eventReactive(input$goFNN, {
-    false_nearest_neighbors(fnn_dat(), maxDim = input$fnn_maxDim, delay = input$fnn_tau, rtol = input$fnn_rtol, atol = input$fnn_atol, fnn_tol = input$fnn_tol)
+    false_nearest_neighbors(fnn_dat(), maxDim = input$fnn_maxDim, delay = input$fnn_tau, 
+                            rtol = input$fnn_rtol, atol = input$fnn_atol, fnn_tol = input$fnn_tol)
     })
   
   # FNN plot
@@ -1465,8 +1472,9 @@ server <- function(input, output) {
       tau = ami_out$tau[1,1]
 
       # FNN
-      fnn_out = fnn(x = rqa_dat(), tau = ami_out$tau[1,1], mmax = 12, rtol = 15, atol = 2) # Use defaults
-      emb_dim = as.numeric(fnn_out[2])
+      fnn_out = false_nearest_neighbors(rqa_dat(), maxDim = input$fnn_maxDim, delay = input$fnn_tau, 
+                              rtol = input$fnn_rtol, atol = input$fnn_atol, fnn_tol = input$fnn_tol)
+      emb_dim = as.numeric(fnn_out$dim)
 
       # RQA
       rqa(ts1 = rqa_dat(), ts2 = rqa_dat(), embed = emb_dim, delay = tau, normalize = input$normalize,
@@ -1595,8 +1603,9 @@ server <- function(input, output) {
       time_delay = ami(x = lye_dat(), y = lye_dat(), L = input$lye_fs, bins = 0)
       tau = time_delay$tau[1,1]
       
-      embed = fnn(x = lye_dat(), tau = tau, mmax = input$lye_mmax, rtol = input$lye_rtol, atol = input$lye_atol)
-      dim = embed$dim
+      fnn_out = false_nearest_neighbors(lye_dat(), maxDim = input$lye_maxDim, delay = input$lye_tau, 
+                              rtol = input$lye_rtol, atol = input$lye_atol, fnn_tol = input$lye_tol)
+      dim = fnn_out$dim
       
       psr_length = length(lye_dat()) - tau*(dim-1)
       start = 1

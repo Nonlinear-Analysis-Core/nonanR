@@ -40,14 +40,17 @@ ts = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 
 mean_frequency = meanfreq(signal = ts, samp_rate = fs)
 
-mmax = 12
-rtol = 15
-atol = 2
+maxDim = 10
+rtol = 10
+atol = 15
+fnn_tol = 0.01
 
-time_delay = ami(ts, ts, 50, 30)
-tau = time_delay$tau[1,1] # Optimal time delay estimated by AMI
+ami_out = ami(ts, ts, 50, 30)
+delay = ami_out$tau[1,1] # Optimal time delay estimated by AMI
 
-embed = fnn(x = ts, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
+fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+                                  atol = atol, fnn_tol = fnn_tol)
+
 dim = embed$dim # Optimal embedding dimension estimated by FNN
 
 psr_length = length(ts) - tau*(dim-1)

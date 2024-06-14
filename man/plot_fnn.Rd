@@ -28,13 +28,16 @@ bins = 30
 ami_out = ami(x, y, L, bins)
 
 # - The second step is running the fnn function
-# Specify the parameters for fnn
-tau = 3 # You can get this value like: ami_out$tau[1,1]
-mmax = 12
-rtol = 15
-atol = 2
+# Function parameters
+maxDim = 10
+delay = 3 # You can get this value like: ami_out$tau[1,1]
+rtol = 10
+atol = 15
+fnn_tol = 0.01
 
-fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
+# Compute false nearest neighbors
+fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+                                  atol = atol, fnn_tol = fnn_tol)
 
 # Plot fnn_out
 plot_fnn(fnn_out)

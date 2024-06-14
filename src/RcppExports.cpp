@@ -63,20 +63,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// lye_r
-List lye_r(arma::vec x, int tau, int dim, int fs);
-RcppExport SEXP _nonanR_lye_r(SEXP xSEXP, SEXP tauSEXP, SEXP dimSEXP, SEXP fsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type tau(tauSEXP);
-    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
-    Rcpp::traits::input_parameter< int >::type fs(fsSEXP);
-    rcpp_result_gen = Rcpp::wrap(lye_r(x, tau, dim, fs));
-    return rcpp_result_gen;
-END_RCPP
-}
 // ami
 List ami(arma::colvec x, arma::colvec y, int L, int bins);
 RcppExport SEXP _nonanR_ami(SEXP xSEXP, SEXP ySEXP, SEXP LSEXP, SEXP binsSEXP) {
@@ -141,21 +127,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
     Rcpp::traits::input_parameter< double >::type std(stdSEXP);
     rcpp_result_gen = Rcpp::wrap(fgn_sim(n, H, mean, std));
-    return rcpp_result_gen;
-END_RCPP
-}
-// fnn
-List fnn(arma::vec x, int tau, int mmax, double rtol, double atol);
-RcppExport SEXP _nonanR_fnn(SEXP xSEXP, SEXP tauSEXP, SEXP mmaxSEXP, SEXP rtolSEXP, SEXP atolSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type tau(tauSEXP);
-    Rcpp::traits::input_parameter< int >::type mmax(mmaxSEXP);
-    Rcpp::traits::input_parameter< double >::type rtol(rtolSEXP);
-    Rcpp::traits::input_parameter< double >::type atol(atolSEXP);
-    rcpp_result_gen = Rcpp::wrap(fnn(x, tau, mmax, rtol, atol));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -264,13 +235,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nonanR_Ent_Ap", (DL_FUNC) &_nonanR_Ent_Ap, 3},
     {"_nonanR_Ent_Samp", (DL_FUNC) &_nonanR_Ent_Samp, 3},
     {"_nonanR_Ent_Sym", (DL_FUNC) &_nonanR_Ent_Sym, 3},
-    {"_nonanR_lye_r", (DL_FUNC) &_nonanR_lye_r, 4},
     {"_nonanR_ami", (DL_FUNC) &_nonanR_ami, 4},
     {"_nonanR_bayesH", (DL_FUNC) &_nonanR_bayesH, 2},
     {"_nonanR_cppsr", (DL_FUNC) &_nonanR_cppsr, 2},
     {"_nonanR_dfa", (DL_FUNC) &_nonanR_dfa, 5},
     {"_nonanR_fgn_sim", (DL_FUNC) &_nonanR_fgn_sim, 4},
-    {"_nonanR_fnn", (DL_FUNC) &_nonanR_fnn, 5},
     {"_nonanR_poly_residuals", (DL_FUNC) &_nonanR_poly_residuals, 2},
     {"_nonanR_lm_c", (DL_FUNC) &_nonanR_lm_c, 2},
     {"_nonanR_seq_int", (DL_FUNC) &_nonanR_seq_int, 1},

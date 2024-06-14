@@ -109,39 +109,6 @@ Ent_Sym <- function(x, thresholdVal, seqLength) {
     .Call('_nonanR_Ent_Sym', PACKAGE = 'nonanR', x, thresholdVal, seqLength)
 }
 
-#' Lyapunov Rosenstein Method
-#'
-#' Calculate the average mutual information of a time series.
-#' 
-#'
-#' @param x - A single column time series.
-#' @param tau - The first local minimum from the data. This is a value returned from the \code{ami} function.
-#' @param dim - An integer reflecting the embedding dimension at which there is the lowest number of false neighbors. This is a value returned from the \code{fnn} function
-#' @param fs - The sampling frequency that the data was collected at. 
-#' @returns The output of the algorithm is a list that includes:
-#' \itemize{
-#'  \item \code{M} The number of matched pairs
-#'  \item \code{out} A matrix of all the matched pairs and the average line divergence from which the slope is calculated. The matched pairs are columns 1 and 2. The average line divergence is column 3.
-#' } 
-#' @import Rcpp
-#' @export
-#'
-#' @details AMI is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
-#' 
-#' 
-#' @examples
-#'
-#' x = rnorm(1000)
-#' tau = 3 # You can get this value like: ami_out$tau[1,1]
-#' dim = 4 # You can get this value like: fnn_out$dim
-#' fs = 60
-#'
-#' lye_out = lye_r(x = x, tau = tau, dim = dim, fs = fs)
-#' 
-lye_r <- function(x, tau, dim, fs) {
-    .Call('_nonanR_lye_r', PACKAGE = 'nonanR', x, tau, dim, fs)
-}
-
 #' Average Mutual Information
 #'
 #' Calculate the average mutual information of a time series.
@@ -229,12 +196,14 @@ bayesH <- function(x, n) {
 #'
 #' t = seq(0, 1, 0.01)
 #' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
-#' tau = 1 # tau for CPPSR is fixed to tau = 1
-#' mmax = 12
-#' rtol = 15
-#' atol = 2
+#' maxDim = 10
+#' delay = 1 # tau for CPPSR is fixed to tau = 1
+#' rtol = 10
+#' atol = 15
+#' fnn_tol = 0.01
 #' 
-#' fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
+#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+#'                                   atol = atol, fnn_tol = fnn_tol)
 #'
 #' y_cppsr= cppsr(x = x, m = fnn_out$dim)
 #' 
@@ -316,41 +285,6 @@ fgn_sim <- function(n, H, mean = 0, std = 1) {
     .Call('_nonanR_fgn_sim', PACKAGE = 'nonanR', n, H, mean, std)
 }
 
-#' False Nearest Neighbor
-#'
-#' Calculate the average mutual information of a time series.
-#'
-#' @param x - a single column time series
-#' @param tau - the first local minimum from the data. This is a value returned from the \code{ami} function
-#' @param mmax - The maximum embedding dimension. Common practice is to set this to 12.
-#' @param rtol - The near tolerance. Common practice is to set this to 15. 
-#' @param atol - The far tolerance. Used to accommodate for the fact that all neighbors may be far away to begin with. Common practice is to set this to 2.
-#' @returns The output of the algorithm is a list that includes:
-#' \itemize{
-#'  \item \code{dE} A column vector of the percentages of false neighbors at the embedding dimensions up to \code{mmax}
-#'  \item \code{dim} An integer reflecting the embedding dimension at which there is the lowest number of false neighbors
-#' } 
-#' @import Rcpp
-#' @export
-#'
-#' @details FNN is part of the phase space reconstruction step that is needed for some nonlinear analysis methods.
-#' 
-#' 
-#' @examples
-#'
-#' x = rnorm(1000)
-#' tau = 3 # You can get this value like: ami_out$tau[1,1]
-#' mmax = 12
-#' rtol = 15
-#' atol = 2
-#' 
-#' fnn_out = fnn(x = x, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
-#'
-#'
-fnn <- function(x, tau, mmax, rtol, atol) {
-    .Call('_nonanR_fnn', PACKAGE = 'nonanR', x, tau, mmax, rtol, atol)
-}
-
 poly_residuals <- function(yr, m) {
     .Call('_nonanR_poly_residuals', PACKAGE = 'nonanR', yr, m)
 }
@@ -393,14 +327,17 @@ seq_int <- function(length) {
 #' 
 #' mean_frequency = meanfreq(signal = ts, samp_rate = fs)
 #' 
-#' mmax = 12
-#' rtol = 15
-#' atol = 2
+#' maxDim = 10
+#' rtol = 10
+#' atol = 15
+#' fnn_tol = 0.01
 #' 
-#' time_delay = ami(ts, ts, 50, 30)
-#' tau = time_delay$tau[1,1] # Optimal time delay estimated by AMI
+#' ami_out = ami(ts, ts, 50, 30)
+#' delay = ami_out$tau[1,1] # Optimal time delay estimated by AMI
 #' 
-#' embed = fnn(x = ts, tau = tau, mmax = mmax, rtol = rtol, atol = atol)
+#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+#'                                   atol = atol, fnn_tol = fnn_tol)
+#' 
 #' dim = embed$dim # Optimal embedding dimension estimated by FNN
 #' 
 #' psr_length = length(ts) - tau*(dim-1)

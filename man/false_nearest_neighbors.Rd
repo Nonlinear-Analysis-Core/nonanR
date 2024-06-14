@@ -44,7 +44,7 @@ Where \eqn{||V(t) – V(t)^{NN}||} is the distance between two vectors, and \eqn
 # Generate example time series data
 x = rnorm(1000)
 
-# Function paramters
+# Function parameters
 maxDim = 10
 delay = 1 # You can get this value like: ami_out$tau[1,1]
 rtol = 10

@@ -3,9 +3,14 @@ Type: Package
 Title: Nonlinear Analysis Methods for Time Series Analysis
 Version: 0.0.1
 Date: 2023-11-14
-Author: Joel Sommerfeld
+Authors@R: c(
+    person("Joel", "Sommerfeld", email = "joel.sommerfeld36@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0002-4972-0872")),
+    person("Aaron", "Likens", email = "alikens@unomaha.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6535-5772")),
+    person("Seung Kyeom", "Kim", email = "seungkyeomkim@unomaha.edu", role = c("aut"), comment = c(ORCID = "0000-0001-5059-6867")),
+    person("Travis", "Wiltshire", email = "T.J.Wiltshire@tilburguniversity.edu", role = c("aut"), comment = c(ORCID = "0000-0001-7630-2695")),
+    person("Tyler", "Wiles", email = "tylerwiles@unomaha.edu", role = c("ctb"), comment = c(ORCID = "0000-0001-9915-6950")))
 Maintainer: Nonlinear Analysis Core <bmchnonan@unomaha.edu>
-Description: This is a collection of functions that can be used for the nonlinear analysis of time series data. 
+Description: This is a collection of functions that can be used for the nonlinear analysis of time series data. Analysis can be done by explicitly writing out code or using the Shiny app for a point-and-click analysis.
 License: GPL (>= 3) + file LICENSE
 Depends: 
     R (>= 2.10), 

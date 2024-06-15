@@ -31,7 +31,7 @@ void free_vector(VECTOR cVector);
 //' @import Rcpp
 //' @export
 //' 
-//' @details Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. Common practice is to take the median of the probability distribution as the estimated Hurst exponent.
+//' @details Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. This algorithm estimates Hurst exponent via Bayesian technique. Based on a predefined target distribution of Hurst exponent, the accept-reject algorithm is used to sample a posterior (probability) distribution of Hurst exponent. Common practice is to take the median of the probability distribution as the estimated Hurst exponent. For an example of using this algorithm on human movement data, refer to Likens et al. 2023.
 //' 
 //' @examples
 //' 
@@ -42,6 +42,8 @@ void free_vector(VECTOR cVector);
 //' 
 //' @references 
 //' - Tyralis, H., & Koutsoyiannis, D. (2014). A Bayesian statistical model for deriving the predictive distribution of hydroclimatic variables. Climate dynamics, 42, 2867-2883.
+//' 
+//' - Likens, A. D., Mangalam, M., Wong, A. Y., Charles, A. C., & Mills, C. (2023). Better than DFA? A Bayesian method for estimating the Hurst exponent in behavioral sciences. ArXiv.
 //' 
 // [[Rcpp::export]]
 arma::vec bayesH(arma::vec x, unsigned int n) {

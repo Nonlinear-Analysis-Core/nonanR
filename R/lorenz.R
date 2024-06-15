@@ -40,6 +40,9 @@
 #' plot_rqa(x.recpt)
 #' 
 #' 
+#' @references
+#' - Sprott, J. C. (2003). Chaos and time-series analysis. Oxford university press.
+#' 
 #' @export
 lorenz = function(sigma = 10, rho = 28, beta = 8/3,
                   x0 = 0, y0 = -0.01, z0 = 9,

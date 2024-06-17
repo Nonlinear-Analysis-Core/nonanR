@@ -8,16 +8,16 @@ int binToDec(arma::ivec binSeq, unsigned int seqLength);
 //' 
 //' Calculate the symbolic entropy of a time series.
 //' 
-//' @param x A vector of integers
-//' @param thresholdVal The threshold of the search that you want to do
-//' @param seqLength The length of the sequence that you want to find 
+//' @param x A single column time series
+//' @param thresholdVal The threshold to decide the symbol (0 or 1) of each value. Typically, 0, mean, or median of the time series is chosen.
+//' @param seqLength The length of the vectors to be compared for matches
 //' 
-//' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+//' @returns The output of the algorithm is a single value that reflects the entropy of the time series in bits.
 //' 
 //' @import Rcpp
 //' @export
 //' 
-//' @details Like all entropy functions, this one also quantifies the amount of complexity (or uncertainty/unpredictability) in the signal. Symbolic entropy can be used to gather greater insight into the underlying patterns seen in movement data.
+//' @details Like all entropy functions, this one also quantifies the amount of complexity (or uncertainty/unpredictability) in the signal. Higher values indicates that the time series is less predictable (or more random) and the temporal patterns in the time series are less repetitive. Lower values indicates that the time series is more predictable and the temporal patterns in the time series are more repetitive. Symbolic entropy is rather robust to the length of the time series, making it more suitable for short time series compared to other entropy functions.
 //' 
 //' @examples 
 //' 
@@ -29,6 +29,7 @@ int binToDec(arma::ivec binSeq, unsigned int seqLength);
 //' 
 //' @references
 //' Aziz, W., Arif, M. Complexity analysis of stride interval time series by threshold dependent symbolic entropy. Eur J Appl Physiol 98, 30–40 (2006). https://doi.org/10.1007/s00421-006-0226-5
+//' 
 // [[Rcpp::export]]
 double Ent_Sym(arma::vec x, double thresholdVal, unsigned int seqLength) {
    

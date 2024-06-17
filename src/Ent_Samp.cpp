@@ -10,7 +10,7 @@ using namespace Rcpp;
 //' @param m The length of the vectors to be compared for matches
 //' @param R The radius for accepting matches
 //' 
-//' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+//' @returns The output of the algorithm is a single value that reflects the entropy of the time series in bits.
 //' 
 //' @import Rcpp
 //' @export

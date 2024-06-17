@@ -50,7 +50,7 @@ Ent_Ap <- function(x, dim, R) {
 #' @param m The length of the vectors to be compared for matches
 #' @param R The radius for accepting matches
 #' 
-#' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+#' @returns The output of the algorithm is a single value that reflects the entropy of the time series in bits.
 #' 
 #' @import Rcpp
 #' @export
@@ -84,16 +84,16 @@ Ent_Samp <- function(x, m, R) {
 #' 
 #' Calculate the symbolic entropy of a time series.
 #' 
-#' @param x A vector of integers
-#' @param thresholdVal The threshold of the search that you want to do
-#' @param seqLength The length of the sequence that you want to find 
+#' @param x A single column time series
+#' @param thresholdVal The threshold to decide the symbol (0 or 1) of each value. Typically, 0, mean, or median of the time series is chosen.
+#' @param seqLength The length of the vectors to be compared for matches
 #' 
-#' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+#' @returns The output of the algorithm is a single value that reflects the entropy of the time series in bits.
 #' 
 #' @import Rcpp
 #' @export
 #' 
-#' @details Like all entropy functions, this one also quantifies the amount of complexity (or uncertainty/unpredictability) in the signal. Symbolic entropy can be used to gather greater insight into the underlying patterns seen in movement data.
+#' @details Like all entropy functions, this one also quantifies the amount of complexity (or uncertainty/unpredictability) in the signal. Higher values indicates that the time series is less predictable (or more random) and the temporal patterns in the time series are less repetitive. Lower values indicates that the time series is more predictable and the temporal patterns in the time series are more repetitive. Symbolic entropy is rather robust to the length of the time series, making it more suitable for short time series compared to other entropy functions.
 #' 
 #' @examples 
 #' 
@@ -105,6 +105,7 @@ Ent_Samp <- function(x, m, R) {
 #' 
 #' @references
 #' Aziz, W., Arif, M. Complexity analysis of stride interval time series by threshold dependent symbolic entropy. Eur J Appl Physiol 98, 30–40 (2006). https://doi.org/10.1007/s00421-006-0226-5
+#' 
 Ent_Sym <- function(x, thresholdVal, seqLength) {
     .Call('_nonanR_Ent_Sym', PACKAGE = 'nonanR', x, thresholdVal, seqLength)
 }
@@ -161,7 +162,7 @@ ami <- function(x, y, L, bins) {
 #' @import Rcpp
 #' @export
 #' 
-#' @details Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. Common practice is to take the median of the probability distribution as the estimated Hurst exponent.
+#' @details Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. This algorithm estimates Hurst exponent via Bayesian technique. Based on a predefined target distribution of Hurst exponent, the accept-reject algorithm is used to sample a posterior (probability) distribution of Hurst exponent. Common practice is to take the median of the probability distribution as the estimated Hurst exponent. For an example of using this algorithm on human movement data, refer to Likens et al. 2023.
 #' 
 #' @examples
 #' 
@@ -172,6 +173,8 @@ ami <- function(x, y, L, bins) {
 #' 
 #' @references 
 #' - Tyralis, H., & Koutsoyiannis, D. (2014). A Bayesian statistical model for deriving the predictive distribution of hydroclimatic variables. Climate dynamics, 42, 2867-2883.
+#' 
+#' - Likens, A. D., Mangalam, M., Wong, A. Y., Charles, A. C., & Mills, C. (2023). Better than DFA? A Bayesian method for estimating the Hurst exponent in behavioral sciences. ArXiv.
 #' 
 bayesH <- function(x, n) {
     .Call('_nonanR_bayesH', PACKAGE = 'nonanR', x, n)
@@ -333,12 +336,12 @@ seq_int <- function(length) {
 #' fnn_tol = 0.01
 #' 
 #' ami_out = ami(ts, ts, 50, 30)
-#' delay = ami_out$tau[1,1] # Optimal time delay estimated by AMI
+#' tau = ami_out$tau[1,1] # Optimal time delay estimated by AMI
 #' 
-#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+#' fnn_out = false_nearest_neighbors(ts, maxDim = maxDim, delay = tau, rtol = rtol, 
 #'                                   atol = atol, fnn_tol = fnn_tol)
 #' 
-#' dim = embed$dim # Optimal embedding dimension estimated by FNN
+#' dim = fnn_out$dim # Optimal embedding dimension estimated by FNN
 #' 
 #' psr_length = length(ts) - tau*(dim-1)
 #' start = 1

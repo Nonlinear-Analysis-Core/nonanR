@@ -14,7 +14,7 @@ Ent_Samp(x, m, R)
 \item{R}{The radius for accepting matches}
 }
 \value{
-The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+The output of the algorithm is a single value that reflects the entropy of the time series in bits.
 }
 \description{
 Calculate the sample entropy of a time series.

@@ -18,13 +18,13 @@
 #' 
 #' # Function parameters
 #' maxDim = 10
-#' delay = ami_out$tau[1,1] # Optimal time delay estimated by AMI
+#' tau = ami_out$tau[1,1] # Optimal time delay estimated by AMI
 #' rtol = 10
 #' atol = 15
 #' fnn_tol = 0.01
 #'
 #' # Compute false nearest neighbors
-#' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
+#' fnn_out = false_nearest_neighbors(ts, maxDim = maxDim, delay = tau, rtol = rtol, 
 #'                                   atol = atol, fnn_tol = fnn_tol)
 #' dim = fnn_out$dim # Optimal embedding dimension estimated by FNN
 #' 

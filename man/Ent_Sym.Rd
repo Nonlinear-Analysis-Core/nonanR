@@ -7,20 +7,20 @@
 Ent_Sym(x, thresholdVal, seqLength)
 }
 \arguments{
-\item{x}{A vector of integers}
+\item{x}{A single column time series}
 
-\item{thresholdVal}{The threshold of the search that you want to do}
+\item{thresholdVal}{The threshold to decide the symbol (0 or 1) of each value. Typically, 0, mean, or median of the time series is chosen.}
 
-\item{seqLength}{The length of the sequence that you want to find}
+\item{seqLength}{The length of the vectors to be compared for matches}
 }
 \value{
-The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+The output of the algorithm is a single value that reflects the entropy of the time series in bits.
 }
 \description{
 Calculate the symbolic entropy of a time series.
 }
 \details{
-Like all entropy functions, this one also quantifies the amount of complexity (or uncertainty/unpredictability) in the signal. Symbolic entropy can be used to gather greater insight into the underlying patterns seen in movement data.
+Like all entropy functions, this one also quantifies the amount of complexity (or uncertainty/unpredictability) in the signal. Higher values indicates that the time series is less predictable (or more random) and the temporal patterns in the time series are less repetitive. Lower values indicates that the time series is more predictable and the temporal patterns in the time series are more repetitive. Symbolic entropy is rather robust to the length of the time series, making it more suitable for short time series compared to other entropy functions.
 }
 \examples{
 

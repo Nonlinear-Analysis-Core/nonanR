@@ -78,3 +78,6 @@ plot_rqa(x.recpt)
 
 
 }
+\references{
+- Sprott, J. C. (2003). Chaos and time-series analysis. Oxford university press.
+}

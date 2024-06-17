@@ -617,7 +617,10 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                  mainPanel(
                                                    fluidRow( 
                                                      column(12,  plotOutput('iaafftPlot')) # single row just for the time series plot
-                                                   )
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("iaafftResults")
                                                  ) # mainpanel
                                                ) # sidebarlayout
                                       ) # Simulations tabpanel
@@ -1808,11 +1811,14 @@ server <- function(input, output) {
     output$iaafftPlot <- renderPlot({
       plot_iaafft(iaafft_dat(), iaafft_result())
     })
+      output$iaafftResults <- renderPrint({
+        cat("To view surrogate series, select the Export button.")
+    })
   }) # observeEvent
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportIAAFFT, {
-    assign(input$exportIAAFFTname, iaafft_result(), envir = globalenv())
+    assign(input$exportSIMname, iaafft_result(), envir = globalenv())
     
     output$iaafftResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")

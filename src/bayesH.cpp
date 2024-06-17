@@ -45,6 +45,8 @@ void free_vector(VECTOR cVector);
 //' 
 //' - Likens, A. D., Mangalam, M., Wong, A. Y., Charles, A. C., & Mills, C. (2023). Better than DFA? A Bayesian method for estimating the Hurst exponent in behavioral sciences. ArXiv.
 //' 
+//' - Mangalam, M., Wilson, T., Sommerfeld, J., & Likens, A. D. (2023). Optimizing a Bayesian method for estimating the Hurst exponent in behavioral sciences. arXiv preprint arXiv:2301.12064.
+//' 
 // [[Rcpp::export]]
 arma::vec bayesH(arma::vec x, unsigned int n) {
   

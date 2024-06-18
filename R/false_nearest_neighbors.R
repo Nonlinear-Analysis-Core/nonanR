@@ -11,8 +11,8 @@
 #'
 #' @return A list containing the following elements:
 #' \describe{
-#'   \item{fnn}{Percentage of false nearest neighbors for each dimension}
-#'   \item{dim}{Embedding dimension at which the percentage of FNN drops below fnn_tol}
+#'   \item{fnn}Percentage of false nearest neighbors for each dimension
+#'   \item{dim}Embedding dimension at which the percentage of FNN drops below fnn_tol
 #' }
 #'
 #' @details

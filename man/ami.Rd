@@ -7,13 +7,13 @@
 ami(x, y, L, bins)
 }
 \arguments{
-\item{x}{- a single column time series}
+\item{x}{A single column time series}
 
-\item{y}{- a single column time series. This can be the same as x}
+\item{y}{A single column time series. Can be the same as x}
 
-\item{L}{- the maximum lag of the time series. This is usually the same as the sampling frequency.}
+\item{L}{The maximum lag of the time series. Usually the same as the sampling frequency.}
 
-\item{bins}{- the number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you.}
+\item{bins}{The number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you.}
 }
 \value{
 The output of the algorithm is a list that includes:
@@ -26,7 +26,7 @@ The output of the algorithm is a list that includes:
 Calculate the average mutual information of a time series.
 }
 \details{
-Average Mutual Information (AMI) is an integral part of state space reconstruction, used to find the optimal time delay (tau) of a system. Tau is needed in algorithms such as Recurrence Quantification Analysis (RQA) and Lyapunov Exponents (LyE). AMI measures the probability that some information in one time series is shared with the same series delayed by one time step. Typically, this step precedes the False Nearest Neighbor (FNN) analysis. For practical implementation, NONAN prefers a histogram-based approach due to its relative speed compared to kernel density methods. Important consideration should be given to factors such as the length of the time series, the presence of artifacts in the data, additional noise, and the sampling rate when using this function.
+Average Mutual Information (AMI) is an integral part of state space reconstruction used to find the optimal time delay (tau) of a system. Tau is needed for algorithms such as Recurrence Quantification Analysis (RQA) and the largest Lyapunov Exponent (LyE). AMI measures the probability that some information in one time series is shared with the same series delayed by one time step. Typically, this step precedes the False Nearest Neighbor (FNN) analysis. For practical implementation, NONAN prefers a histogram-based approach due to its relative speed compared to kernel density methods. Important consideration should be given to factors such as the length of the time series, the presence of artifacts in the data, additional noise, and the sampling rate when using this function.
 The formula for AMI is as follows: 
 
 \eqn{I(k) = \sum_{t = 1}^{n} P(x_t, x_{t+k}) log_2 [\frac{P(x_t, x_{t+k})}{P(x_t)P(x_{t+k})} ]}
@@ -34,11 +34,13 @@ The formula for AMI is as follows:
 Where \eqn{P(x_t)} is the probability density function of the original time series, \eqn{P(x_{t+k})} is the probability density function of the time series shifted by a time delay \eqn{t}, and \eqn{P(x_t, x_{t+k})} is the joint probability density function of the original time series and the time series shifted by \eqn{t}.
 }
 \examples{
+# Generate example time series data
 x = rnorm(1000)
 y = x
 L = 50
-bins = 30 # If you do not want to specify a bin number, you can set it to 0.
+bins = 30
 
+# Run AMI
 ami_out = ami(x, y, L, bins)
 
 }

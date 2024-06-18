@@ -21,18 +21,18 @@ false_nearest_neighbors(data, maxDim, delay, rtol, atol, fnn_tol)
 }
 \value{
 A list containing the following elements:
-\describe{
-  \item{fnn}{Percentage of false nearest neighbors for each dimension}
-  \item{dim}{Embedding dimension at which the percentage of FNN drops below fnn_tol}
+\itemize{
+  \item \code{fnn}Percentage of false nearest neighbors for each dimension
+  \item \code{dim}Embedding dimension at which the percentage of FNN drops below fnn_tol
 }
 }
 \description{
 Computes the false nearest neighbors for a given time series.
 }
 \details{
-Finding the embedding dimensions is typically the second step in the phase space reconstruction. This can be done using the False Nearest Neighbors which minimizes the number of false neighbors as the attractor (input time series) is unfolded at increasingly higher and higher dimensions. In the package, FNN follows the calculation of average mutual information (AMI), where the output tau serves as an input into this function. 
+Finding the embedding dimensions is typically the second step during phase space reconstruction. The embedding dimension is often determined using False Nearest Neighbors (FNN), which minimizes the number of false neighbors as the attractor (input time series) is unfolded at increasingly higher and higher dimensions. In the package, FNN follows the calculation of average mutual information (AMI), where the output tau serves as an input into FNN. 
 
-The False Nearest Neighbors algorithm calculates the distance between a vector and its nearest neighbor in an m-dimensional space, repeating the process for each subsequent dimension by incrementing m by 1. True neighbors exhibit minimal change in distance between dimensions d and d+1. The algorithm then computes the ratio of the difference in distances between vectors at dimensions d and d+1 to the distance at dimension d. If this ratio exceeds a predefined threshold, `rtol`, the vector is determined to be a false neighbor. As the dimension increases, the percentage of false neighbors should decrease as the dynamics of the attractor unfold. The first dimension where the percentage drops to 0 (or very close to it) is chosen as the optimal embedding dimension for the data.
+The False Nearest Neighbors algorithm calculates the distance between a vector and its nearest neighbor in an m-dimensional space, repeating the process for each subsequent dimension by increasing m by 1. True neighbors exhibit minimal change in distance between dimensions d and d+1. The algorithm then computes the ratio of the difference in distances between vectors at dimensions d and d+1 to the distance at dimension d. If this ratio exceeds a predefined threshold, `rtol`, the vector is determined to be a false neighbor. As the dimension increases, the percentage of false neighbors should decrease as the dynamics of the attractor unfold. The first dimension where the percentage drops to 0 (or very close to it) is chosen as the optimal embedding dimension for the data.
 
 The calculation for False Nearest Neighbors can be represented by the following equation:
 

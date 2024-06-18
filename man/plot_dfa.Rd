@@ -13,14 +13,15 @@ plot_dfa(x)
 Plot method for monofractal detrended fluctuation analysis
 }
 \examples{
-
-# Create a time series and perform DFA
 x = fgn_sim(n = 1000, H = 0.9)
+
+# Specify inputs for dfa()
 order = 1
 verbose = 1
-scales = c(16,32,64,128,256,512)
+scales = logscale(scale_min = 16, scale_max = 512, scale_ratio = 2)
 scale_ratio = 2
 
+# Run DFA
 dfa_out = dfa(x, order, verbose, scales, scale_ratio)
 
 # Plot dfa_out

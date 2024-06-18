@@ -7,29 +7,36 @@
 bayesH(x, n)
 }
 \arguments{
-\item{x}{- A vector of time series}
+\item{x}{A vector of time series}
 
-\item{n}{- An integer indicating the number of Hurst exponents to infer}
+\item{n}{An integer indicating the number of Hurst exponents to infer}
 }
 \value{
-The output of the algorithm is a probability distribution of the Hurst exponents inferred
+A probability distribution of the Hurst exponents inferred
 }
 \description{
 Infer Hurst exponent of a time series based on accept-reject algorithm.
 }
 \details{
-Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. This algorithm estimates Hurst exponent via Bayesian technique. Based on a predefined target distribution of Hurst exponent, the accept-reject algorithm is used to sample a posterior (probability) distribution of Hurst exponent. Common practice is to take the median of the probability distribution as the estimated Hurst exponent. For an example of using this algorithm on human movement data, refer to Likens et al. 2023.
+The Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. This algorithm estimates the Hurst exponent via Bayesian technique. Based on a predefined target distribution of Hurst exponent, an accept-reject algorithm is used to sample a posterior (probability) distribution of Hurst exponent. Common practice is to take the median of the probability distribution as the estimated Hurst exponent. For an example of using this algorithm on human movement data, refer to Likens et al. 2023.
 }
 \examples{
-
+# Generate example time series data
 x = fgn_sim(n = 128, H = 0.9)
 
+# Run BayesH
 h.pdf = bayesH(x = x, n = 200)
+
+# Take the median of the probabilty distribution
 H = median(h.pdf)
 
 }
 \references{
-- Tyralis, H., & Koutsoyiannis, D. (2014). A Bayesian statistical model for deriving the predictive distribution of hydroclimatic variables. Climate dynamics, 42, 2867-2883.
+Hurst, H. E. Long-Term Storage Capacity of Reservoirs. T. Am. Soc. Civ. Eng. 116, 770–799 (1951). https://doi.org/10.1061/TACEAT.0006518
 
-- Likens, A. D., Mangalam, M., Wong, A. Y., Charles, A. C., & Mills, C. (2023). Better than DFA? A Bayesian method for estimating the Hurst exponent in behavioral sciences. ArXiv.
+Tyralis, H., & Koutsoyiannis, D. (2014). A Bayesian statistical model for deriving the predictive distribution of hydroclimatic variables. Climate dynamics, 42, 2867-2883. http://link.springer.com/10.1007/s00382-013-1804-y
+
+Likens, A. D., Mangalam, M., Wong, A. Y., Charles, A. C., & Mills, C. (2024). Better than Detrended Fluctuation Analysis?A Bayesian Method for Estimating the Hurst Exponent in Behavioral Sciences. Preprint: https://www.researchgate.net/publication/378038184_Better_than_Detrended_Fluctuation_Analysis_A_Bayesian_method_for_estimating_the_Hurst_exponent_in_behavioral_sciences
+
+Mangalam, M., Wilson, T., Sommerfeld, J., & Likens, A. D. (2024). Optimizing a Bayesian method for estimating the Hurst exponent in behavioral sciences. Preprint: https://www.researchgate.net/publication/381123281_Optimizing_a_Bayesian_method_for_estimating_the_Hurst_exponent_in_behavioral_sciences
 }

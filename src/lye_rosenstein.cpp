@@ -28,6 +28,10 @@ arma::vec mean_log_distance(const arma::uvec& step_time, const arma::uvec& nn, c
 //'
 //' @details Lyapunov exponent is the rate of divergence between two neighboring points of a trajectory in a state space.
 //' 
+//'
+//' @references
+//' 
+//' Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method for calculating largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
 //' 
 //' @examples
 //'

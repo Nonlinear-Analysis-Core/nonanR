@@ -10,9 +10,9 @@
 #' @param fnn_tol Proportion of false neighbors below which to choose dim
 #'
 #' @return A list containing the following elements:
-#' \describe{
-#'   \item{fnn}Percentage of false nearest neighbors for each dimension
-#'   \item{dim}Embedding dimension at which the percentage of FNN drops below fnn_tol
+#' \itemize{
+#'   \item \code{fnn}Percentage of false nearest neighbors for each dimension
+#'   \item \code{dim}Embedding dimension at which the percentage of FNN drops below fnn_tol
 #' }
 #'
 #' @details

@@ -176,6 +176,8 @@ ami <- function(x, y, L, bins) {
 #' 
 #' - Likens, A. D., Mangalam, M., Wong, A. Y., Charles, A. C., & Mills, C. (2023). Better than DFA? A Bayesian method for estimating the Hurst exponent in behavioral sciences. ArXiv.
 #' 
+#' - Mangalam, M., Wilson, T., Sommerfeld, J., & Likens, A. D. (2023). Optimizing a Bayesian method for estimating the Hurst exponent in behavioral sciences. arXiv preprint arXiv:2301.12064.
+#' 
 bayesH <- function(x, n) {
     .Call('_nonanR_bayesH', PACKAGE = 'nonanR', x, n)
 }

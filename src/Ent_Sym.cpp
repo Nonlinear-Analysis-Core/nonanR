@@ -22,8 +22,8 @@ int binToDec(arma::ivec binSeq, unsigned int seqLength);
 //' @examples 
 //' 
 //' x = rnorm(1000)
-//' thresholdVal = 2
-//' seqLength = 0.2
+//' thresholdVal = mean(x)
+//' seqLength = 2
 //' 
 //' SymE = Ent_Sym(x, thresholdVal, seqLength)
 //' 

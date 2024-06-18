@@ -446,8 +446,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    numericInput("delay", "Delay:", value = 1, min = 0),
                                                    numericInput("normalize", "Normalization:", value = 0, min = 0, max = 2),
                                                    numericInput("rescale", "Rescale:", value = 1, step = 1, min = 0, max = 2),
-                                                   numericInput("mindiagline", "Min Length:", value = 2, step = 1, min = 1),
-                                                   numericInput("minvertline", "Min Length:", value = 2, step = 1, min = 1),
+                                                   numericInput("mindiagline", "Min Diagonal Length:", value = 2, step = 1, min = 1),
+                                                   numericInput("minvertline", "Min Vertical Length:", value = 2, step = 1, min = 1),
                                                    numericInput("twin", "Theiler Window:", value = 0, step = 0.1),
                                                    numericInput("radius", "Radius:", value = 0.0001, step = 0.0001, min = 0),
                                                    numericInput("rqa_maxDim", "Maximum Embedding Dimension:", value = 10),
@@ -509,7 +509,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    sliderInput("lye_fs", "Sampling Frequency:", value = 100, step = 10, min = 0, max = 2000),
                                                    numericInput("lye_nsteps", "Number of Time Steps:", value = 500, step = 10),
                                                    sliderInput("lye_regpoints", "Data point for regression line:", value = c(10, 500), step = 1, min = 0, max = 1000),
-                                                   numericInput("lye_maxDim", "Maximum Embedding Dimension:", value = 10),
+                                                   numericInput("lye_maxDim", "Embedding Dimension:", value = 10),
                                                    numericInput("lye_delay", "Time Lag:", value = 1),
                                                    numericInput("lye_rtol", "rtol:", value = 10, min = 1, step = 1),
                                                    numericInput("lye_atol", "atol:", value = 15, min = 1, step = 1),
@@ -1606,9 +1606,9 @@ server <- function(input, output) {
       time_delay = ami(x = lye_dat(), y = lye_dat(), L = input$lye_fs, bins = 0)
       tau = time_delay$tau[1,1]
       
-      fnn_out = false_nearest_neighbors(lye_dat(), maxDim = input$lye_maxDim, delay = input$lye_tau, 
-                              rtol = input$lye_rtol, atol = input$lye_atol, fnn_tol = input$lye_tol)
-      dim = fnn_out$dim
+      #fnn_out = false_nearest_neighbors(lye_dat(), maxDim = input$lye_maxDim, delay = input$lye_tau, 
+      #                        rtol = input$lye_rtol, atol = input$lye_atol, fnn_tol = input$lye_tol)
+      dim = input$lye_maxDim#fnn_out$dim
       
       psr_length = length(lye_dat()) - tau*(dim-1)
       start = 1

@@ -6,12 +6,12 @@
 #' @param surrogates IAAFFT surrogates
 #'
 #' @examples
-#' 
-#' # Original time series
+#' # Generate example time series data
 #' x = rnorm(1000)
 #' 
 #' # IAAFFT surrogates
-#' iaafft_out = nonanR::iaafft(x, N = 19)
+#' iaafft_out = iaafft(x, N = 19)
+#' 
 #' # Plot
 #' plot_iaafft(x, iaafft_out)
 #' 

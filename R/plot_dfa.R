@@ -7,14 +7,16 @@
 #' @param x The list object returned \code{dfa} in this package.
 #' 
 #' @examples
-#' 
-#' # Create a time series and perform DFA
+# Generate example time series data
 #' x = fgn_sim(n = 1000, H = 0.9)
+#' 
+#' # Specify inputs for dfa()
 #' order = 1
 #' verbose = 1
-#' scales = c(16,32,64,128,256,512)
+#' scales = logscale(scale_min = 16, scale_max = 512, scale_ratio = 2)
 #' scale_ratio = 2
 #' 
+#' # Run DFA
 #' dfa_out = dfa(x, order, verbose, scales, scale_ratio)
 #' 
 #' # Plot dfa_out

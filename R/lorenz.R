@@ -1,15 +1,15 @@
 #' Simulate Lorenz system
 #' 
-#' This function allows you to simulate Lorenz system and generate synthesized Lorenz attractor
+#' This function allows you to simulate the Lorenz system and generate synthesized Lorenz attractor
 #' 
-#' @param sigma A control parameter for Lorenz system
-#' @param rho A control parameter for Lorenz system
-#' @param beta A control parameter for Lorenz system
-#' @param x0 A double that indicates the initial state of x component of Lorenz system
-#' @param y0 A double that indicates the initial state of y component of Lorenz system
-#' @param z0 A double that indicates the initial state of z component of Lorenz system
-#' @param duration The duration to simulate Lorenz system
-#' @param fs The sampling rate to simulate Lorenz system
+#' @param sigma A control parameter for the Lorenz system
+#' @param rho A control parameter for the Lorenz system
+#' @param beta A control parameter for the Lorenz system
+#' @param x0 A double that indicates the initial state of x component of the Lorenz system
+#' @param y0 A double that indicates the initial state of y component of the Lorenz system
+#' @param z0 A double that indicates the initial state of z component of the Lorenz system
+#' @param duration The duration to simulate the Lorenz system
+#' @param fs The sampling rate to simulate the Lorenz system
 #'
 #' @returns The output of the algorithm is a data frame that contains the synthesized Lorenz attractor. The first column is the time vector. The second column is the x component of the Lorenz attractor. The third column is the y component of the Lorenz attractor. The fourth column is the z component of the Lorenz attractor.
 #'
@@ -18,9 +18,6 @@
 #' This function requires "deSolve" library.
 #'
 #' @examples
-#' 
-#' library(nonanR)
-#' 
 #' # Simulate Lorenz system
 #' lorenz.df = lorenz(sigma = 10, rho = 28, beta = 8/3,
 #'                    x0 = 0, y0 = -0.01, z0 = 9,
@@ -36,7 +33,7 @@
 #'                mode = "lines") %>%
 #'  layout(title = "Lorenz Attractor")               
 #'  
-#'                    
+#' # Phase space reconstruction of Lorenz system
 #' x = lorenz.df$x0
 #' y = lorenz.df$x0
 #' L = 50
@@ -49,7 +46,6 @@
 #' 
 #' # Return recurrence plot
 #' plot_rqa(x.recpt)
-#' 
 #' 
 #' @references
 #' - Sprott, J. C. (2003). Chaos and time-series analysis. Oxford university press.

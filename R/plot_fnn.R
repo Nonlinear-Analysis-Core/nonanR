@@ -5,11 +5,10 @@
 #' @param x The list object returned \code{fnn} in this package.
 #' 
 #' @examples
-#' 
 #' # When performing phase space reconstruction there are two crucial steps. 
 #' # - The first step is running the ami function. 
 #' 
-#' #' # Create a time series
+#' # Generate example time series data
 #' x = fgn_sim(n = 1000, H = 0.9)
 #' 
 #' # Specify the parameters for ami
@@ -17,6 +16,7 @@
 #' L = 50
 #' bins = 30
 #' 
+#' # Run ami
 #' ami_out = ami(x, y, L, bins)
 #' 
 #' # - The second step is running the fnn function
@@ -26,10 +26,10 @@
 #' rtol = 10
 #' atol = 15
 #' fnn_tol = 0.01
-#'
-#' # Compute false nearest neighbors
+#' 
+#' # Run False Nearest Neighbors
 #' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
-#'                                   atol = atol, fnn_tol = fnn_tol)
+#'                                  atol = atol, fnn_tol = fnn_tol)
 #' 
 #' # Plot fnn_out
 #' plot_fnn(fnn_out)
@@ -44,10 +44,13 @@
 #' rtol = 10
 #' atol = 15
 #' fnn_tol = 0.01
-#'
+#' 
 #' # Compute false nearest neighbors
 #' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
 #'                                   atol = atol, fnn_tol = fnn_tol)
+#' 
+#' # Plot fnn_out
+#' plot_fnn(fnn_out)
 #' 
 #' @export
 plot_fnn = function(x){

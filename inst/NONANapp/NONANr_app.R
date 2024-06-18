@@ -509,7 +509,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    sliderInput("lye_fs", "Sampling Frequency:", value = 100, step = 10, min = 0, max = 2000),
                                                    numericInput("lye_nsteps", "Number of Time Steps:", value = 500, step = 10),
                                                    sliderInput("lye_regpoints", "Data point for regression line:", value = c(10, 500), step = 1, min = 0, max = 1000),
-                                                   numericInput("lye_maxDim", "Maximum Embedding Dimension:", value = 10),
+                                                   numericInput("lye_maxDim", "Embedding Dimension:", value = 10),
                                                    numericInput("lye_delay", "Time Lag:", value = 1),
                                                    numericInput("lye_rtol", "rtol:", value = 10, min = 1, step = 1),
                                                    numericInput("lye_atol", "atol:", value = 15, min = 1, step = 1),
@@ -1606,9 +1606,9 @@ server <- function(input, output) {
       time_delay = ami(x = lye_dat(), y = lye_dat(), L = input$lye_fs, bins = 0)
       tau = time_delay$tau[1,1]
       
-      fnn_out = false_nearest_neighbors(lye_dat(), maxDim = input$lye_maxDim, delay = input$lye_tau, 
-                              rtol = input$lye_rtol, atol = input$lye_atol, fnn_tol = input$lye_tol)
-      dim = fnn_out$dim
+      #fnn_out = false_nearest_neighbors(lye_dat(), maxDim = input$lye_maxDim, delay = input$lye_tau, 
+      #                        rtol = input$lye_rtol, atol = input$lye_atol, fnn_tol = input$lye_tol)
+      dim = input$lye_maxDim#fnn_out$dim
       
       psr_length = length(lye_dat()) - tau*(dim-1)
       start = 1

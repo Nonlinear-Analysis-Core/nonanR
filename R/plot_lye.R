@@ -68,7 +68,7 @@ plot_lye = function(x){
     geom_label(label = plot.text, 
                x = Inf, y = -Inf, 
                parse = T, vjust = "bottom", hjust = "inward",
-               label.size = NA, fill = "lightgray") +
+               label.size = NA, fill = "lightgray", size = 5) +
     labs(title = "Log of Divergence", 
          x = "ln(Divergence)", 
          y = "Time (s)") +

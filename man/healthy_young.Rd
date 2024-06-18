@@ -32,6 +32,6 @@ healthy_young
 A subset of data from the NONAN Gaitprint data repository. The age range for healthy young people is 19-35 years old. For details on the collections and data descriptions see the paper cited in the references. To get the full versions of the data please visit \url{https://springernature.figshare.com/collections/NONAN_GaitPrint_An_IMU_gait_database_of_healthy_young_adults/6415061/1}.
 }
 \references{
-\url{https://www.nature.com/articles/s41597-023-02704-z}
+Wiles, T.M., Mangalam, M., Sommerfeld, J.H. et al. NONAN GaitPrint: An IMU gait database of healthy young adults. Sci Data 10, 867 (2023). https://doi.org/10.1038/s41597-023-02704-z
 }
 \keyword{datasets}

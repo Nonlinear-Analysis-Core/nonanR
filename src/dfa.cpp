@@ -45,7 +45,7 @@ using namespace arma;
 //' General recommendations for choosing the min and max scale are an min = 10 and max = (N/4), where N is the number of observations. See Eke et al. (2002) and Gulich and Zunino (2014) for additional considerations.
 //' 
 //' @examples
-//' Generate example time series data
+//' # Generate example time series data
 //' x = fgn_sim(n = 1000, H = 0.9)
 //' order = 1
 //' verbose = 1

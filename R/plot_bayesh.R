@@ -17,6 +17,7 @@
 #' 
 plot_bayesh = function(x){
   
+  h.pdf <- NULL
   h.range = max(h.pdf) - min(h.pdf)
   # h.max = max(h.pdf)
   # h.min = min(h.pdf)

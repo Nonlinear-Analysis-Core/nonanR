@@ -11,8 +11,8 @@ arma::mat phaseSpaceReconstruction(const arma::vec& x, int tau, int m);
 //'
 //' Reconstruct attractor based on constant embedding parameters and principle component analysis.
 //' 
-//' @param x - A single column time series.
-//' @param m - An integer indicating the embedding dimension of the time series.
+//' @param x A single column time series
+//' @param m An integer indicating the embedding dimension of the time series
 //' @returns The output of the algorithm is a list that includes:
 //' \itemize{
 //'  \item \code{Yprime} The reconstructed attractor of the time series.
@@ -20,10 +20,14 @@ arma::mat phaseSpaceReconstruction(const arma::vec& x, int tau, int m);
 //' @import Rcpp
 //' @export
 //'
-//' @details Constant embedding parameters and principal component analysis-based phase space reconstruction (CPPSR) is a specific version of phase space reconstruction that is applicable on low-dimensional systems (dimension < 3).
+//' @details Constant embedding parameters and Principal component analysis-based Phase Space Reconstruction (CPPSR) is a specific version of phase space reconstruction that is applicable to low-dimensional systems (dimension < 3).
+//' 
+//' 
+//' @references 
+//' Li, D., Cao, M., Manoach, E. & Ragulskis, M. A novel embedding method for characterization of low-dimensional nonlinear dynamical systems. Nonlinear Dyn 104, 125–148 (2021). https://doi.org/10.1007/s11071-021-06229-1
 //' 
 //' @examples
-//'
+//' # Generate example time series data and inputs for FNN
 //' t = seq(0, 1, 0.01)
 //' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 //' maxDim = 10
@@ -32,10 +36,12 @@ arma::mat phaseSpaceReconstruction(const arma::vec& x, int tau, int m);
 //' atol = 15
 //' fnn_tol = 0.01
 //' 
+//' # Run FNN
 //' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
 //'                                   atol = atol, fnn_tol = fnn_tol)
 //'
-//' y_cppsr= cppsr(x = x, m = fnn_out$dim)
+//' # Run CPPSR
+//' y_cppsr = cppsr(x = x, m = fnn_out$dim)
 //' 
 // [[Rcpp::export]]
  arma::mat cppsr(const arma::vec& x, int m) {

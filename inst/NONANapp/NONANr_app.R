@@ -637,16 +637,23 @@ server <- function(input, output) {
   # Fractal Methods ---------------------------------------------------------------------
   ## DFA ---------------------------------------------------------------------
   
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoice) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   # get a list of the column names in the data frame
   n = reactive({
-    names(get(input$dataChoice))
+    names(new_dat())
   })
   
   
   # Update x and y choices based on the selected dataframe
   observeEvent(input$dataChoice, {
     updateSelectInput(inputId = "dfax", choices = n())
-    updateSelectInput(inputId = "dfay", choices = n(), selected = n()[2])
+    updateSelectInput(inputId = "dfay", choices = n(), selected = n()[3])
   })
   
   # Select the desired data frame and by default the second column for analysis
@@ -659,12 +666,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$dfaTS <- renderPlotly({
     
-    plot_dat = get(input$dataChoice)
+    plot_dat = new_dat() #get(input$dataChoice)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$dfay]])) +
+    ggplot(plot_dat, aes(x = .data[[input$dfax]], y = .data[[input$dfay]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$dfay), 
-           x = "Index") + 
+           x = input$dfax) + 
       theme_nonan()
     
   })
@@ -728,14 +735,19 @@ server <- function(input, output) {
   # Print out the DFA results
   observeEvent(input$goDFA, {
     output$dfaResults <- renderPrint({
-      cat("Log Scales:", dfaResult()$log_scales, "\n", "Log RMS:", dfaResult()$log_rms, "\n", "Alpha:", dfaResult()$alpha)
+      cat(input$dfay, "was analyzed", "\n",
+          "Log Scales:", dfaResult()$log_scales, "\n", 
+          "Log RMS:", dfaResult()$log_rms, "\n", 
+          "Alpha:", dfaResult()$alpha)
       
     })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportDFA, {
-    assign(input$exportDFAname, dfaResult(), envir = globalenv())
+    export_dat = append(dfaResult(), list("time_series" = input$dfay))
+    
+    assign(input$exportDFAname, export_dat, envir = globalenv())
     
     output$dfaResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -745,15 +757,23 @@ server <- function(input, output) {
   
   ## MFDFA ---------------------------------------------------------------------
   
+  
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoiceMFDFA) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   # get a list of the column names in the data frame
   n_mfdfa = reactive({
-    names(get(input$dataChoiceMFDFA))
+    names(new_dat())
   })
   
   # Update x and y choices based on the selected dataframe
   observeEvent(input$dataChoiceMFDFA, {
     updateSelectInput(inputId = "mfdfax", choices = n_mfdfa())
-    updateSelectInput(inputId = "mfdfay", choices = n_mfdfa(), selected = n_mfdfa()[2])
+    updateSelectInput(inputId = "mfdfay", choices = n_mfdfa(), selected = n_mfdfa()[3])
   })
   
   # Select the desired data frame and by default the second column for analysis
@@ -766,12 +786,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$mfdfaTS <- renderPlotly({
     
-    plot_dat = get(input$dataChoiceMFDFA)
+    plot_dat = new_dat()#get(input$dataChoiceMFDFA)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$mfdfay]])) +
+    ggplot(plot_dat, aes(x = .data[[input$mfdfax]], y = .data[[input$mfdfay]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$mfdfay), 
-           x = "Index") + 
+           x = input$mfdfax) + 
       theme_nonan()
   })
   
@@ -787,8 +807,8 @@ server <- function(input, output) {
   # MFDFA calculation
   mfdfaResult <- eventReactive(input$goMFDFA, {
     mfdfa(mfdfa_dat(), q = q_order(), order = input$order_mfdfa, scales = scales(), scale_ratio = input$scaleRatio_mfdfa)
-    
   })
+  
   
   # MFDFA plot -- generate the plot only when the "Go" button has been clicked
   observeEvent(input$goMFDFA, {
@@ -837,8 +857,16 @@ server <- function(input, output) {
   # Print out the MFDFA results
   observeEvent(input$goMFDFA, {
     output$mfdfaResults <- renderPrint({
+      
+      df = mfdfaResult()
+      
+      colnames(df$log_fq) = df$q
+      rownames(df$log_fq) = df$scales
+      
+      cat(input$dfay, "was analyzed", "\n",
+          "Log fq:", "\n")
+      print(df$log_fq)
       cat("Log Scales:", mfdfaResult()$log_scale, "\n", 
-          "Log fq:", mfdfaResult()$log_fq, "\n", 
           "Hq:", mfdfaResult()$Hq, "\n", 
           "Tau:", mfdfaResult()$Tau, "\n", 
           "H:", mfdfaResult()$h, "\n", 
@@ -849,7 +877,9 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportMFDFA, {
-    assign(input$exportMFDFAname, mfdfaResult(), envir = globalenv())
+    export_dat = append(mfdfaResult(), list(time_series = input$mfdfay))
+    
+    assign(input$exportMFDFAname, export_dat, envir = globalenv())
     
     output$mfdfaResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -859,9 +889,16 @@ server <- function(input, output) {
   
   ## bayesH -----------------------------------------------------------------
   
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoiceMFDFA) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   # get a list of the column names in the data frame
   n_bayes = reactive({
-    names(get(input$dataChoicebayesH))
+    names(new_dat())
   })
   
   # Update x and y choices based on the selected dataframe
@@ -881,12 +918,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$bayesHTS <- renderPlotly({
     
-    plot_dat = get(input$dataChoicebayesH)
+    plot_dat = new_dat() #get(input$dataChoicebayesH)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$bayesHy]])) +
+    ggplot(plot_dat, aes(x = .data[[input$bayesHx]], y = .data[[input$bayesHy]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$bayesHy),
-           x = "Index") +
+           x = input$bayesHx) +
       theme_nonan()
     
   })
@@ -899,13 +936,16 @@ server <- function(input, output) {
   # Print out the median bayesH result
   observeEvent(input$gobayesH, {
     output$bayesHResults <- renderPrint({
-      cat("bayesH:", median(bayesHresult()))
+      cat(input$bayesHy, "was analyzed", "\n",
+          "bayesH:", median(bayesHresult()))
     })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportbayesH, {
-    assign(input$exportbayesHname, list("hurst_pdf" = bayesHresult(), "median_hurst" =  median(bayesHresult())), envir = globalenv())
+    assign(input$exportbayesHname, list("hurst_pdf" = bayesHresult(), 
+                                        "median_hurst" =  median(bayesHresult()),
+                                        "time_series" = input$bayesHy), envir = globalenv())
     
     output$bayesHResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -951,9 +991,16 @@ server <- function(input, output) {
   # Entropy -----------------------------------------------------------------
   ## Sample Entropy -----------------------------------------------------------------
   
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoice1) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   # get a list of the column names in the data frame
   n1 = reactive({
-    names(get(input$dataChoice1))
+    names(new_dat())
   })
   
   # Update x and y choices based on the selected dataframe
@@ -973,12 +1020,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$SEts <- renderPlotly({
     
-    plot_dat = get(input$dataChoice1)
+    plot_dat = new_dat() # get(input$dataChoice1)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$SEy]])) +
+    ggplot(plot_dat, aes(x = .data[[input$SEx]], y = .data[[input$SEy]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$SEy), 
-           x = "Index") + 
+           x = input$SEx) + 
       theme_nonan()
     
   })
@@ -991,13 +1038,17 @@ server <- function(input, output) {
   # Print out the sample entropy results
   observeEvent(input$goSEENT, {
     output$SEresults <- renderPrint({
-      cat("Sample Entropy:", SEresult())
+      cat(input$SEy, "was analyzed", "\n",
+          "Sample Entropy:", SEresult())
     })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportSEENT, {
-    assign(input$exportSEENTname, SEresult(), envir = globalenv())
+    assign(input$exportSEENTname, list("SE" = SEresult(),
+                                       "m" = input$SEm, 
+                                       "R" = input$SEr, 
+                                       "time_series" = input$SEy), envir = globalenv())
     
     output$SEresults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -1042,9 +1093,16 @@ server <- function(input, output) {
   
   ## Approximate Entropy -----------------------------------------------------------------
   
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoice2) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   # get a list of the column names in the data frame
   n2 = reactive({
-    names(get(input$dataChoice2))
+    names(new_dat())
   })
   
   # Update x and y choices based on the selected dataframe
@@ -1064,12 +1122,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$AEts <- renderPlotly({
     
-    plot_dat = get(input$dataChoice2)
+    plot_dat = new_dat() # get(input$dataChoice2)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$AEy]])) +
+    ggplot(plot_dat, aes(x = .data[[input$AEx]], y = .data[[input$AEy]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$AEy), 
-           x = "Index") + 
+           x = input$AEx) + 
       theme_nonan()
     
   })
@@ -1082,13 +1140,17 @@ server <- function(input, output) {
   # Print out the approximate entropy results
   observeEvent(input$goAENT, {
     output$AEresults <- renderPrint({
-      cat("Approximate Entropy:", AEresult())
+      cat(input$SEy, "was analyzed", "\n",
+          "Approximate Entropy:", AEresult())
     })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportAENT, {
-    assign(input$exportAENTname, AEresult(), envir = globalenv())
+    assign(input$exportAENTname, list("AE" = AEresult(),
+                                      "dim" = input$AEdim,
+                                      "R" = input$AEr, 
+                                      "time_series" = input$AEy), envir = globalenv())
     
     output$AEresults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -1134,9 +1196,16 @@ server <- function(input, output) {
   
   ## Symbolic Entropy --------------------------------------------------------
   
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoice3) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   # get a list of the column names in the data frame
   n3 = reactive({
-    names(get(input$dataChoice3))
+    names(new_dat())
   })
   
   # Update x and y choices based on the selected dataframe
@@ -1170,12 +1239,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$SymEts <- renderPlotly({
     
-    plot_dat = get(input$dataChoice3)
+    plot_dat = new_dat() # get(input$dataChoice3)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$SymEy]])) +
+    ggplot(plot_dat, aes(x = .data[[input$SymEx]], y = .data[[input$SymEy]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$SymEy),
-           x = "Index") + 
+           x = input$SymEx) + 
       theme_nonan()
   })
   
@@ -1187,13 +1256,17 @@ server <- function(input, output) {
   # Print out the approximate entropy results
   observeEvent(input$goSymENT, {
     output$SymEresults <- renderPrint({
-      cat("Symbolic Entropy:", SymEresult())
+      cat(input$SymEy, "was analyzed", "\n",
+          "Symbolic Entropy:", SymEresult())
     })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportSymENT, {
-    assign(input$exportSymENTname, SymEresult(), envir = globalenv())
+    assign(input$exportSymENTname, list("SymE" = SymEresult(),
+                                        "threshold_val" = input$SymEthresh,
+                                        "seq_length" =input$SymEseql,
+                                        "time_series" = input$SymEy), envir = globalenv())
     
     output$SymEresults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -1239,8 +1312,16 @@ server <- function(input, output) {
   
   # PSR ---------------------------------------------------------------------
   ## AMI ---------------------------------------------------------------------
+  
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoiceAMI) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   ami_n = reactive({
-    names(get(input$dataChoiceAMI))
+    names(new_dat())
   })
   
   # Update x and y choices based on the selected dataframe
@@ -1259,12 +1340,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$amiTS <- renderPlotly({
     
-    plot_dat = get(input$dataChoiceAMI)
+    plot_dat = new_dat() # get(input$dataChoiceAMI)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$amiy]])) +
+    ggplot(plot_dat, aes(x = .data[[input$amix]], y = .data[[input$amiy]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$amiy), 
-           x = "Index") + 
+           x = input$amix) + 
       theme_nonan()
   })
   
@@ -1282,13 +1363,19 @@ server <- function(input, output) {
   observeEvent(input$goAMI, {
     output$amiResults <- renderPrint({
       tau = as.data.frame(amiResult()[1]) # tau data frame
-      cat("Lag:", tau[1,1])
+      cat(input$amiy, "was analyzed", "\n",
+          "Tau:", tau[1,2], "\n",
+          "Lag:", tau[1,1])
     })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportAMI, {
-    assign(input$exportAMIname, amiResult(), envir = globalenv())
+    export_dat = append(amiResult(), list("max_lag" = input$ami_lag,
+                                          "bins" = input$ami_bins,
+                                          "time_series" = input$amiy))
+    
+    assign(input$exportAMIname, export_dat, envir = globalenv())
     
     output$amiResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -1332,8 +1419,16 @@ server <- function(input, output) {
   }) # observeEvent
   
   ## FNN ---------------------------------------------------------------------
+  
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoiceFNN) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   fnn_n = reactive({
-    names(get(input$dataChoiceFNN))
+    names(new_dat())
   })
     
   # Update x and y choices based on the selected dataframe
@@ -1352,12 +1447,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$fnnTS <- renderPlotly({
     
-    plot_dat = get(input$dataChoiceFNN)
+    plot_dat = new_dat() # get(input$dataChoiceFNN)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$fnny]])) +
+    ggplot(plot_dat, aes(x = .data[[input$fnnx]], y = .data[[input$fnny]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$fnny), 
-           x = "Index") + 
+           x = input$fnnx) + 
       theme_nonan()
   })
   
@@ -1375,13 +1470,23 @@ server <- function(input, output) {
   # Print out the FNN results
   observeEvent(input$goFNN, {
     output$fnnResults <- renderPrint({
-      cat("Embedding Dimension:", as.numeric(fnnResult()$dim))
+      cat(input$fnny, "was analyzed", "\n",
+          "Embedding Dimension:", as.numeric(fnnResult()$dim))
     })
   })
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportFNN, {
-    assign(input$exportFNNname, fnnResult(), envir = globalenv())
+    
+    export_dat = append(fnnResult(), list("max_dim" = input$fnn_maxDim,
+                                          "tau" = input$fnn_tau,
+                                          "rtol" = input$fnn_rtol,
+                                          "atol" = input$fnn_atol,
+                                          "fnn_tol" = input$fnn_tol,
+                                          "time_series" = input$fnny))
+    
+    
+    assign(input$exportFNNname, export_dat, envir = globalenv())
     
     output$fnnResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -1428,9 +1533,16 @@ server <- function(input, output) {
   
   ## RQA ---------------------------------------------------------------------
   
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoice4) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   # get a list of the column names in the data frame
   n4 = reactive({
-    names(get(input$dataChoice4))
+    names(new_dat())
   })
   
   
@@ -1450,12 +1562,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$rqaTS <- renderPlotly({
     
-    plot_dat = get(input$dataChoice4)
+    plot_dat = new_dat() # get(input$dataChoice4)
     
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$rqay]])) +
+    ggplot(plot_dat, aes(x = .data[[input$rqax]], y = .data[[input$rqay]])) +
       geom_line() +
       labs(title = paste0("Time series of ", input$rqay), 
-           x = "Index") + 
+           x = input$rqax) + 
       theme_nonan()
   })
   
@@ -1539,7 +1651,8 @@ server <- function(input, output) {
   observeEvent(input$goRQA, {
     output$rqaResults <- renderPrint({
       # rqaResult()
-      cat("rr:", rqaResult()$rqa$rr, "\n",
+      cat(input$rqay, "was analyzed", "\n",
+          "rr:", rqaResult()$rqa$rr, "\n",
           "det:", rqaResult()$rqa$det, "\n",
           "div:", rqaResult()$rqa$div, "\n",
           "nrline:", rqaResult()$rqa$nrline, "\n",
@@ -1557,7 +1670,9 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportRQA, {
-    assign(input$exportRQAname, rqaResult(), envir = globalenv())
+    export_dat = append(rqaResult(), list("time_series" = input$rqay))
+    
+    assign(input$exportRQAname, export_dat, envir = globalenv())
     
     output$rqaResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
@@ -1567,9 +1682,16 @@ server <- function(input, output) {
   
   ## LyE ---------------------------------------------------------------------
   
+  # Update data to add in an index column for plotting purposes
+  new_dat = reactive({
+    get(input$dataChoiceLYE) |>
+      mutate(Index = row_number()) |>
+      select(Index, everything())
+  })
+  
   # get a list of the column names in the data frame
   lye_n = reactive({
-    names(get(input$dataChoiceLYE))
+    names(new_dat())
   })
   
   
@@ -1590,11 +1712,12 @@ server <- function(input, output) {
   # plot the time series of the data
   output$lyeTS <- renderPlotly({
 
-    plot_dat = get(input$dataChoiceLYE)
+    plot_dat = new_dat() # get(input$dataChoiceLYE)
 
-    ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$lyey]])) +
+    ggplot(plot_dat, aes(x = .data[[input$lyex]], y = .data[[input$lyey]])) +
       geom_line() +
-      labs(title = paste0("Time series of ", input$lyey)) +
+      labs(title = paste0("Time series of ", input$lyey), 
+           x = input$lyex) +
       theme_nonan()
   })
 
@@ -1667,7 +1790,8 @@ server <- function(input, output) {
   
     observeEvent(input$golye, {
     output$lyeResults <- renderPrint({
-      cat("LyE Value:", lye_result()$lye[2])
+      cat(input$lyey, "was analyzed", "\n",
+          "LyE Value:", lye_result()$lye[2])
     })
   })
   
@@ -1675,7 +1799,9 @@ server <- function(input, output) {
   
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportlye, {
-    assign(input$exportLYEname, lye_result(), envir = globalenv())
+    export_dat = append(lye_result(), list("time_series" = input$lyey))
+    
+    assign(input$exportLYEname, export_dat, envir = globalenv())
     
     output$lyeResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")

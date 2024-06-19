@@ -14,6 +14,7 @@
 #' @importFrom shinythemes shinytheme
 #' @importFrom stats fft
 #' @importFrom stats lm
+#' @importFrom stats median
 #' @importFrom stats predict
 #' @importFrom stats quantile
 #' @importFrom tidyr pivot_longer

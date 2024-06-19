@@ -67,3 +67,6 @@ lye_out = lye_rosenstein(X = X, samp_rate = fs, mean_freq = mean_frequency,
                          nsteps = 500, regpoints = 10:500)
 
 }
+\references{
+Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method for calculating largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
+}

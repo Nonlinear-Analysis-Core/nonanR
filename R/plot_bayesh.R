@@ -17,9 +17,11 @@
 #' 
 plot_bayesh = function(x){
   
+
   h.range = max(x) - min(x)
   h.med = median(x)
   h.mean = mean(x)
+
   values = c(h.med, h.mean)
   if (h.med > h.mean | h.med == h.mean) {
     hjust = c(-0.15, 1.2)

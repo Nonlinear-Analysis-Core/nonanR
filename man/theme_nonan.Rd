@@ -26,30 +26,27 @@ This function allows you to use the NONAN theme for ggplot2 graphics
 \examples{
 
 library(ggplot2)
-library(nonanR)
-
-# Extract data
-your_column <- healthy_young$contact_lt
-# Find the differences between consecutive elements
-differences <- diff(your_column)
  
-# Find the indices where the difference is 1000 and the previous value was 0
-indices <- which(differences == 1000)
- 
-stride_time = diff(indices)/ 200 # 200 is the sampling frequency of the data
- 
-# Combine into a data frame for ggplot
-dat = data.frame("stride_num" = 1:length(stride_time), "stride_time" = stride_time)
+iris_dat = iris
  
 # Plot the data and add nonan_theme()
-ggplot(dat, ggplot2::aes(x = stride_num, y = stride_time)) + 
- geom_line(color = "black", linewidth = 1) + 
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+geom_point() +
+labs(title = "Sepal Length vs Sepal Width",
+     x = "Sepal Length",
+     y = "Sepal Width") +
  theme_nonan()
   
   
-# Alternatively you could provide color values for the different features of the graph
-ggplot(dat, ggplot2::aes(x = stride_num, y = stride_time)) + 
- geom_line(color = "black", linewidth = 1) + 
- theme_nonan(background = "#BCBBBA", main_text = "#D71920", axis_text = "#681820", axes = "#474648")
+# Alternatively you can provide explicit color values for the different features of the graph
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+geom_point() +
+labs(title = "Sepal Length vs Sepal Width",
+     x = "Sepal Length",
+     y = "Sepal Width") +
+ theme_nonan(background = "grey15", 
+             main_text = "goldenrod", 
+             axis_text = "maroon", 
+             axes = "#ffffff")
 
 }

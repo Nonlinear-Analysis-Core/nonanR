@@ -14,7 +14,7 @@ Ent_Ap(x, dim, R)
 \item{R}{is the radius in which to search for matches}
 }
 \value{
-The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+The output of the algorithm is a single value that reflects the entropy of the time series in bits.
 }
 \description{
 Calculate the approximate entropy of a time series.
@@ -36,6 +36,8 @@ AE = Ent_Ap(x, dim, R)
 }
 \references{
 Pincus, S. M. (1991). Approximate entropy as a measure of system complexity. Proceedings of the National Academy of Sciences, 88(6), 2297–2301. https://doi.org/10.1073/pnas.88.6.2297
+
+Richman, J. S., & Moorman, J. R. (2000). Physiological time-series analysis using approximate entropy and sample entropy. American journal of physiology-heart and circulatory physiology, 278(6), H2039-H2049.
 
 Yentes, J. M., & Raffalt, P. C. (2021). Entropy Analysis in Gait Research: Methodological Considerations and Recommendations. Annals of Biomedical Engineering, 49(3), 979–990. https://doi.org/10.1007/s10439-020-02616-8
 }

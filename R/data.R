@@ -22,15 +22,16 @@
 #'   \item{knee_flexion_rt_deg}{Right knee angle in reference to the direction of heading}
 #'   \item{ankle_dorsiflexion_rt_deg}{Right ankle angle in reference to the direction of heading}
 #' }
-#' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
+#' @references 
+#' Wiles, T.M., Mangalam, M., Sommerfeld, J.H. et al. NONAN GaitPrint: An IMU gait database of healthy young adults. Sci Data 10, 867 (2023). https://doi.org/10.1038/s41597-023-02704-z
 "healthy_young"
 
 
 
 
-#' Gaitprint data for a healthy middle-aged person
+#' Gaitprint data for a healthy middle-aged adult
 #'
-#' A subset of data from the NONAN Gaitprint data repository. The age range for healthy young people is 36-55 years old. For details on the collections and data descriptions see the paper cited in the references. To get the full versions of the data please visit \url{https://springernature.figshare.com/collections/NONAN_GaitPrint_An_IMU_gait_database_of_healthy_young_adults/6415061/1}.
+#' A subset of data from the NONAN Gaitprint data repository. The age range for healthy middle-aged adults is 36-55 years old. For details on the collections and data descriptions see the paper cited in the references.
 #'
 #' @format
 #' A data frame with 10,000 rows and 16 columns:
@@ -52,7 +53,8 @@
 #'   \item{knee_flexion_rt_deg}{Right knee angle in reference to the direction of heading}
 #'   \item{ankle_dorsiflexion_rt_deg}{Right ankle angle in reference to the direction of heading}
 #' }
-#' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
+#' @references 
+#' Database in progress. please see: https://www.nature.com/articles/s41597-023-02704-z
 "healthy_middle"
 
 
@@ -60,7 +62,7 @@
 
 #' Gaitprint data for a healthy older person
 #'
-#' A subset of data from the NONAN Gaitprint data repository. The age range for healthy young people is over 55 years old. For details on the collections and data descriptions see the paper cited in the references. To get the full versions of the data please visit \url{https://springernature.figshare.com/collections/NONAN_GaitPrint_An_IMU_gait_database_of_healthy_young_adults/6415061/1}.
+#' A subset of data from the NONAN Gaitprint data repository. The age range for healthy older adults is over 55 years old. For details on the collections and data descriptions see the paper cited in the references.
 #'
 #' @format
 #' A data frame with 10,000 rows and 16 columns:
@@ -82,5 +84,6 @@
 #'   \item{knee_flexion_rt_deg}{Right knee angle in reference to the direction of heading}
 #'   \item{ankle_dorsiflexion_rt_deg}{Right ankle angle in reference to the direction of heading}
 #' }
-#' @references \url{https://www.nature.com/articles/s41597-023-02704-z}
+#' @references
+#' Database in progress. please see: https://www.nature.com/articles/s41597-023-02704-z
 "healthy_old"

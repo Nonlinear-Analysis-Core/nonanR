@@ -3,7 +3,7 @@
 \docType{data}
 \name{healthy_middle}
 \alias{healthy_middle}
-\title{Gaitprint data for a healthy middle-aged person}
+\title{Gaitprint data for a healthy middle-aged adult}
 \format{
 A data frame with 10,000 rows and 16 columns:
 \describe{
@@ -29,9 +29,9 @@ A data frame with 10,000 rows and 16 columns:
 healthy_middle
 }
 \description{
-A subset of data from the NONAN Gaitprint data repository. The age range for healthy young people is 36-55 years old. For details on the collections and data descriptions see the paper cited in the references. To get the full versions of the data please visit \url{https://springernature.figshare.com/collections/NONAN_GaitPrint_An_IMU_gait_database_of_healthy_young_adults/6415061/1}.
+A subset of data from the NONAN Gaitprint data repository. The age range for healthy middle-aged adults is 36-55 years old. For details on the collections and data descriptions see the paper cited in the references.
 }
 \references{
-\url{https://www.nature.com/articles/s41597-023-02704-z}
+Database in progress. please see: https://www.nature.com/articles/s41597-023-02704-z
 }
 \keyword{datasets}

@@ -7,24 +7,51 @@
 plot_mfdfa(mf, do.surrogate, nsurrogates = 19, return.ci = FALSE)
 }
 \arguments{
-\item{mf}{an object containing elements related to the mutlifractal 
+\item{mf}{An object containing elements related to the mutlifractal 
 spectrum derived from Multifractal Detrended Fluctuation Analysis}
 
-\item{do.surrogate}{logical indicating whether surrogation should be 
+\item{do.surrogate}{Logical indicating whether surrogation should be 
 performed on the time series}
 
-\item{nsurrogates}{integer indicating the number of surrogates to be 
-constructed. Default is 19 for 95% confidence limit. Larger number of 
-surrogates ore more precise but increase computational time.}
+\item{nsurrogates}{Integer indicating the number of surrogates to be 
+constructed. Default is 19 for 95% confidence limit. A larger number of 
+surrogates are more precise but increase computational time.}
 
-\item{return.ci}{logical indicating if confidence intervals derived from 
+\item{return.ci}{Logical indicating if confidence intervals derived from 
 surrogate analysis should be returned.}
 }
 \description{
 Method for plotting various forms of the multifractal spectrum
 }
-\references{
-Kantelhardt et al. (2002). Multifractal detrended fluctuation
-analys of nonstationary time series. Physica A: Statistical Mechanics and 
-its Applications, 87
+\examples{
+# White Noise
+white_noise_ts = fgn_sim(n = 1000, H = 0.5)
+ 
+q = -5:5
+order = 1
+scales = c(16,32,64,128,256,512)
+scale_ratio = 2
+
+mfdfa_white_out <- mfdfa(
+    x = white_noise_ts, 
+    q = q, 
+    order = order, 
+    scales = scales, 
+    scale_ratio = scale_ratio)
+    
+# Plot White Noise
+plot(mfdfa_white_out)
+ 
+# Pink Noise
+pink_noise_ts <- fgn_sim(n = 1000, H = 0.9)
+
+mfdfa_pink_out <- mfdfa(
+    x = pink_noise_ts, 
+    q = q, 
+    order = order, 
+    scales = scales, 
+    scale_ratio = scale_ratio) 
+    
+plot(mfdfa_pink_out)
+
 }

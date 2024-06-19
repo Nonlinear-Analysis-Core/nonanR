@@ -13,7 +13,7 @@ ApproximateEntropyTest <- function(x, dim, R) {
 #' @param dim is the embedding dimension of the time series
 #' @param R is the radius in which to search for matches
 #' 
-#' @returns The output of the algorithm is a single integer that reflects the entropy of the time series in bits.
+#' @returns The output of the algorithm is a single value that reflects the entropy of the time series in bits.
 #' 
 #' @import Rcpp
 #' @useDynLib nonanR
@@ -28,6 +28,8 @@ ApproximateEntropyTest <- function(x, dim, R) {
 #' 
 #' @references
 #' Pincus, S. M. (1991). Approximate entropy as a measure of system complexity. Proceedings of the National Academy of Sciences, 88(6), 2297–2301. https://doi.org/10.1073/pnas.88.6.2297
+#' 
+#' Richman, J. S., & Moorman, J. R. (2000). Physiological time-series analysis using approximate entropy and sample entropy. American journal of physiology-heart and circulatory physiology, 278(6), H2039-H2049.
 #' 
 #' Yentes, J. M., & Raffalt, P. C. (2021). Entropy Analysis in Gait Research: Methodological Considerations and Recommendations. Annals of Biomedical Engineering, 49(3), 979–990. https://doi.org/10.1007/s10439-020-02616-8
 #' 
@@ -98,8 +100,8 @@ Ent_Samp <- function(x, m, R) {
 #' @examples 
 #' 
 #' x = rnorm(1000)
-#' thresholdVal = 2
-#' seqLength = 0.2
+#' thresholdVal = mean(x)
+#' seqLength = 2
 #' 
 #' SymE = Ent_Sym(x, thresholdVal, seqLength)
 #' 
@@ -114,10 +116,10 @@ Ent_Sym <- function(x, thresholdVal, seqLength) {
 #'
 #' Calculate the average mutual information of a time series.
 #'
-#' @param x - a single column time series
-#' @param y - a single column time series. This can be the same as x
-#' @param L - the maximum lag of the time series. This is usually the same as the sampling frequency.
-#' @param bins - the number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you. 
+#' @param x A single column time series
+#' @param y A single column time series. Can be the same as x
+#' @param L The maximum lag of the time series. Usually the same as the sampling frequency.
+#' @param bins The number of histogram bins to split the data into. You can specify 0 and the algorithm will bin the data for you. 
 #' @returns The output of the algorithm is a list that includes:
 #' \itemize{
 #'  \item \code{tau} A data frame of the local minima of the AMI values and the corresponding lag
@@ -126,7 +128,7 @@ Ent_Sym <- function(x, thresholdVal, seqLength) {
 #' @import Rcpp
 #' @export
 #'
-#' @details Average Mutual Information (AMI) is an integral part of state space reconstruction, used to find the optimal time delay (tau) of a system. Tau is needed in algorithms such as Recurrence Quantification Analysis (RQA) and Lyapunov Exponents (LyE). AMI measures the probability that some information in one time series is shared with the same series delayed by one time step. Typically, this step precedes the False Nearest Neighbor (FNN) analysis. For practical implementation, NONAN prefers a histogram-based approach due to its relative speed compared to kernel density methods. Important consideration should be given to factors such as the length of the time series, the presence of artifacts in the data, additional noise, and the sampling rate when using this function.
+#' @details Average Mutual Information (AMI) is an integral part of state space reconstruction used to find the optimal time delay (tau) of a system. Tau is needed for algorithms such as Recurrence Quantification Analysis (RQA) and the largest Lyapunov Exponent (LyE). AMI measures the probability that some information in one time series is shared with the same series delayed by one time step. Typically, this step precedes the False Nearest Neighbor (FNN) analysis. For practical implementation, NONAN prefers a histogram-based approach due to its relative speed compared to kernel density methods. Important consideration should be given to factors such as the length of the time series, the presence of artifacts in the data, additional noise, and the sampling rate when using this function.
 #' The formula for AMI is as follows: 
 #' 
 #' \eqn{I(k) = \sum_{t = 1}^{n} P(x_t, x_{t+k}) log_2 [\frac{P(x_t, x_{t+k})}{P(x_t)P(x_{t+k})} ]}
@@ -139,11 +141,13 @@ Ent_Sym <- function(x, thresholdVal, seqLength) {
 #' Raffalt, P. C., Senderling, B., & Stergiou, N. (2020). Filtering affects the calculation of the largest Lyapunov exponent. Computers in Biology and Medicine, 122, 103786. https://doi.org/10.1016/j.compbiomed.2020.103786
 #' 
 #' @examples
+#' # Generate example time series data
 #' x = rnorm(1000)
 #' y = x
 #' L = 50
-#' bins = 30 # If you do not want to specify a bin number, you can set it to 0.
+#' bins = 30
 #'
+#' # Run AMI
 #' ami_out = ami(x, y, L, bins)
 #'
 ami <- function(x, y, L, bins) {
@@ -154,29 +158,35 @@ ami <- function(x, y, L, bins) {
 #' 
 #' Infer Hurst exponent of a time series based on accept-reject algorithm.
 #' 
-#' @param x - A vector of time series
-#' @param n - An integer indicating the number of Hurst exponents to infer
+#' @param x A vector of time series
+#' @param n An integer indicating the number of Hurst exponents to infer
 #' 
-#' @returns The output of the algorithm is a probability distribution of the Hurst exponents inferred
+#' @returns A probability distribution of the Hurst exponents inferred
 #' 
 #' @import Rcpp
 #' @export
 #' 
-#' @details Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. This algorithm estimates Hurst exponent via Bayesian technique. Based on a predefined target distribution of Hurst exponent, the accept-reject algorithm is used to sample a posterior (probability) distribution of Hurst exponent. Common practice is to take the median of the probability distribution as the estimated Hurst exponent. For an example of using this algorithm on human movement data, refer to Likens et al. 2023.
+#' @details The Hurst exponent quantifies the temporal correlation among data points of a time series. This algorithm returns Hurst exponents with less variance compared to \code{dfa}. In addition, this algorithm is more robust to time series shorter than 512 data points. This algorithm estimates the Hurst exponent via Bayesian technique. Based on a predefined target distribution of Hurst exponent, an accept-reject algorithm is used to sample a posterior (probability) distribution of Hurst exponent. Common practice is to take the median of the probability distribution as the estimated Hurst exponent. For an example of using this algorithm on human movement data, refer to Likens et al. 2023.
 #' 
 #' @examples
-#' 
+#' # Generate example time series data
 #' x = fgn_sim(n = 128, H = 0.9)
 #' 
+#' # Run BayesH
 #' h.pdf = bayesH(x = x, n = 200)
+#' 
+#' # Take the median of the probabilty distribution
 #' H = median(h.pdf)
 #' 
 #' @references 
-#' - Tyralis, H., & Koutsoyiannis, D. (2014). A Bayesian statistical model for deriving the predictive distribution of hydroclimatic variables. Climate dynamics, 42, 2867-2883.
+#' Hurst, H. E. Long-Term Storage Capacity of Reservoirs. T. Am. Soc. Civ. Eng. 116, 770–799 (1951). https://doi.org/10.1061/TACEAT.0006518
 #' 
-#' - Likens, A. D., Mangalam, M., Wong, A. Y., Charles, A. C., & Mills, C. (2023). Better than DFA? A Bayesian method for estimating the Hurst exponent in behavioral sciences. ArXiv.
+#' Tyralis, H., & Koutsoyiannis, D. (2014). A Bayesian statistical model for deriving the predictive distribution of hydroclimatic variables. Climate dynamics, 42, 2867-2883. http://link.springer.com/10.1007/s00382-013-1804-y
 #' 
-#' - Mangalam, M., Wilson, T., Sommerfeld, J., & Likens, A. D. (2023). Optimizing a Bayesian method for estimating the Hurst exponent in behavioral sciences. arXiv preprint arXiv:2301.12064.
+#' Likens, A. D., Mangalam, M., Wong, A. Y., Charles, A. C., & Mills, C. (2024). Better than Detrended Fluctuation Analysis?A Bayesian Method for Estimating the Hurst Exponent in Behavioral Sciences. Preprint: https://www.researchgate.net/publication/378038184_Better_than_Detrended_Fluctuation_Analysis_A_Bayesian_method_for_estimating_the_Hurst_exponent_in_behavioral_sciences
+#' 
+#' Mangalam, M., Wilson, T., Sommerfeld, J., & Likens, A. D. (2024). Optimizing a Bayesian method for estimating the Hurst exponent in behavioral sciences. Preprint: https://www.researchgate.net/publication/381123281_Optimizing_a_Bayesian_method_for_estimating_the_Hurst_exponent_in_behavioral_sciences
+#' 
 #' 
 bayesH <- function(x, n) {
     .Call('_nonanR_bayesH', PACKAGE = 'nonanR', x, n)
@@ -186,8 +196,8 @@ bayesH <- function(x, n) {
 #'
 #' Reconstruct attractor based on constant embedding parameters and principle component analysis.
 #' 
-#' @param x - A single column time series.
-#' @param m - An integer indicating the embedding dimension of the time series.
+#' @param x A single column time series
+#' @param m An integer indicating the embedding dimension of the time series
 #' @returns The output of the algorithm is a list that includes:
 #' \itemize{
 #'  \item \code{Yprime} The reconstructed attractor of the time series.
@@ -195,10 +205,14 @@ bayesH <- function(x, n) {
 #' @import Rcpp
 #' @export
 #'
-#' @details Constant embedding parameters and principal component analysis-based phase space reconstruction (CPPSR) is a specific version of phase space reconstruction that is applicable on low-dimensional systems (dimension < 3).
+#' @details Constant embedding parameters and Principal component analysis-based Phase Space Reconstruction (CPPSR) is a specific version of phase space reconstruction that is applicable to low-dimensional systems (dimension < 3).
+#' 
+#' 
+#' @references 
+#' Li, D., Cao, M., Manoach, E. & Ragulskis, M. A novel embedding method for characterization of low-dimensional nonlinear dynamical systems. Nonlinear Dyn 104, 125–148 (2021). https://doi.org/10.1007/s11071-021-06229-1
 #' 
 #' @examples
-#'
+#' # Generate example time series data and inputs for FNN
 #' t = seq(0, 1, 0.01)
 #' x = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 #' maxDim = 10
@@ -207,10 +221,12 @@ bayesH <- function(x, n) {
 #' atol = 15
 #' fnn_tol = 0.01
 #' 
+#' # Run FNN
 #' fnn_out = false_nearest_neighbors(x, maxDim = maxDim, delay = delay, rtol = rtol, 
 #'                                   atol = atol, fnn_tol = fnn_tol)
 #'
-#' y_cppsr= cppsr(x = x, m = fnn_out$dim)
+#' # Run CPPSR
+#' y_cppsr = cppsr(x = x, m = fnn_out$dim)
 #' 
 cppsr <- function(x, m) {
     .Call('_nonanR_cppsr', PACKAGE = 'nonanR', x, m)
@@ -218,13 +234,13 @@ cppsr <- function(x, m) {
 
 #' Detrended Fluctuation Analysis
 #' 
-#' Something a little more can go here
+#' Fast function for computing detrended fluctuation analysis (DFA), a widely used method for estimating long-range temporal correlations in time series data. DFA is also a form of mono-fractal analysis that indicates the degree of self-similarity across temporal scales.
 #' 
-#' @param x A real values vector (i.e., time series data) to be analyzed.
-#' @param order An integer indicating the polynomial order used for detrending the local windows (e.g., 1 = linear, 2 = quadratic, etc.).
-#' @param verbose A boolean that when = 1 indicates that the flucuation function inlcuding the log of all included scales as well as the log Rms should be returned as well as the alpha or when = 0 only the estimated scaling exponent alpha will be returned.
-#' @param scales An integer valued vector indicating the scales one wishes to resolve in the analysis.
-#' @param scale_ratio A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max.
+#' @param x A real values vector (i.e., time series data) to be analyzed
+#' @param order An integer indicating the polynomial order used for detrending the local windows (e.g., 1 = linear, 2 = quadratic, etc.)
+#' @param verbose A boolean (when verbose = 1) indicates that the fluctuation function should return the log of all included scales, the log Rms, and alpha. Alternatively, (when verbose = 0) only the estimated scaling exponent, alpha, will returned.
+#' @param scales An integer valued vector indicating the scales one wishes to resolve in the analysis
+#' @param scale_ratio A scaling factor by which to create successive window sizes from 'sc_min' to 'sc_max
 #' 
 #' @returns The output of the algorithm is a list that includes:
 #' \itemize{ 
@@ -237,32 +253,51 @@ cppsr <- function(x, m) {
 #' @import Rcpp
 #' @export
 #' 
-#' @details DFA is useful in the analysis of many things but also it has a lot of requirements that should be met before using it.
+#' @details Details of the algorithm are specified in detail in Peng et al. 
+#' (1994) and visualized nicely in Kelty-Stephen et al. (2016). The output of 
+#' the algorithm is an \eqn{\alpha} (alpha) estimate which is a generalization
+#'  of the Hurst Exponent. Conventional interpretation of \eqn{\alpha} is:
+#' \itemize{
+#'  \item \eqn{\alpha < 0.5 =} anti-correlated
+#'  \item \eqn{\alpha ~= 0.5 =} uncorrelated, white noise
+#'  \item \eqn{\alpha > 0.5 =} temporally correlated
+#'  \item \eqn{\alpha ~= 1 =} 1/f-noise, pink noise
+#'  \item \eqn{\alpha > 1 =} non-stationary and unbounded
+#'  \item \eqn{\alpha ~= 1.5 =} fractional brownian motion
+#' } 
+#' 
+#' We recommend a few points of consideration here in using this function. One is to be sure to verify there are not cross-over points in the logScale-logFluctuation plots (Peng et al., 1995; Perakakis et al ., 2009). Cross-over points (or a visible change in the slope as a function of of scale) indicate that a mono-fractal characterization does not sufficiently characterize the data. If cross-over points are evident, we recommend proceeding to using the mfdfa() to estimate the multi-fractal fluctuation dynamics across scales.
+#' 
+#' While it is common to use only linear detrending with DFA, it is important to inspect the trends in the data to determine if it would be more appropriate to use a higher order polynomial for detrending, and/or compare the DFA output for different polynomial orders (see Kantelhardt et al., 2001).
+#' 
+#' General recommendations for choosing the min and max scale are an min = 10 and max = (N/4), where N is the number of observations. See Eke et al. (2002) and Gulich and Zunino (2014) for additional considerations.
 #' 
 #' @examples
-#' 
-#' x = rnorm(1000)
+#' # Generate example time series data
+#' x = fgn_sim(n = 1000, H = 0.9)
 #' order = 1
 #' verbose = 1
-#' scales = c(16,32,64,128,256,512)
+#' scales = logscale(scale_min = 16, scale_max = 512, scale_ratio = 2)
 #' scale_ratio = 2
 #' 
+#' # Run DFA
 #' dfa_out = dfa(x, order, verbose, scales, scale_ratio)
 #' 
+#' 
 #' @references
-#' - Eke, A., Herman, P., Kocsis, L., & Kozak, L. R. (2002). Fractal characterization of complexity in temporal physiological signals. Physiological measurement, 23(1), R1-R38.
+#' - Eke, A., Herman, P., Kocsis, L., & Kozak, L. R. (2002). Fractal characterization of complexity in temporal physiological signals. Physiological measurement, 23(1), R1-R38. DOI: 10.1088/0967-3334/23/1/201
 #' 
-#' - Gulich, D., & Zunino, L. (2014). A criterion for the determination of optimal scaling ranges in DFA and MF-DFA. Physica A: Statistical Mechanics and its Applications, 397, 17-30.
+#' - Gulich, D., & Zunino, L. (2014). A criterion for the determination of optimal scaling ranges in DFA and MF-DFA. Physica A: Statistical Mechanics and its Applications, 397, 17-30. https://doi.org/10.1016/j.physa.2013.11.029
 #' 
-#' - Kantelhardt, J. W., Koscielny-Bunde, E., Rego, H. H., Havlin, S., & Bunde, A. (2001). Detecting long-range correlations with detrended fluctuation analysis. Physica A: Statistical Mechanics and its Applications, 295(3-4), 441-454.
+#' - Kantelhardt, J. W., Koscielny-Bunde, E., Rego, H. H., Havlin, S., & Bunde, A. (2001). Detecting long-range correlations with detrended fluctuation analysis. Physica A: Statistical Mechanics and its Applications, 295(3-4), 441-454. https://doi.org/10.1016/S0378-4371(01)00144-3
 #' 
-#' - Kelty-Stephen, D. G., Stirling, L. A., & Lipsitz, L. A. (2016). Multifractal temporal correlations in circle-tracing behaviors are associated with the executive function of rule-switching assessed by the Trail Making Test. Psychological assessment, 28(2), 171-180.
+#' - Kelty-Stephen, D. G., Stirling, L. A., & Lipsitz, L. A. (2016). Multifractal temporal correlations in circle-tracing behaviors are associated with the executive function of rule-switching assessed by the Trail Making Test. Psychological assessment, 28(2), 171-180. https://doi.org/10.1037/pas0000177
 #'  
-#' - Peng C-K, Buldyrev SV, Havlin S, Simons M, Stanley HE, and Goldberger AL (1994), Mosaic organization of DNA nucleotides, Physical Review E, 49, 1685-1689. 
+#' - Peng C-K, Buldyrev SV, Havlin S, Simons M, Stanley HE, and Goldberger AL (1994), Mosaic organization of DNA nucleotides, Physical Review E, 49, 1685-1689. https://doi.org/10.1103/PhysRevE.49.1685
 #' 
-#' - Peng C-K, Havlin S, Stanley HE, and Goldberger AL (1995), Quantification of scaling exponents and crossover phenomena in nonstationary heartbeat time series, Chaos, 5, 82-87.
+#' - Peng C-K, Havlin S, Stanley HE, and Goldberger AL (1995), Quantification of scaling exponents and crossover phenomena in nonstationary heartbeat time series, Chaos, 5, 82-87. https://doi.org/10.1063/1.166141
 #' 
-#' - Perakakis, P., Taylor, M., Martinez-Nieto, E., Revithi, I., & Vila, J. (2009). Breathing frequency bias in fractal analysis of heart rate variability. Biological psychology, 82(1), 82-88.
+#' - Perakakis, P., Taylor, M., Martinez-Nieto, E., Revithi, I., & Vila, J. (2009). Breathing frequency bias in fractal analysis of heart rate variability. Biological psychology, 82(1), 82-88. https://doi.org/10.1016/j.biopsycho.2009.06.004
 dfa <- function(x, order, verbose, scales, scale_ratio = 2) {
     .Call('_nonanR_dfa', PACKAGE = 'nonanR', x, order, verbose, scales, scale_ratio)
 }
@@ -323,6 +358,10 @@ seq_int <- function(length) {
 #'
 #' @details Lyapunov exponent is the rate of divergence between two neighboring points of a trajectory in a state space.
 #' 
+#'
+#' @references
+#' 
+#' Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method for calculating largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
 #' 
 #' @examples
 #'

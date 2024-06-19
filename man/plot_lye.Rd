@@ -13,16 +13,18 @@ plot_lye(x)
 Plot method for log of divergence.
 }
 \examples{
+# Generate example time series data
 fs = 100
 t = seq(0, 10, 1/fs)
 ts = sin(2*pi*10*t) + 2*cos(2*pi*5*t)
 
+# Calculate mean frequency
 mean_frequency = meanfreq(signal = ts, samp_rate = fs)
 
+# Run AMI
 ami_out = ami(ts, ts, 50, 30)
-tau = ami_out$tau[1,1] # Optimal time delay estimated by AMI
 
-# Function parameters
+# Other inputs for FNN
 maxDim = 10
 tau = ami_out$tau[1,1] # Optimal time delay estimated by AMI
 rtol = 10
@@ -31,9 +33,10 @@ fnn_tol = 0.01
 
 # Compute false nearest neighbors
 fnn_out = false_nearest_neighbors(ts, maxDim = maxDim, delay = tau, rtol = rtol, 
-                                  atol = atol, fnn_tol = fnn_tol)
+                                 atol = atol, fnn_tol = fnn_tol)
 dim = fnn_out$dim # Optimal embedding dimension estimated by FNN
 
+# Phase space reconstruction
 psr_length = length(ts) - tau*(dim-1)
 start = 1
 stop = psr_length
@@ -44,9 +47,9 @@ for (i in 1:dim) {
   stop = stop + tau
 }
 
+# Estimate the Largest Lyapunov Exponent
 lye_out = lye_rosenstein(X = X, samp_rate = fs, mean_freq = mean_frequency, 
-                         nsteps = 500, regpoints = 10:500)
-
+                        nsteps = 500, regpoints = 10:500)
 
 # Plot lye_out
 plot_lye(lye_out)

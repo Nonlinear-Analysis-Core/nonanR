@@ -25,8 +25,8 @@ Like all entropy functions, this one also quantifies the amount of complexity (o
 \examples{
 
 x = rnorm(1000)
-thresholdVal = 2
-seqLength = 0.2
+thresholdVal = mean(x)
+seqLength = 2
 
 SymE = Ent_Sym(x, thresholdVal, seqLength)
 

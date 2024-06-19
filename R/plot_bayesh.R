@@ -17,13 +17,11 @@
 #' 
 plot_bayesh = function(x){
   
-  h.pdf <- NULL
-  h.range = max(h.pdf) - min(h.pdf)
-  # h.max = max(h.pdf)
-  # h.min = min(h.pdf)
-  h.med = median(h.pdf)
-  h.mean = mean(h.pdf)
-  # h.dist = abs(h.med-h.mean)/(max(h.pdf) - min(h.pdf))
+
+  h.range = max(x) - min(x)
+  h.med = median(x)
+  h.mean = mean(x)
+
   values = c(h.med, h.mean)
   if (h.med > h.mean | h.med == h.mean) {
     hjust = c(-0.15, 1.2)
@@ -36,7 +34,7 @@ plot_bayesh = function(x){
   dist.df = data.frame("values" = values, "xpos" = xpos, "ypos" = ypos, "label" = label)
   
   ggplot() +
-    geom_density(aes(h.pdf), linewidth = 1, alpha = 0.6, fill = 'lightgray') +
+    geom_density(aes(x), linewidth = 1, alpha = 0.6, fill = 'lightgray') +
     geom_vline(xintercept = values, linewidth = 1, color = c('#C8102E', '#10C732')) +
     geom_label(data = dist.df, aes(label = label),
                x = xpos, y = ypos,

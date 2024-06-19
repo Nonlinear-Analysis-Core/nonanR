@@ -27,7 +27,7 @@ x = fgn_sim(n = 128, H = 0.9)
 # Run BayesH
 h.pdf = bayesH(x = x, n = 200)
 
-# Take the median of the probabilty distribution
+# Take the median of the probability distribution
 H = median(h.pdf)
 
 }

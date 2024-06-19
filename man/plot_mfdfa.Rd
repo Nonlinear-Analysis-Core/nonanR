@@ -40,7 +40,7 @@ mfdfa_white_out <- mfdfa(
     scale_ratio = scale_ratio)
     
 # Plot White Noise
-plot(mfdfa_white_out)
+plot_mfdfa(mfdfa_white_out, do.surrogate = TRUE)
  
 # Pink Noise
 pink_noise_ts <- fgn_sim(n = 1000, H = 0.9)
@@ -52,6 +52,6 @@ mfdfa_pink_out <- mfdfa(
     scales = scales, 
     scale_ratio = scale_ratio) 
     
-plot(mfdfa_pink_out)
+plot_mfdfa(mfdfa_pink_out, do.surrogate = TRUE)
 
 }

@@ -175,7 +175,7 @@ ami <- function(x, y, L, bins) {
 #' # Run BayesH
 #' h.pdf = bayesH(x = x, n = 200)
 #' 
-#' # Take the median of the probabilty distribution
+#' # Take the median of the probability distribution
 #' H = median(h.pdf)
 #' 
 #' @references 

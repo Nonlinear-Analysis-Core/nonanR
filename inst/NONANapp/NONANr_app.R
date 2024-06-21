@@ -623,7 +623,41 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                    verbatimTextOutput("iaafftResults")
                                                  ) # mainpanel
                                                ) # sidebarlayout
-                                      ) # Simulations tabpanel
+                                      ), # IAAFFT tabpanel
+                                      
+                                      ## Pseudoperiodic ----------------------------------------------------------
+                                      tabPanel("Pseudoperiodic",
+                                               h4(strong("Pseudoperiodic Surrogation")),
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("dataChoicePseudo", "Select Data", choices = list("Your Data" = c(myDataFrames) , selected = NULL)),
+                                                   selectInput("pseudox", "Select X axis:", choices = NULL),
+                                                   selectInput("pseudoy", "Select Y axis:", choices = NULL),
+                                                   numericInput("pseudo_tau", "Time Lag: ", value = 0, step = 1, min = 0),
+                                                   numericInput("pseudo_dim", "Embedding Dimension: ", value = 1, step = 1, min = 1),
+                                                   numericInput("pseudo_rho", "Noise Radius: ", value = 0.1, step = 0.1, min = 0.1),
+                                                   fluidRow(
+                                                     column(width = 6,
+                                                            actionButton("goPseudo", "Analyze")
+                                                     ),
+                                                     column(width = 6,
+                                                            actionButton("exportPseudo", "Export",
+                                                                         style = "position: absolute; right: 19px;")
+                                                     )
+                                                   ), # fluidRow for action buttons
+                                                   textInput("exportPPname", "Choose a name for your variable before exporting", "pseudo_out"),
+                                                   
+                                                 ), # sidebarPanel
+                                                 mainPanel(
+                                                   fluidRow( 
+                                                     column(12,  plotOutput('pseudoPlot')) # single row just for the time series plot
+                                                   ),
+                                                   br(),
+                                                   br(),
+                                                   verbatimTextOutput("pseudoResults")
+                                                 ) # mainpanel
+                                               ) # sidebarLayout
+                                      ) # Pseudoperiodic tabpanel
                            ) #navbar menu
                 ) # navbar page
 ) # fluidpage
@@ -1938,7 +1972,7 @@ server <- function(input, output) {
       plot_iaafft(iaafft_dat(), iaafft_result())
     })
       output$iaafftResults <- renderPrint({
-        cat("To view surrogate series, select the Export button.")
+        cat("To view surrogate data, select the Export button.")
     })
   }) # observeEvent
   
@@ -1951,6 +1985,66 @@ server <- function(input, output) {
     }) # renderPrint
   }) # observeEvent
   
+  ## Pseudoperiodic ---------------------------------------------------------------
+  
+  # Pseudoperiodic data selection
+  pseudo_n = reactive({
+    names(get(input$dataChoicePseudo))
+  })
+  
+  
+  # Update x and y choices based on the selected dataframe
+  observeEvent(input$dataChoicePseudo, {
+    updateSelectInput(inputId = "pseudox", choices = pseudo_n())
+    updateSelectInput(inputId = "pseudoy", choices = pseudo_n(), selected = pseudo_n()[2])
+  })
+  
+  
+  # Select the desired data frame and by default the second column for analysis
+  pseudo_dat = reactive({
+    get(input$dataChoicePseudo) |>
+      select(all_of(input$pseudoy)) |>
+      as.matrix()
+  })
+  
+  
+  # IAAFFT simulation
+  pseudo_result = eventReactive(input$goPseudo, {
+    Surr_PseudoPeriodic(pseudo_dat(), input$pseudo_tau, input$pseudo_dim, input$pseudo_rho)
+  })
+  
+  # plot the time series of the data
+  # Electing to not plot this now as the original is included in the plot_pseudo function
+  # output$pseudoPlot <- renderPlotly({
+  #   
+  #   plot_dat = get(input$dataChoicePseudo)
+  #   
+  #   ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$pseudoy]])) +
+  #     geom_line() +
+  #     labs(title = paste0("Time series of ", input$pseudoy), 
+  #          x = "Index") + 
+  #     theme_nonan()
+  #   
+  # })
+  
+  # Pseudoperiodic plot
+  observeEvent(input$goPseudo, {
+    output$pseudoPlot <- renderPlot({
+      plot_Surr_PseudoPeriodic(pseudo_dat(), pseudo_result()$ys)
+    })
+    output$pseudoResults <- renderPrint({
+      cat("To view surrogate data, select the Export button.")
+    })
+  }) # observeEvent
+  
+  # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
+  observeEvent(input$exportPseudo, {
+    assign(input$exportPPname, pseudo_result(), envir = globalenv())
+    
+    output$pseudoResults <- renderPrint({
+      cat("Exported to global environment. Close the app to view.")
+    }) # renderPrint
+  }) # observeEvent
   
 } # server
 

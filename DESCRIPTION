@@ -2,7 +2,7 @@ Package: nonanR
 Type: Package
 Title: Nonlinear Analysis Methods for Time Series Analysis
 Version: 1.0.0
-Date: 2023-11-14
+Date: 2024-06-24
 Authors@R: c(
     person("Joel H.", "Sommerfeld", email = "joel.sommerfeld36@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0002-4972-0872")),
     person("Aaron D.", "Likens", email = "alikens@unomaha.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6535-5772")),

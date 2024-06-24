@@ -1,18 +1,5 @@
 
 
-# library(shiny)
-# library(shinythemes)
-# library(tidyverse)
-# library(plotly)
-
-# Create some mock data to use in the app
-#left_dat = data.frame("stride_number" = 1:1000, "stride_time_left" = fgn_sim(1000, 0.75))
-#right_dat = data.frame("stride_number" = 1:1000, "stride_time_right" = fgn_sim(1000, 0.8))
-
-
-# myDataFrames <- names(which(unlist(eapply(.GlobalEnv,is.data.frame))))
-# loadedData <- data()$results[,3]
-
 # Attempt to retrieve data frame names in the global environment
 tryCatch({
   myDataFrames <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
@@ -646,10 +633,10 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                      )
                                                    ), # fluidRow for action buttons
                                                    textInput("exportPPname", "Choose a name for your variable before exporting", "pseudo_out"),
-                                                   
+
                                                  ), # sidebarPanel
                                                  mainPanel(
-                                                   fluidRow( 
+                                                   fluidRow(
                                                      column(12,  plotOutput('pseudoPlot')) # single row just for the time series plot
                                                    ),
                                                    br(),
@@ -706,7 +693,7 @@ server <- function(input, output) {
       geom_line() +
       labs(title = paste0("Time series of ", input$dfay), 
            x = input$dfax) + 
-      theme_nonan()
+      nonanR::theme_nonan()
     
   })
   
@@ -739,7 +726,7 @@ server <- function(input, output) {
         geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of", input$dfay), 
              x = input$dfay) +
-        theme_nonan()
+        nonanR::theme_nonan()
       
       
     })
@@ -760,7 +747,7 @@ server <- function(input, output) {
         geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$dfay)) + 
-        theme_nonan() # add the nonan plot theme on
+        nonanR::theme_nonan() # add the nonan plot theme on
       
     })
   }) # observeEvent
@@ -1991,56 +1978,56 @@ server <- function(input, output) {
   pseudo_n = reactive({
     names(get(input$dataChoicePseudo))
   })
-  
-  
+
+
   # Update x and y choices based on the selected dataframe
   observeEvent(input$dataChoicePseudo, {
     updateSelectInput(inputId = "pseudox", choices = pseudo_n())
     updateSelectInput(inputId = "pseudoy", choices = pseudo_n(), selected = pseudo_n()[2])
   })
-  
-  
+
+
   # Select the desired data frame and by default the second column for analysis
   pseudo_dat = reactive({
     get(input$dataChoicePseudo) |>
       select(all_of(input$pseudoy)) |>
       as.matrix()
   })
-  
-  
+
+
   # IAAFFT simulation
   pseudo_result = eventReactive(input$goPseudo, {
     Surr_PseudoPeriodic(pseudo_dat(), input$pseudo_tau, input$pseudo_dim, input$pseudo_rho)
   })
-  
+
   # plot the time series of the data
   # Electing to not plot this now as the original is included in the plot_pseudo function
   # output$pseudoPlot <- renderPlotly({
-  #   
+  #
   #   plot_dat = get(input$dataChoicePseudo)
-  #   
+  #
   #   ggplot(plot_dat, aes(x = 1:nrow(plot_dat), y = .data[[input$pseudoy]])) +
   #     geom_line() +
-  #     labs(title = paste0("Time series of ", input$pseudoy), 
-  #          x = "Index") + 
+  #     labs(title = paste0("Time series of ", input$pseudoy),
+  #          x = "Index") +
   #     theme_nonan()
-  #   
+  #
   # })
-  
+
   # Pseudoperiodic plot
   observeEvent(input$goPseudo, {
     output$pseudoPlot <- renderPlot({
-      plot_Surr_PseudoPeriodic(pseudo_dat(), pseudo_result()$ys)
+      plot_Surr_PseudoPeriodic(pseudo_dat(), pseudo_result()[1])
     })
     output$pseudoResults <- renderPrint({
       cat("To view surrogate data, select the Export button.")
     })
   }) # observeEvent
-  
+
   # Export results -- only when the "Export" button has been clicked. This appears in the environment once the app is closed.
   observeEvent(input$exportPseudo, {
     assign(input$exportPPname, pseudo_result(), envir = globalenv())
-    
+
     output$pseudoResults <- renderPrint({
       cat("Exported to global environment. Close the app to view.")
     }) # renderPrint

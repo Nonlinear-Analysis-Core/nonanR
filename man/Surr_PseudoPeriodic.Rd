@@ -17,8 +17,10 @@ Surr_PseudoPeriodic(y, tau, dim, rho)
 }
 \value{
 The output of the algorithm is a list that includes:
-  \item{ys}Numeric vector representing the surrogate time series.
-  \item{yi}Integer vector representing the selected indexes for the surrogate from the original time series.
+\itemize{
+  \item \code{ys}Numeric vector representing the surrogate time series.
+  \item \code{yi}Integer vector representing the selected indexes for the surrogate from the original time series.
+}
 }
 \description{
 Generate a surrogate time series for a periodic signal that destroys the dynamics between cycles and preserves dynamics within cycles.

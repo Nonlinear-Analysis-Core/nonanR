@@ -27,6 +27,7 @@
 #' @export
 plot_Surr_PseudoPeriodic <- function(x, PseudoPeriodic_out) {
   
+  value <- variable <- NULL
   # Adjust the length of the original series to match the surrogate series
   surrogate <- PseudoPeriodic_out$ys
   min_length <- min(length(x), length(surrogate))

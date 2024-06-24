@@ -16,11 +16,7 @@ Authors:
   \item Joel H. Sommerfeld \email{joel.sommerfeld36@gmail.com} (\href{https://orcid.org/0000-0002-4972-0872}{ORCID})
   \item Seung Kyeom Kim \email{seungkyeomkim@unomaha.edu} (\href{https://orcid.org/0000-0001-5059-6867}{ORCID})
   \item Travis Wiltshire \email{T.J.Wiltshire@tilburguniversity.edu} (\href{https://orcid.org/0000-0001-7630-2695}{ORCID})
-}
-
-Other contributors:
-\itemize{
-  \item Tyler M. Wiles \email{tylerwiles@unomaha.edu} (\href{https://orcid.org/0000-0001-9915-6950}{ORCID}) [contributor]
+  \item Tyler M. Wiles \email{tylerwiles@unomaha.edu} (\href{https://orcid.org/0000-0001-9915-6950}{ORCID})
 }
 
 }

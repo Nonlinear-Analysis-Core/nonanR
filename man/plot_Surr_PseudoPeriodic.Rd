@@ -9,7 +9,7 @@ plot_Surr_PseudoPeriodic(x, PseudoPeriodic_out)
 \arguments{
 \item{x}{Original time series}
 
-\item{surrogate}{Pseudoperiodic surrogate}
+\item{PseudoPeriodic_out}{Pseudoperiodic surrogate}
 }
 \description{
 Plot method for Pseudoperiodic surrogates.

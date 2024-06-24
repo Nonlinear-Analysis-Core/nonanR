@@ -8,8 +8,10 @@
 #' @param rho Numeric value representing the noise radius.
 #' 
 #' @return The output of the algorithm is a list that includes:
-#'   \item{ys}Numeric vector representing the surrogate time series.
-#'   \item{yi}Integer vector representing the selected indexes for the surrogate from the original time series.
+#' \itemize{
+#'   \item \code{ys}Numeric vector representing the surrogate time series.
+#'   \item \code{yi}Integer vector representing the selected indexes for the surrogate from the original time series.
+#' }
 #' 
 #' @details This function produces one pseudo-periodic surrogate time series, which is appropriate for removing long-term correlations in periodic time series. This is useful for testing the presence of chaos or various nonlinear analysis methods. There may be an optimal value of rho that can be found using a different function or specified manually. If rho is too low (e.g., <0.01), the function may not be able to find a neighbor.
 #' 

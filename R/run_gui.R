@@ -9,11 +9,12 @@
 #'
 #' @import nonanR
 #' @import ggplot2
-#' @import plotly
+#' @rawNamespace import(plotly, except = last_plot)
 #' @import shiny
 #' @import shinythemes
 #' @import markdown
-#'
+#' @importFrom dplyr row_number
+#' 
 #' @examples
 #' # Create some mock data (or load in your own) to use in the app.
 #' example_dat = data.frame("Index" = 1:1000, 
@@ -32,10 +33,10 @@ run_gui <- function() {
     stop("Could not find example directory. Try re-installing `nonanR`.", call. = FALSE)
   }
   
-  suppressWarnings(
-    suppressMessages(
-      shiny::runApp(appDir, display.mode = "normal")
-    )
-  )
+  #suppressWarnings(
+   #suppressMessages(
+     shiny::runApp(appDir, display.mode = "normal")
+   #)
+  #)
   
 }

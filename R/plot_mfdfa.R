@@ -14,6 +14,13 @@
 #' @param return.ci Logical indicating if confidence intervals derived from 
 #' surrogate analysis should be returned. 
 #' 
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
+#' @importFrom nonanR iaafft
+#' @importFrom nonanR mfdfa
+#' @importFrom tidyr pivot_longer
+#' @importFrom cowplot plot_grid
+#' 
 #' @examples
 #' # White Noise
 #' white_noise_ts = fgn_sim(n = 1000, H = 0.5)
@@ -63,7 +70,7 @@ plot_mfdfa = function(mf, do.surrogate,  nsurrogates = 19, return.ci = FALSE){
     # Plot q-order fluctuation function
     log_fq <- as.data.frame(mf$log_fq)
     log_fq$index <- as.numeric(mf$log_scale)
-    log_fq_long <- tidyr::pivot_longer(log_fq, cols = -index, names_to = "column", values_to = "value") # go to long format
+    log_fq_long <- pivot_longer(log_fq, cols = -index, names_to = "column", values_to = "value") # go to long format
     
     q = ggplot(data = log_fq_long, aes(x = index, y = value, color = as.factor(column))) +
       geom_smooth(formula = y ~ x, method = lm, se = FALSE, linewidth = 0.5) +

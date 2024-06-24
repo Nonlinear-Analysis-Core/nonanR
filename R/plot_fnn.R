@@ -4,6 +4,9 @@
 #' 
 #' @param x The list object returned \code{fnn} in this package.
 #' 
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
+#' 
 #' @examples
 #' # When performing phase space reconstruction there are two crucial steps. 
 #' # - The first step is running the ami function. 

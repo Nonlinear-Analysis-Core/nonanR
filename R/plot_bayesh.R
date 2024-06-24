@@ -5,6 +5,9 @@
 #' 
 #' @param x The vector returned \code{bayesH} in this package.
 #' 
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
+#' 
 #' @examples
 #' x = fgn_sim(n = 128, H = 0.9)
 #' 
@@ -17,11 +20,12 @@
 #' 
 plot_bayesh = function(x){
   
-
+  # Calculate statistics required for plotting
   h.range = max(x) - min(x)
   h.med = median(x)
   h.mean = mean(x)
 
+  # Calculate horizontal displacement of labels
   values = c(h.med, h.mean)
   if (h.med > h.mean | h.med == h.mean) {
     hjust = c(-0.15, 1.2)
@@ -40,25 +44,9 @@ plot_bayesh = function(x){
                x = xpos, y = ypos,
                parse = F, vjust = "bottom", hjust = hjust,
                label.size = NA, fill = "lightgray") +
-    # geom_label() +
     labs(title = "Posterior Distribution of Hurst Exponents",
          x = "Hurst Exponent",
          y = "Density") +
     theme_nonan()
-  
-  # ggplot(dat, aes(x = dat[,1], y = dat[,2])) +
-  #   geom_line(linewidth = 1) +
-  #   geom_segment(data = reg.dat, aes(x = x_start, y = y_start, 
-  #                                    xend = x_end, yend = y_end),
-  #                
-  #                linewidth = 0.6, color="#C8102E") + 
-  #   geom_label(label = plot.text, 
-  #              x = Inf, y = -Inf, 
-  #              parse = F, vjust = "bottom", hjust = "inward",
-  #              label.size = NA, fill = "lightgray") +
-  #   labs(title = "Log of Divergence", 
-  #        x = "ln(Divergence)", 
-  #        y = "Time (s)") +
-  #   theme_nonan()
   
 }

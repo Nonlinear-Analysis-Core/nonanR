@@ -24,7 +24,7 @@ dim = 2
 rho = 0.1
 
 # Generate the Pseudo Periodic Surrogate
-PseudoPeriodic_out = Surr_PseudoPeriodic(y, tau, dim, rho)
+PseudoPeriodic_out = Surr_PseudoPeriodic(x, tau, dim, rho)
 
 # Plot
 plot_Surr_PseudoPeriodic(x, PseudoPeriodic_out)

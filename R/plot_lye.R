@@ -6,6 +6,9 @@
 #' 
 #' @param x The list object returned \code{lye_rosenstein} in this package.
 #' 
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
+#' 
 #' @examples
 #' # Generate example time series data
 #' fs = 100

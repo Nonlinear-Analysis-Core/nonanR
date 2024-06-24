@@ -6,6 +6,9 @@
 #' 
 #' @param x The list object returned \code{dfa} in this package.
 #' 
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
+#' 
 #' @examples
 # Generate example time series data
 #' x = fgn_sim(n = 1000, H = 0.9)

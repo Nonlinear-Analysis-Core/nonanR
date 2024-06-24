@@ -1,7 +1,6 @@
 #' Pseudo-Periodic Surrogate Time Series Generation
 #'
 #' Generate a surrogate time series for a periodic signal that destroys the dynamics between cycles and preserves dynamics within cycles.
-
 #'
 #' @param y Numeric vector representing the original time series.
 #' @param tau Integer representing the time lag for phase space reconstruction.

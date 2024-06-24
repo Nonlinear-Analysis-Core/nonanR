@@ -4,9 +4,11 @@
 #' 
 #' @param recurrence_matrix The output from the \code{rqa} function
 #'
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
+#' @importFrom reshape2 melt
+#'
 #' @examples
-#' 
-#' library(nonanR)
 #' 
 #' # Create a sample time series
 #' x = fgn_sim(n = 100, H = 0.8)
@@ -32,7 +34,7 @@ plot_rqa = function(recurrence_matrix){
   colnames(A) <- 1:ncol(A)
   rownames(A) <- 1:nrow(A)
   
-  longData = reshape2::melt(A)
+  longData = melt(A)
   longData = longData[longData$value!=0,]
   longData$value = as.factor(longData$value)
   

@@ -5,6 +5,10 @@
 #' @param x Original time series
 #' @param surrogates IAAFFT surrogates
 #'
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
+#' @importFrom reshape2 melt
+#'
 #' @examples
 #' # Generate example time series data
 #' x = rnorm(1000)

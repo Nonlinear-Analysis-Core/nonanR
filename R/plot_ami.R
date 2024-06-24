@@ -2,9 +2,10 @@
 #' 
 #' Plot method for average mutual information. 
 #' 
-#' 
-#' 
 #' @param x The list object returned \code{ami} in this package.
+#' 
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
 #' 
 #' @examples
 #' 

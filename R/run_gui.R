@@ -7,6 +7,13 @@
 #' your data frame and the column you want to analyse using the dropdown menu on the left hand side. 
 #' The analysis methods have suggested inputs for you to use however, it is strongly recommended that you use parameters specific for your analysis. 
 #'
+#' @import nonanR
+#' @import ggplot2
+#' @import plotly
+#' @import shiny
+#' @import shinythemes
+#' @import markdown
+#'
 #' @examples
 #' # Create some mock data (or load in your own) to use in the app.
 #' example_dat = data.frame("Index" = 1:1000, 

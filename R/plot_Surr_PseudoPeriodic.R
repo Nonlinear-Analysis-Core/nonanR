@@ -3,7 +3,11 @@
 #' Plot method for Pseudoperiodic surrogates.
 #' 
 #' @param x Original time series
-#' @param surrogate Pseudoperiodic surrogate
+#' @param PseudoPeriodic_out Pseudoperiodic surrogate
+#'
+#' @import ggplot2
+#' @importFrom nonanR theme_nonan
+#' @importFrom reshape2 melt
 #'
 #' @examples
 #' # Generate example time series data
@@ -15,7 +19,7 @@
 #' rho = 0.1
 #' 
 #' # Generate the Pseudo Periodic Surrogate
-#' PseudoPeriodic_out = Surr_PseudoPeriodic(y, tau, dim, rho)
+#' PseudoPeriodic_out = Surr_PseudoPeriodic(x, tau, dim, rho)
 #' 
 #' # Plot
 #' plot_Surr_PseudoPeriodic(x, PseudoPeriodic_out)
@@ -39,4 +43,5 @@ plot_Surr_PseudoPeriodic <- function(x, PseudoPeriodic_out) {
     theme_nonan() +
     theme(legend.position = "top") +
     scale_color_manual(values = c("black", "#C8102E"))
+  
 }

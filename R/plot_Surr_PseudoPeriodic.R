@@ -1,4 +1,4 @@
-#' IAAFFT Surrogates Plot
+#' Pseudoperiodic surrogate Plot
 #' 
 #' Plot method for Pseudoperiodic surrogates.
 #' 
@@ -7,19 +7,24 @@
 #'
 #' @examples
 #' # Generate example time series data
-#' x <- sin(seq(0, 2 * pi, length.out = 500))
+#' x = sin(seq(0, 2 * pi, length.out = 500))
 #' 
-#' # Pseudoperiodic surrogate
-#' PseudoPeriodic_out  <- Surr_PseudoPeriodic(x, tau, dim, rho)
+#' # Set parameters
+#' tau = 1
+#' dim = 2
+#' rho = 0.1
+#' 
+#' # Generate the Pseudo Periodic Surrogate
+#' PseudoPeriodic_out = Surr_PseudoPeriodic(y, tau, dim, rho)
 #' 
 #' # Plot
-#' plot_Surr_PseudoPeriodic(x, PseudoPeriodic_out$ys)
+#' plot_Surr_PseudoPeriodic(x, PseudoPeriodic_out)
 #' 
 #' @export
-plot_Surr_PseudoPeriodic <- function(x, surrogate) {
-  require(ggplot2)
-  require(reshape2)
+plot_Surr_PseudoPeriodic <- function(x, PseudoPeriodic_out) {
+  
   # Adjust the length of the original series to match the surrogate series
+  surrogate <- PseudoPeriodic_out$ys
   min_length <- min(length(x), length(surrogate))
   x <- x[1:min_length]
   surrogate <- surrogate[1:min_length]
@@ -31,6 +36,7 @@ plot_Surr_PseudoPeriodic <- function(x, surrogate) {
   ggplot(data_long, aes(x = index, y = value, color = variable)) +
     geom_line() +
     labs(title = "Original and Pseudoperiodic Surrogate Time Series", x = "Time", y = "Amplitude") +
-    theme_minimal() +
-    theme(legend.position = "top")
+    theme_nonan() +
+    theme(legend.position = "top") +
+    scale_color_manual(values = c("black", "#C8102E"))
 }

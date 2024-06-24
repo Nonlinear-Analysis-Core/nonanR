@@ -661,8 +661,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoice) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   # get a list of the column names in the data frame
@@ -693,7 +693,7 @@ server <- function(input, output) {
       geom_line() +
       labs(title = paste0("Time series of ", input$dfay), 
            x = input$dfax) + 
-      nonanR::theme_nonan()
+      theme_nonan()
     
   })
   
@@ -726,7 +726,7 @@ server <- function(input, output) {
         geom_density(color = "black", fill = "grey40", alpha = 0.7, linewidth = 1.1) +
         labs(title = paste("Density Plot of", input$dfay), 
              x = input$dfay) +
-        nonanR::theme_nonan()
+        theme_nonan()
       
       
     })
@@ -747,7 +747,7 @@ server <- function(input, output) {
         geom_hline(aes(yintercept = -ciline), linetype = "dashed", color = '#C8102E', linewidth = 0.7) + 
         geom_segment(mapping = aes(xend = lag, yend = 0), color = "black", linewidth = 3) + # lags as individual segments
         labs(title = paste("Autocorrelation of ", input$dfay)) + 
-        nonanR::theme_nonan() # add the nonan plot theme on
+        theme_nonan() # add the nonan plot theme on
       
     })
   }) # observeEvent
@@ -782,8 +782,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoiceMFDFA) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   # get a list of the column names in the data frame
@@ -913,8 +913,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoiceMFDFA) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   # get a list of the column names in the data frame
@@ -1015,8 +1015,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoice1) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   # get a list of the column names in the data frame
@@ -1117,8 +1117,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoice2) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   # get a list of the column names in the data frame
@@ -1220,8 +1220,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoice3) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   # get a list of the column names in the data frame
@@ -1337,8 +1337,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoiceAMI) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   ami_n = reactive({
@@ -1444,8 +1444,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoiceFNN) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   fnn_n = reactive({
@@ -1557,8 +1557,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoice4) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   # get a list of the column names in the data frame
@@ -1706,8 +1706,8 @@ server <- function(input, output) {
   # Update data to add in an index column for plotting purposes
   new_dat = reactive({
     get(input$dataChoiceLYE) |>
-      mutate(Index = row_number()) |>
-      select(Index, everything())
+      mutate(Index = dplyr::row_number()) |>
+      select(Index, dplyr::everything())
   })
   
   # get a list of the column names in the data frame

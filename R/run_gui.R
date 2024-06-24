@@ -7,7 +7,6 @@
 #' your data frame and the column you want to analyse using the dropdown menu on the left hand side. 
 #' The analysis methods have suggested inputs for you to use however, it is strongly recommended that you use parameters specific for your analysis. 
 #'
-#' @import nonanR
 #' @import ggplot2
 #' @rawNamespace import(plotly, except = last_plot)
 #' @import shiny
@@ -32,11 +31,11 @@ run_gui <- function() {
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing `nonanR`.", call. = FALSE)
   }
-  
-  #suppressWarnings(
-   #suppressMessages(
+  require(nonanR)
+  suppressWarnings(
+   suppressMessages(
      shiny::runApp(appDir, display.mode = "normal")
-   #)
-  #)
+   )
+  )
   
 }

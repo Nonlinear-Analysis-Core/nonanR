@@ -9,7 +9,7 @@
 #' @param atol Absolute tolerance for the neighbor distance (often, between 10 and 20, typically 15)
 #' @param fnn_tol Proportion of false neighbors below which to choose dim
 #'
-#' @return A list containing the following elements:
+#' @return The output of the algorithm is a list that includes:
 #' \itemize{
 #'   \item \code{fnn}Percentage of false nearest neighbors for each dimension
 #'   \item \code{dim}Embedding dimension at which the percentage of FNN drops below fnn_tol

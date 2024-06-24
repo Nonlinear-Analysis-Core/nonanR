@@ -16,29 +16,29 @@ Surr_PseudoPeriodic(y, tau, dim, rho)
 \item{rho}{Numeric value representing the noise radius.}
 }
 \value{
-A list containing:
-  \item{ys}{Numeric vector representing the surrogate time series.}
-  \item{yi}{Integer vector representing the selected indexes for the surrogate from the original time series.}
+The output of the algorithm is a list that includes:
+  \item{ys}Numeric vector representing the surrogate time series.
+  \item{yi}Integer vector representing the selected indexes for the surrogate from the original time series.
 }
 \description{
-Pseudo-Periodic Surrogate Time Series Generation
+Generate a surrogate time series for a periodic signal that destroys the dynamics between cycles and preserves dynamics within cycles.
 }
 \details{
 This function produces one pseudo-periodic surrogate time series, which is appropriate for removing long-term correlations in periodic time series. This is useful for testing the presence of chaos or various nonlinear analysis methods. There may be an optimal value of rho that can be found using a different function or specified manually. If rho is too low (e.g., <0.01), the function may not be able to find a neighbor.
 }
 \examples{
 # Generate a sine wave
-y <- sin(seq(0, 2 * pi, length.out = 500))
+y = sin(seq(0, 2 * pi, length.out = 500))
 
 # Set parameters
-tau <- 1
-dim <- 2
-rho <- 0.1
+tau = 1
+dim = 2
+rho = 0.1
 
 # Generate the Pseudo Periodic Surrogate
-result <- Surr_PseudoPeriodic(y, tau, dim, rho)
-ys <- result$ys
-yi <- result$yi
+result = Surr_PseudoPeriodic(y, tau, dim, rho)
+ys = result$ys
+yi = result$yi
 
 }
 \references{

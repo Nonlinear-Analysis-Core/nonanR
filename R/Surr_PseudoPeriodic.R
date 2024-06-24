@@ -8,7 +8,7 @@
 #' @param dim Integer representing the embedding dimension for phase space reconstruction.
 #' @param rho Numeric value representing the noise radius.
 #' 
-#' @return A list containing:
+#' @return The output of the algorithm is a list that includes:
 #'   \item{ys}Numeric vector representing the surrogate time series.
 #'   \item{yi}Integer vector representing the selected indexes for the surrogate from the original time series.
 #' 

@@ -2,9 +2,9 @@
 % Please edit documentation in R/plot_Surr_PseudoPeriodic.R
 \name{plot_Surr_PseudoPeriodic}
 \alias{plot_Surr_PseudoPeriodic}
-\title{IAAFFT Surrogates Plot}
+\title{Pseudoperiodic surrogate Plot}
 \usage{
-plot_Surr_PseudoPeriodic(x, surrogate)
+plot_Surr_PseudoPeriodic(x, PseudoPeriodic_out)
 }
 \arguments{
 \item{x}{Original time series}
@@ -16,12 +16,17 @@ Plot method for Pseudoperiodic surrogates.
 }
 \examples{
 # Generate example time series data
-x <- sin(seq(0, 2 * pi, length.out = 500))
+x = sin(seq(0, 2 * pi, length.out = 500))
 
-# Pseudoperiodic surrogate
-PseudoPeriodic_out  <- Surr_PseudoPeriodic(x, tau, dim, rho)
+# Set parameters
+tau = 1
+dim = 2
+rho = 0.1
+
+# Generate the Pseudo Periodic Surrogate
+PseudoPeriodic_out = Surr_PseudoPeriodic(y, tau, dim, rho)
 
 # Plot
-plot_Surr_PseudoPeriodic(x, PseudoPeriodic_out$ys)
+plot_Surr_PseudoPeriodic(x, PseudoPeriodic_out)
 
 }

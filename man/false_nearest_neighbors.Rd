@@ -20,7 +20,7 @@ false_nearest_neighbors(data, maxDim, delay, rtol, atol, fnn_tol)
 \item{fnn_tol}{Proportion of false neighbors below which to choose dim}
 }
 \value{
-A list containing the following elements:
+The output of the algorithm is a list that includes:
 \itemize{
   \item \code{fnn}Percentage of false nearest neighbors for each dimension
   \item \code{dim}Embedding dimension at which the percentage of FNN drops below fnn_tol

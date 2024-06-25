@@ -1,10 +1,10 @@
 bibentry(
-  bibtype = "Unpublished",
-  note = "This paper is in preparation",
+  bibtype = "Manual",
   header = "To cite nonanR in publications, please use",
-  author = "Joel H. Sommerfeld, Seung Kyeom Kim, Tyler M. Wiles and Aaron D. Likens",
-  title = "nonanR: Nonlinear Analysis Methods for Time Series Data",
-  publisher = "",
-  year = "2024",
+  title = "{nonanR}: Nonlinear Analysis Methods for Time Series Data",
+  author = "Joel H. Sommerfeld, Seung Kyeom Kim, Tyler M. Wiles, Travis J. Wiltshire and Aaron D. Likens",
+  organisation = "Nonlinear Analysis Core",
+  address = "Omaha, NE",
+  note = "version 1.0.1",
   url = "https://github.com/Nonlinear-Analysis-Core/nonanR",
 )

@@ -102,7 +102,7 @@ List dfa(arma::vec x, int order, arma::uword verbose,
   //take the logm of scales and RMS
   arma::vec log_scale(number_of_scales);
   arma::vec log_rms(number_of_scales);
-  if (abs(scale_ratio-2)<.00001){
+  if (std::fabs(scale_ratio-2)<.00001){
     log_scale = arma::log2(arma::conv_to<arma::vec>::from(scales));
     log_rms = arma::log2(RMS);
   }else{

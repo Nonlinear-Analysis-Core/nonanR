@@ -8,3 +8,5 @@ Mac users can see this guide (https://mac.r-project.org/tools/) for an overview 
 For more information or help, please contact bmchnonan@unomaha.edu. 
 
 Happy Analysis!
+
+This work was supported by the NSF award 212491.
